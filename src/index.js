@@ -13,17 +13,21 @@ import Home from 'containers/Home'
 import Page1 from 'containers/Page1'
 import Page2 from 'containers/Page2'
 
-const tempHistory = [window.location.href]
-let browserAction = 'POP'
+// 页面刷新或者appinit的时候，action为pop，所以需要一个init的stack
+const historyStack = [{ oldURL: null, newURL: window.location.href }]
+const isExist = () => historyStack.find(v => v.oldURL === hashChangeOldURL && v.newURL === window.location.href)
+let hashChangeOldURL = window.location.href
+let browserAction = 'GOBACK'
 
 window.addEventListener('hashchange', (HashChangeEvent) => {
   const { newURL, oldURL } = HashChangeEvent
-  const idx = tempHistory.indexOf(newURL)
-  // 浏览器按钮后退
-  if (idx && (tempHistory.indexOf(oldURL) === idx - 1)) {
-    browserAction = 'PUSH'
+  hashChangeOldURL = newURL
+  console.log(HashChangeEvent, historyStack)
+  // 浏览器forward按钮前进，相当于push操作，区别在于产生的action为 POP
+  if (historyStack.find(v => v.oldURL === oldURL && v.newURL === newURL)) {
+    browserAction = 'FORWARD'
   } else {
-    browserAction = 'POP'
+    browserAction = 'GOBACK'
   }
 })
 
@@ -33,12 +37,17 @@ ReactDOM.render((
       <HashRouter>
         <Route render={({ location, history }) => {
           let cls = history.action === 'POP' ? 'slide-right' : 'slide-left'
-          if (browserAction === 'PUSH') {
+          if (browserAction === 'FORWARD' && history.action === 'POP') {
             cls = 'slide-left'
           }
           if (history.action === 'PUSH') {
-            tempHistory.push(window.location.href)
+            !isExist() && historyStack.push({ oldURL: hashChangeOldURL, newURL: window.location.href })
           }
+          if (history.action === 'REPLACE') {
+            const currentStack = historyStack.find(v => v.newURL === hashChangeOldURL)
+            currentStack.newURL = window.location.href
+          }
+          console.table(historyStack)
           return (
             <TransitionGroup className={cls}>
               <CSSTransition key={location.pathname} classNames="animation" timeout={304}>
