@@ -1,16 +1,3 @@
-(function(history){
-  var replaceState = history.replaceState
-  var pushState = history.pushState
-  history.replaceState = function() {
-    setTimeout(() => appHistoryStack.splice(-1, 1, window.location.href), 0)
-    replaceState.apply(history, arguments)
-  };
-  history.pushState = function() {
-    setTimeout(() => appHistoryStack.push(window.location.href), 0)
-    pushState.apply(history, arguments)
-  };
-})(window.history)
-
 import './styles.less'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -28,8 +15,19 @@ import Page2 from 'containers/Page2'
 
 // 一个不准确的 appHistoryStack，不对外暴露接口，不能当做历史记录参考
 const appHistoryStack = [window.location.href]
+const replaceState = history.replaceState
+const pushState = history.pushState
 let useAppAction = true
 let appAction = 'FORWARD'
+
+history.replaceState = function() {
+  setTimeout(() => appHistoryStack.splice(-1, 1, window.location.href), 0)
+  replaceState.apply(history, arguments)
+}
+history.pushState = function() {
+  setTimeout(() => appHistoryStack.push(window.location.href), 0)
+  pushState.apply(history, arguments)
+}
 
 window.addEventListener('hashchange', (HashChangeEvent) => {
   const { newURL, oldURL } = HashChangeEvent
