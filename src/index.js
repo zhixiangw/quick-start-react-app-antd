@@ -1,3 +1,16 @@
+(function(history){
+  var replaceState = history.replaceState
+  var pushState = history.pushState
+  history.replaceState = function() {
+    setTimeout(() => appHistoryStack.splice(-1, 1, window.location.href), 0)
+    replaceState.apply(history, arguments)
+  };
+  history.pushState = function() {
+    setTimeout(() => appHistoryStack.push(window.location.href), 0)
+    pushState.apply(history, arguments)
+  };
+})(window.history)
+
 import './styles.less'
 import React from 'react'
 import ReactDOM from 'react-dom'

@@ -12,6 +12,8 @@ export default class App extends React.Component {
     return (
       <div style={style}>
         <Button type="primary" onClick={() => this.props.history.push('/page1')}>to page1</Button>
+        <Button type="primary" onClick={() => window.history.replaceState({}, '', '/#/home?a=1')}>replaceState location href</Button>
+        <Button type="primary" onClick={() => window.history.pushState({}, '', '/#/home?a=1')}>replaceState location href</Button>
       </div>
     )
   }
