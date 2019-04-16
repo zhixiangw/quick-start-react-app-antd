@@ -28,9 +28,9 @@ class App extends React.Component {
     }
     return (
       <div style={style}>
-        {/* <Button type="primary" onClick={this.handleIncrementClick}>incrementCount</Button>
+        <Button type="primary" onClick={this.handleIncrementClick}>incrementCount</Button>
         <Button onClick={this.handleDecrementClick}>decrementCount</Button>
-        <Button type="dashed">Dashed</Button> */}
+        <Button type="dashed">Dashed</Button>
         <Button type="danger" onClick={() => this.props.history.push('/home')}>to Home</Button>
         <p>{counter}</p>
       </div>
