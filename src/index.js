@@ -13,7 +13,7 @@ ReactDOM.render((
   <Provider store={store}>
     <ConnectedRouter history={localHistory}>
       <HashRouter>
-        <Switch location={location}>
+        <Switch>
           <Route exact path="/app" component={App}/>
           <Route exact path="/home" component={Home}/>
         </Switch>
