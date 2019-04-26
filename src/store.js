@@ -3,10 +3,10 @@ import { createBrowserHistory } from 'history'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import promiseMiddleware from 'redux-promise-middleware'
 
-import AppReducer from 'containers/App/reducer'
+
 
 const reducers = {
-  AppReducer
+
 }
 
 const middleware = routerMiddleware(history)
