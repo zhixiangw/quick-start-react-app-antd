@@ -3,13 +3,14 @@ import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
+const filename = process.env.npm_config_env
 export default {
-  entry: './src/index.js',
+  entry: `./src/containers/${filename}/index.js`,
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'app.[hash:16].js'
+    filename: `${filename}.[hash].js`
   },
-  mode: 'development',
+  mode: 'production',
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -46,21 +47,6 @@ export default {
         ]
       },
       {
-        test: /\.less$/,
-        use: [
-          {
-            loader: 'style-loader'
-          }, {
-            loader: 'css-loader'
-          }, {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true
-            }
-          }
-        ]
-      },
-      {
         test: /\.(gif|jpg|png|bmp|eot|woff|woff2|ttf|svg)/,
         use: [{
           loader: 'url-loader',
@@ -75,28 +61,17 @@ export default {
   plugins: [
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      filename: `${filename}.html`,
+      template: `./src/containers/${filename}/index.html`,
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[hash:16].css',
-      chunkFilename: '[id].[hash:16].css'
+      filename: `${filename}.[hash].css`,
+      chunkFilename: '[id].[hash].css'
     })
   ],
   resolve: {
     alias: {
-      containers: path.resolve(__dirname, 'src/containers')
-    }
-  },
-  devServer: {
-    contentBase: './dist',
-    port: '2333',
-    host: 'localhost',
-    historyApiFallback: true,
-    open: 'Chrome',
-    hot: true,
-    inline: true,
-    proxy: {
-      '/api': 'http://localhost:3000'
+      lib: path.resolve(__dirname, 'src/lib')
     }
   }
 }
