@@ -62,7 +62,7 @@ function getPlatform() {
 }
 
 function getUrlParamByName(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
   var r = decodeURI(window.location.search).substr(1).match(reg)
   if (r != null) return unescape(r[2])
   return null
@@ -72,16 +72,28 @@ function getPageInfo() {
   apiRequest.getPageInfo().then(function(res){
     var resp = res.data.data
     var logo = resp.logo
-    var companyName = resp.company_name
+    var name = resp.name
     logo && document.querySelector('.logo-wrap .logo').setAttribute('src', logo)
-    if (companyName) document.querySelector('.logo-wrap .title').innerHTML = companyName
+    if (name) document.querySelector('.logo-wrap .title').innerHTML = name
+    __DOWNLOAD__INIT__DATA__.androidDownUrl = resp.android_downurl
+    __DOWNLOAD__INIT__DATA__.iosDownUrl = resp.ios_downurl
   })
+}
+
+var __DOWNLOAD__INIT__DATA__ = {
+  androidDownUrl: null,
+  iosDownUrl: null
 }
 
 document.querySelector('.download-btn img').addEventListener('click', function(){
   apiRequest.download({ userId: getUrlParamByName('uid') || 0, })
   apiRequest.upLocation({ userId: getUrlParamByName('uid') || 0, poisition: 3 })
-  window.open('http://47.110.150.249:8891/download/common_official.apk')
+  if (getPlatform().IOS && __DOWNLOAD__INIT__DATA__.iosDownUrl) {
+    window.open(__DOWNLOAD__INIT__DATA__.iosDownUrl)
+  }
+  if (getPlatform().Android && __DOWNLOAD__INIT__DATA__.androidDownUrl) {
+    window.open(__DOWNLOAD__INIT__DATA__.androidDownUrl)
+  }
 })
 
 function init() {

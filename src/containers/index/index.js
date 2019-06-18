@@ -127,16 +127,12 @@ function toast(text, duration) {
 function getPageInfo() {
   apiRequest.getPageInfo().then(function(res){
     var resp = res.data.data
-    var logo = resp.logo
-    var companyName = resp.company_name
     var banner = resp.top_banner
     var agreement = resp.agreement
     var agreementName = agreement.name
     var agreementContent = agreement.content
     var icp = resp.icp
-    logo && document.querySelector('.logo-wrap .logo').setAttribute('src', logo)
     banner && document.querySelector('.banner-content').setAttribute('src', banner)
-    if (companyName) document.querySelector('.logo-wrap .title').innerHTML = companyName
     if (agreementName) document.querySelector('.user-agreement-modal .modal-title').innerHTML = agreementName
     if (agreementContent) document.querySelector('.user-agreement-modal .modal-content').innerHTML = agreementContent
     if (icp) document.querySelector('.login-container .icp').innerHTML = icp
