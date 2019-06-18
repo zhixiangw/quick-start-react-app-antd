@@ -204,7 +204,7 @@ submitBtn.addEventListener('click', function(e){
       apiRequest.upLocation({ userId: userId, poisition: 2 })
       setTimeout(() => {
         window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
-      }, 300)
+      }, 1500)
       return
     }
     toast(msg)
