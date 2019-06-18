@@ -1,4 +1,92 @@
-#app{
-  color: red;
-  font-size: 14px;
+* {
+  margin: 0;
+  padding: 0;
+}
+input,select,option{
+  border: none;
+  outline: none;
+  -webkit-appearance:none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.container{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-height: 550px;
+  top: 0;
+  left: 0;
+  font-family: Avenir,Helvetica,Arial,sans-serif;
+  line-height: 1.5;
+  font-size: 12px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  background-color: #fff;
+}
+.container .banner {
+  position: relative;
+}
+.container .banner .banner-content{
+  display: block;
+  width: 100%;
+}
+.container .banner .logo-wrap{
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+.container .banner .logo{
+  display: inline-block;
+  width: 1.8rem;
+  margin-left: .5rem;
+  margin-top: .5rem;
+  vertical-align: middle;
+}
+.container .banner .title{
+  display: inline-block;
+  margin-top: .9rem;
+  font-size: 12px;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+  color: #fff;
+  vertical-align: middle;
+}
+.container .download-bottom{
+  position: relative;
+  -webkit-box-flex: 1;
+  min-height: 275px;
+  background: url('../../images/bottom-bg.png') no-repeat center center;
+  background-size: 100% 100%;
+}
+.container .download-bottom .download-btn{
+  width: 80%;
+  margin: 20px auto 0 auto;
+}
+.container .download-bottom .download-btn img{
+  width: 100%;
+}
+.container .download-bottom .tip{
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+.ios-download-container .ios-download-title{
+  line-height: 24px;
+  font-size: 17px;
+  margin: 34px 0 25px 0;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+.ios-download-container img{
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+.ios-download-container .download-btn-wrap{
+  position: relative;
+}
+.ios-download-container .download-btn-wrap img{
+  width: 100%;
 }

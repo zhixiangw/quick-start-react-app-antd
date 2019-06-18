@@ -15,6 +15,7 @@ export default {
     splitChunks: {
       chunks: 'all',
       name: true,
+      minSize: 300000,
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -53,6 +54,15 @@ export default {
           options: {
             limit: 8192,
             outputPath: 'images'
+          }
+        }]
+      },
+      {
+        test: /\.html$/,
+        use: [ {
+          loader: 'html-loader',
+          options: {
+            minimize: true
           }
         }]
       }
