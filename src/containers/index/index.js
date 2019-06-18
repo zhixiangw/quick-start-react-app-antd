@@ -31,6 +31,15 @@ var apiRequest = {
       }
     })
   },
+  refreshCaptchaCode: function() {
+    return Axios({
+      method: 'post',
+      url: '/user/refresh-image-captcha',
+      data: {
+        type: 6
+      }
+    })
+  },
   upLocation: function(param) {
     return Axios({
       method: 'post',
@@ -207,7 +216,7 @@ submitBtn.addEventListener('click', function(e){
     if (captcha) return (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
     submitBtn.classList.remove('disabled')
     // 需要进行图形验证码
-    if (code === -1) {
+    if (code === -1009) {
       apiRequest.getCaptchaCode({ mobile: mobileInput.value }).then(function(res){
         var link = res.data.data && res.data.data.link
         var captchaImg = document.querySelector('.captcha-container .captcha-img img')
@@ -217,6 +226,15 @@ submitBtn.addEventListener('click', function(e){
     }
   })
 })
+
+document.querySelector('.captcha-container .captcha-img img').addEventListener('click', function(){
+  apiRequest.refreshCaptchaCode().then(function(res){
+    var link = res.data.data && res.data.data.link
+    var captchaImg = document.querySelector('.captcha-container .captcha-img img')
+    link && captchaImg.setAttribute('src', link.replace('47.110.150.249', '47.110.150.249:8899'))
+  })
+})
+
 function CountDown() {
   var count = 59
   submitBtn.innerHTML = count + '秒后获取'

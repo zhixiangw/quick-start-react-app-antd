@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: PingFangSC-Regular;
 }
 input,select,option{
   border: none;
@@ -85,7 +86,7 @@ input,select,option{
   font-size: 14px;
   color: #333;
   line-height: 20px;
-  padding: 13px 11px;
+  padding: 12px 11px;
   border: 1px solid #999;
 }
 .container .login-container .login-wrap .code-box{
@@ -103,13 +104,13 @@ input,select,option{
   display: block;
   -webkit-box-flex: 1;
   line-height: 20px;
-  padding: 13px 11px;
+  padding: 12px 11px;
   font-size: 14px;
 }
 .container .login-container .login-wrap .code-box .btn.disabled{
   display: block;
   width: 92px;
-  height: 46px;
+  height: 44px;
   background-color: #e2e2e2;
   line-height: 46px;
   font-size: 14px;
