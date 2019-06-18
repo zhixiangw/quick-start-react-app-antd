@@ -204,7 +204,7 @@ submitBtn.addEventListener('click', function(e){
       return
     }
     toast(msg)
-    if (captcha) return (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown(), apiRequest.upLocation({ userId: userId, poisition: 2 }))
+    if (captcha) return (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
     submitBtn.classList.remove('disabled')
     // 需要进行图形验证码
     if (code === -1) {

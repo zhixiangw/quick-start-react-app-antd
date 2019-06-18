@@ -28,7 +28,15 @@ var apiRequest = {
       data: {
         user_id: param.userId,
         poisition: param.poisition,
-        app_market: getUrlParamByName('appMarket') || 'h5-special'
+        app_market: getUrlParamByName('appMarket') || 'h5-special',
+        client_info: JSON.stringify({
+          clientType: getPlatform().platform,
+          deviceName: '',
+          osVersion: '',
+          appVersion: '',
+          appMarket: getUrlParamByName('appMarket') || 'h5-special',
+          deviceId: ''
+        }),
       }
     })
   },
