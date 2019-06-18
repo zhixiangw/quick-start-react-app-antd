@@ -143,10 +143,11 @@ function getPageInfo() {
     var agreementName = agreement.name
     var agreementContent = agreement.content
     var icp = resp.icp
+    var companyName = resp.company_name
     banner && document.querySelector('.banner-content').setAttribute('src', banner)
     if (agreementName) document.querySelector('.user-agreement-modal .modal-title').innerHTML = agreementName
     if (agreementContent) document.querySelector('.user-agreement-modal .modal-content').innerHTML = agreementContent
-    if (icp) document.querySelector('.login-container .icp').innerHTML = icp
+    if (icp || companyName) document.querySelector('.login-container .icp').innerHTML = icp + ' ' + companyName
   })
   apiRequest.upLocation({ userId: 0, poisition: 0 })
 }
@@ -373,6 +374,16 @@ function init() {
       animationStart(count)
     }, 3500);
     getPageInfo()
+    document.querySelector('input.mobile').addEventListener('blur', function(){
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+      }, 0);
+    })
+    document.querySelector('input.valid-code').addEventListener('blur', function(){
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+      }, 0);
+    })
   }
 }
 init()
