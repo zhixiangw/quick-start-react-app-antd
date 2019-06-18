@@ -106,8 +106,8 @@ document.querySelector('.download-btn img').addEventListener('click', function()
 
 function init() {
   window.onload = function(){
-    if (!getPlatform().IOS) {
-      document.querySelector('.ios-download-container').style.cssText = 'display: none;'
+    if (getPlatform().IOS) {
+      document.querySelector('.ios-download-container').style.cssText = 'display: block;'
     }
     if (!getUrlParamByName('uid')) {
       window.location.replace('/login.html')

@@ -90,6 +90,8 @@ var apiRequest = {
           appMarket: getUrlParamByName('appMarket') || 'h5-special',
           deviceId: ''
         }),
+        location: 1,
+        source: -1
       }
     })
   },
@@ -152,6 +154,9 @@ function getPageInfo() {
 function showCaptchaModal() {
   var modal = document.querySelector('.captcha-container')
   modal.classList.add('show')
+  modal.addEventListener('touchmove', function(e){
+    e.preventDefault()
+  })
   __GLOBAL__INIT__DATA__.captchaCodeIsRequired = true
 }
 
@@ -212,9 +217,6 @@ submitBtn.addEventListener('click', function(e){
       }, 1500)
       return
     }
-    toast(msg)
-    if (captcha) return (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
-    submitBtn.classList.remove('disabled')
     // 需要进行图形验证码
     if (code === -1009) {
       apiRequest.getCaptchaCode({ mobile: mobileInput.value }).then(function(res){
@@ -223,7 +225,11 @@ submitBtn.addEventListener('click', function(e){
         link && captchaImg.setAttribute('src', link.replace('47.110.150.249', '47.110.150.249:8899'))
         showCaptchaModal()
       })
+      return
     }
+    toast(msg)
+    if (captcha) return (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
+    submitBtn.classList.remove('disabled')
   })
 })
 
@@ -292,6 +298,7 @@ document.querySelector('.user-agreement-modal-container .confirm-btn').addEventL
 // 图像验证码弹窗关闭按钮
 document.querySelector('.captcha-container .close-btn').addEventListener('click', function(){
   var modal = document.querySelector('.captcha-container')
+  submitBtn.classList.remove('disabled')
   modal.classList.remove('show')
 })
 // 图形验证码弹框确定按钮
@@ -300,8 +307,20 @@ document.querySelector('.captcha-container .confirm-btn').addEventListener('clic
   if (
     __GLOBAL__INIT__DATA__.captchaCodeIsRequired && code
   ) {
-    var modal = document.querySelector('.captcha-container')
-    modal.classList.remove('show')
+    apiRequest.getVerificationCode({ mobile: mobileInput.value, captchaCode: code }).then(function(res){
+      var captcha = res.data && res.data.data.captcha
+      var msg = res.data && res.data.message
+      var resCode = res.data && res.data.code
+      if (resCode === -1) {
+        toast(msg)
+        return
+      }
+      if (captcha) {
+        (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown())
+        var modal = document.querySelector('.captcha-container')
+        modal.classList.remove('show')
+      }
+    })
   } else {
     toast('图形验证码不能为空')
   }
