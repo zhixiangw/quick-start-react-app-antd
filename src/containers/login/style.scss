@@ -18,7 +18,6 @@ input,select,option{
   font-family: Avenir,Helvetica,Arial,sans-serif;
   line-height: 1.5;
   font-size: 12px;
-  display: -webkit-box;
   -webkit-box-orient: vertical;
   background-color: #FEBB2D;
 }
@@ -68,10 +67,9 @@ input,select,option{
   transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
 }
 .container .login-container{
-  padding: 21px 17px 55px 17px;
-  background: url('../../images/login_bg.jpg') no-repeat center center;
+  padding: 21px 17px 10px 17px;
+  background: url('../../images/login-bg.png') no-repeat center center;
   background-size: 100% 100%;
-  -webkit-box-flex: 1;
 }
 .container .login-container .login-wrap{
   padding: 17px;
@@ -167,7 +165,7 @@ input,select,option{
   text-align: center;
   color: #fff;
   font-size: 12px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .toast-container,.captcha-container,.user-agreement-modal-container{
@@ -290,4 +288,21 @@ input,select,option{
   color: #fff;
   background-color: #fe5115;
   text-align: center;
+}
+.login-container .login-desc{
+  margin-top: 40px;
+  img{
+    display: inline-block;
+    width: 100%;
+  }
+}
+.login-container .bottom-tip{
+  text-align: center;
+  width: 200%;
+  color: #fff;
+  font-size: 18px;
+  line-height: 26px;
+  margin-left: -50%;
+  transform: scale(.5);
+  margin-top: -10px;
 }

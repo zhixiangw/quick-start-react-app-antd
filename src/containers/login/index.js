@@ -121,7 +121,7 @@ function toast(text, duration) {
   body.appendChild(div)
   setTimeout(() => {
     div.remove()
-  }, duration || 1250);
+  }, duration || 1500);
 }
 
 function getPageInfo() {
