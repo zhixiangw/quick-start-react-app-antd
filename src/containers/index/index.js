@@ -374,16 +374,6 @@ function init() {
       animationStart(count)
     }, 3500);
     getPageInfo()
-    document.querySelector('input.mobile').addEventListener('blur', function(){
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-      }, 0);
-    })
-    document.querySelector('input.valid-code').addEventListener('blur', function(){
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-      }, 0);
-    })
     document.querySelector('input.captcha-code').addEventListener('blur', function(){
       setTimeout(() => {
         window.scrollTo(0, 0)
