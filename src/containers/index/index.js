@@ -384,6 +384,11 @@ function init() {
         window.scrollTo(0, 0)
       }, 0);
     })
+    document.querySelector('input.captcha-code').addEventListener('blur', function(){
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+      }, 0);
+    })
   }
 }
 init()
