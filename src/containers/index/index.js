@@ -105,7 +105,7 @@ function getPlatform() {
 
 function isValidMobile(mobile) {
   // 简单验证手机号码
-  return /^1[3|5|6|7|8|9]\d{19}$/.test(mobile)
+  return /^1[3|5|6|7|8|9]\d{9}$/.test(mobile)
 }
 
 function toast(text, duration) {
