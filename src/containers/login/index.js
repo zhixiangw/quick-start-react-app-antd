@@ -87,7 +87,7 @@ var apiRequest = {
 }
 
 function getUrlParamByName(name) {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
   var r = decodeURI(window.location.search).substr(1).match(reg)
   if (r != null) return unescape(r[2])
   return null
@@ -105,7 +105,7 @@ function getPlatform() {
 
 function isValidMobile(mobile) {
   // 简单验证手机号码
-  return /^1\d{10}$/.test(mobile)
+  return /^1[3|5|6|7|8|9]\d{19}$/.test(mobile)
 }
 
 function toast(text, duration) {
@@ -326,7 +326,7 @@ var tipWrap = document.querySelector('.tip-container-warp')
 function animationStart(count) {
   if (!(count % 8)) {
     var html = generatorItems().join('')
-    tipWrap.insertAdjacentHTML("beforeend", html)
+    tipWrap.insertAdjacentHTML('beforeend', html)
   }
   tipWrap.style.cssText = `transform: translate3d(0, -${tipContainer.clientHeight * (count)}px, 0)`;
 }

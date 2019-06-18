@@ -3,8 +3,9 @@ import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
+const filename = process.env.npm_config_env
 export default {
-  entry: './src/index.js',
+  entry: `./src/containers/${filename}/index.js`,
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.[hash:16].js'
@@ -75,7 +76,7 @@ export default {
   plugins: [
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: `./src/containers/${filename}/index.html`
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[hash:16].css',
@@ -84,19 +85,14 @@ export default {
   ],
   resolve: {
     alias: {
-      containers: path.resolve(__dirname, 'src/containers')
+      lib: path.resolve(__dirname, 'src/lib')
     }
   },
   devServer: {
-    contentBase: './dist',
     port: '2333',
     host: 'localhost',
-    historyApiFallback: true,
     open: 'Chrome',
     hot: true,
-    inline: true,
-    proxy: {
-      '/api': 'http://localhost:3000'
-    }
+    inline: true
   }
 }
