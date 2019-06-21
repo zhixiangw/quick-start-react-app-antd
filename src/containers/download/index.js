@@ -110,7 +110,7 @@ function init() {
       document.querySelector('.ios-download-container').style.cssText = 'display: block;'
     }
     if (!getUrlParamByName('uid')) {
-      window.location.replace('/login.html')
+      window.location.replace('/index.html')
     }
     getPageInfo()
   }
