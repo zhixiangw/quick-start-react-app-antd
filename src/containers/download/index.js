@@ -2,7 +2,7 @@ import './style.scss';
 import axios from 'axios'
 
 var Axios = axios.create({
-  baseURL: 'http://47.110.150.249:8899',
+  baseURL: 'http://opapi.fengjiangdali.com',
   timeout: 2000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   transformRequest: function(data) {
