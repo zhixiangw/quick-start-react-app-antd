@@ -166,7 +166,6 @@ var __GLOBAL__INIT__DATA__ = {
   mobilePhoneIsValid: false, // 手机号码是否有效
   verificationCodeIsValid: false, // 验证码是否有效
   userAgreementIsChecked: true, // 用户协议是否勾选
-  verifyCodeFromServer: -1, // 服务端获取到的验证码，判断的时候相减，-1避免类型转换
 }
 
 var mobileInput = document.querySelector('.mobile')
@@ -188,7 +187,7 @@ mobileInput.addEventListener('input', function(e){
 // 验证码输入框
 verifyCodeInput.addEventListener('input', function(e){
   var verifyCode = e.target.value
-  if ((verifyCode - __GLOBAL__INIT__DATA__.verifyCodeFromServer) === 0) {
+  if (verifyCode) {
     __GLOBAL__INIT__DATA__.verificationCodeIsValid = true
   } else {
     __GLOBAL__INIT__DATA__.verificationCodeIsValid = false
@@ -208,7 +207,6 @@ submitBtn.addEventListener('click', function(e){
   apiRequest.getVerificationCode(param).then(function(res){
     var userId = res.data.data && res.data.data.item && res.data.data.item.uid || 0
     var code = res.data && res.data.code
-    var captcha = res.data && res.data.data.captcha
     var msg = res.data && res.data.message
     if (code == -1003) {
       toast('您是老用户，可直接下载APP')
@@ -229,7 +227,7 @@ submitBtn.addEventListener('click', function(e){
       return
     }
     toast(msg)
-    if (captcha) return (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
+    if (code === 0) return (CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
     submitBtn.classList.remove('disabled')
   })
 })
@@ -309,15 +307,14 @@ document.querySelector('.captcha-container .confirm-btn').addEventListener('clic
     __GLOBAL__INIT__DATA__.captchaCodeIsRequired && code
   ) {
     apiRequest.getVerificationCode({ mobile: mobileInput.value, captchaCode: code }).then(function(res){
-      var captcha = res.data && res.data.data.captcha
       var msg = res.data && res.data.message
       var resCode = res.data && res.data.code
       if (resCode === -1) {
         toast(msg)
         return
       }
-      if (captcha) {
-        (__GLOBAL__INIT__DATA__.verifyCodeFromServer = captcha, CountDown())
+      if (code === 0) {
+        CountDown();
         var modal = document.querySelector('.captcha-container')
         modal.classList.remove('show')
       }
