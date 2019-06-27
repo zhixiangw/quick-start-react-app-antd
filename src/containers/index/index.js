@@ -208,8 +208,10 @@ submitBtn.addEventListener('click', function(e){
     var userId = res.data.data && res.data.data.item && res.data.data.item.uid || 0
     var code = res.data && res.data.code
     var msg = res.data && res.data.message
+    apiRequest.upLocation({ userId: userId, poisition: 1 })
     if (code == -1003) {
       toast('您是老用户，可直接下载APP')
+      apiRequest.upLocation({ userId: userId, poisition: 2 })
       setTimeout(() => {
         window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
       }, 1500)
@@ -226,7 +228,7 @@ submitBtn.addEventListener('click', function(e){
       return
     }
     toast(msg)
-    if (code === 0) return (CountDown(), apiRequest.upLocation({ userId: userId, poisition: 1 }))
+    if (code === 0) return (CountDown())
     submitBtn.classList.remove('disabled')
   })
 })
