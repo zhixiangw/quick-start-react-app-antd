@@ -210,7 +210,6 @@ submitBtn.addEventListener('click', function(e){
     var msg = res.data && res.data.message
     if (code == -1003) {
       toast('您是老用户，可直接下载APP')
-      apiRequest.upLocation({ userId: userId, poisition: 2 })
       setTimeout(() => {
         window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
       }, 1500)
@@ -267,6 +266,7 @@ downLoadBtn.addEventListener('click', function(){
       var userId = res.data.data && res.data.data.item && res.data.data.item.uid || 0
       toast(msg)
       if (loginCode === 0) {
+        apiRequest.upLocation({ userId: userId, poisition: 2 })
         setTimeout(() => {
           window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
         }, 1500);
