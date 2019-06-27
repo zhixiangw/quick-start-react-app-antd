@@ -72,6 +72,7 @@ export default {
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
       filename: `${filename}.html`,
+      favicon: './src/images/favicon.ico',
       template: `./src/containers/${filename}/index.html`,
     }),
     new MiniCssExtractPlugin({
