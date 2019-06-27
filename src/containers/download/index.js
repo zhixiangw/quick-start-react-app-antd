@@ -37,6 +37,7 @@ var apiRequest = {
           appMarket: getUrlParamByName('appMarket') || 'h5-special',
           deviceId: ''
         }),
+        from: 'webDown'
       }
     })
   },
@@ -96,12 +97,14 @@ var __DOWNLOAD__INIT__DATA__ = {
 document.querySelector('.download-btn img').addEventListener('click', function(){
   apiRequest.download({ userId: getUrlParamByName('uid') || 0, })
   apiRequest.upLocation({ userId: getUrlParamByName('uid') || 0, poisition: 3 })
-  if (getPlatform().IOS && __DOWNLOAD__INIT__DATA__.iosDownUrl) {
-    window.location.href = __DOWNLOAD__INIT__DATA__.iosDownUrl
-  }
-  if (getPlatform().Android && __DOWNLOAD__INIT__DATA__.androidDownUrl) {
-    window.location.href = __DOWNLOAD__INIT__DATA__.androidDownUrl
-  }
+  setTimeout(() => {
+    if (getPlatform().IOS && __DOWNLOAD__INIT__DATA__.iosDownUrl) {
+      window.location.href = __DOWNLOAD__INIT__DATA__.iosDownUrl
+    }
+    if (getPlatform().Android && __DOWNLOAD__INIT__DATA__.androidDownUrl) {
+      window.location.href = __DOWNLOAD__INIT__DATA__.androidDownUrl
+    }
+  }, 300);
 })
 
 function init() {
