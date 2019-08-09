@@ -136,6 +136,7 @@ function toast(text, duration) {
 }
 
 function getPageInfo() {
+  apiRequest.upLocation({ userId: 0, poisition: 0 })
   apiRequest.getPageInfo().then(function(res){
     var resp = res.data.data
     var banner = resp.top_banner
@@ -149,7 +150,6 @@ function getPageInfo() {
     if (agreementContent) document.querySelector('.user-agreement-modal .modal-content').innerHTML = agreementContent
     if (icp || companyName) document.querySelector('.login-container .icp').innerHTML = icp + ' ' + companyName
   })
-  apiRequest.upLocation({ userId: 0, poisition: 0 })
 }
 
 function showCaptchaModal() {
@@ -211,10 +211,11 @@ submitBtn.addEventListener('click', function(e){
     apiRequest.upLocation({ userId: userId, poisition: 1 })
     if (code == -1003) {
       toast('您是老用户，可直接下载APP')
-      apiRequest.upLocation({ userId: userId, poisition: 2 })
-      setTimeout(() => {
-        window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
-      }, 1500)
+      apiRequest.upLocation({ userId: userId, poisition: 2 }).then(() => {
+        setTimeout(() => {
+          window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
+        }, 1500)
+      })
       return
     }
     // 需要进行图形验证码
@@ -268,10 +269,11 @@ downLoadBtn.addEventListener('click', function(){
       var userId = res.data.data && res.data.data.item && res.data.data.item.uid || 0
       toast(msg)
       if (loginCode === 0) {
-        apiRequest.upLocation({ userId: userId, poisition: 2 })
-        setTimeout(() => {
-          window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
-        }, 1500);
+        apiRequest.upLocation({ userId: userId, poisition: 2 }).then(() => {
+          setTimeout(() => {
+            window.location.replace('/download.html?appMarket=' + (getUrlParamByName('appMarket') || 'h5-special') + '&uid=' + userId)
+          }, 1500);
+        })
       }
     })
   } else {

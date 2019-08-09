@@ -96,15 +96,16 @@ var __DOWNLOAD__INIT__DATA__ = {
 
 document.querySelector('.download-btn img').addEventListener('click', function(){
   apiRequest.download({ userId: getUrlParamByName('uid') || 0, })
-  apiRequest.upLocation({ userId: getUrlParamByName('uid') || 0, poisition: 3 })
-  setTimeout(() => {
-    if (getPlatform().IOS && __DOWNLOAD__INIT__DATA__.iosDownUrl) {
-      window.location.href = __DOWNLOAD__INIT__DATA__.iosDownUrl
-    }
-    if (getPlatform().Android && __DOWNLOAD__INIT__DATA__.androidDownUrl) {
-      window.location.href = __DOWNLOAD__INIT__DATA__.androidDownUrl
-    }
-  }, 300);
+  apiRequest.upLocation({ userId: getUrlParamByName('uid') || 0, poisition: 3 }).then(() => {
+    setTimeout(() => {
+      if (getPlatform().IOS && __DOWNLOAD__INIT__DATA__.iosDownUrl) {
+        window.location.href = __DOWNLOAD__INIT__DATA__.iosDownUrl
+      }
+      if (getPlatform().Android && __DOWNLOAD__INIT__DATA__.androidDownUrl) {
+        window.location.href = __DOWNLOAD__INIT__DATA__.androidDownUrl
+      }
+    }, 300);
+  })
 })
 
 function init() {
