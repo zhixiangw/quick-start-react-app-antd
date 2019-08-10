@@ -2,7 +2,7 @@ import './style.scss';
 import axios from 'axios'
 
 var Axios = axios.create({
-  baseURL: 'http://opapi.fengjiangdali.com',
+  baseURL: 'http://opapi.yourqianbao.cn',
   timeout: 2000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
   transformRequest: function(data) {
@@ -86,6 +86,7 @@ function getPageInfo() {
     if (name) document.querySelector('.logo-wrap .title').innerHTML = name
     __DOWNLOAD__INIT__DATA__.androidDownUrl = resp.android_downurl
     __DOWNLOAD__INIT__DATA__.iosDownUrl = resp.ios_downurl
+    document.querySelector('.download-btn img').click()
   })
 }
 
