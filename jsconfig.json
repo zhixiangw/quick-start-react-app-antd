@@ -3,7 +3,9 @@
     "target": "es5",
     "baseUrl": ".",
     "paths": {
-      "containers/*": ["./src/containers/*"]
+      "containers/*": ["./src/containers/*"],
+      "images/*": ["./src/images/*"],
+      "lib/*": ["./src/lib/*"]
     }
   },
   "exclude": [
