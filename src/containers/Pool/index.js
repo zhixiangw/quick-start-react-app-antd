@@ -5,8 +5,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Home page</h1>
-        <Button onClick={() => this.props.history.push('/pool')}>demo</Button>
+        <h1>Pool page</h1>
       </div>
     )
   }
