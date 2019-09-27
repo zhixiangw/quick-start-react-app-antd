@@ -1,15 +1,31 @@
 export default {
   menus: [{
-    path: '/home',
-    icon: 'user',
-    name: '香蕉制作'
+    path: '/dashboard',
+    icon: 'dashboard',
+    name: '数据概览'
   }, {
-    path: '/pool',
+    path: '/cinema',
     icon: 'video-camera',
-    name: '苹果制作'
+    name: '影院信息'
   }, {
-    path: '/',
-    icon: 'upload',
-    name: '熊猫制作'
+    path: '/movie',
+    icon: 'youtube',
+    name: '电影信息'
+  }, {
+    path: '/movie-scene',
+    icon: 'scissor',
+    name: '场次信息'
+  }, {
+    path: '/order',
+    icon: 'ordered-list',
+    name: '订单信息'
+  }, {
+    path: '/user',
+    icon: 'team',
+    name: '用户设置'
+  }, {
+    path: '/setting',
+    icon: 'setting',
+    name: '系统设置'
   }]
 }

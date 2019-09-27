@@ -7,8 +7,13 @@ import { ConnectedRouter } from 'connected-react-router'
 import { store, localHistory } from './store'
 
 import App from 'containers/App'
-import Home from 'containers/Home'
-import Pool from 'containers/Pool'
+import Dashboard from 'containers/Dashboard'
+import Cinema from 'containers/Cinema'
+import Movie from 'containers/Movie'
+import MovieScene from 'containers/MovieScene'
+import Order from 'containers/Order'
+import User from 'containers/User'
+import Setting from 'containers/Setting'
 
 ReactDOM.render((
   <Provider store={store}>
@@ -17,9 +22,14 @@ ReactDOM.render((
         <Route render={({ location, history }) => {
           return (<App history={history} location={location}>
             <Switch>
-              <Route exact path="/home" component={Home}/>
-              <Route exact path="/pool" component={Pool}/>
-              <Redirect from='/' to='/home'/>
+              <Route exact path="/dashboard" component={Dashboard}/>
+              <Route exact path="/cinema" component={Cinema}/>
+              <Route exact path="/movie" component={Movie}/>
+              <Route exact path="/movie-scene" component={MovieScene}/>
+              <Route exact path="/order" component={Order}/>
+              <Route exact path="/user" component={User}/>
+              <Route exact path="/setting" component={Setting}/>
+              <Redirect from='/' to='/dashboard'/>
             </Switch>
           </App>)
         }}/>
