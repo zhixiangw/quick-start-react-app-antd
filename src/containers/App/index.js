@@ -46,7 +46,7 @@ export default class App extends React.Component {
   }
 
   handleLogin = (values) => {
-
+    console.log(values)
   }
 
   renderLoginForm = () => {

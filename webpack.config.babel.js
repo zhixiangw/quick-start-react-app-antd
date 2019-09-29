@@ -86,7 +86,9 @@ export default {
   ],
   resolve: {
     alias: {
-      containers: path.resolve(__dirname, 'src/containers')
+      containers: path.resolve(__dirname, 'src/containers'),
+      images: path.resolve(__dirname, 'src/images'),
+      lib: path.resolve(__dirname, 'src/lib'),
     }
   },
   devServer: {
