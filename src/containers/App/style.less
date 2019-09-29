@@ -5,12 +5,20 @@
   min-height: 280px;
 }
 
-.app-container{
+.app-container, .loading-page{
   position: absolute;
   height: 100%;
   width: 100%;
   top: 0;
   left: 0;
+  background: url('../../images/Login/login-bg.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.loading-page{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-container .trigger {

@@ -1,22 +1,13 @@
 import { createActions } from 'redux-actions'
-
-const INCREMENT_COUNT = 'INCREMENT_COUNT'
-const DECREMENT_COUNT = 'DECREMENT_COUNT'
+import apiRequest from 'lib/request.service'
 
 export const APP = {
-  INCREMENT_COUNT,
-  DECREMENT_COUNT
+  LOGIN: 'LOGIN'
 }
 
 export default createActions({
-  [INCREMENT_COUNT]: ({ counter = 1 }) => new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(counter)
-    }, 500)
-  }),
-  [DECREMENT_COUNT]: ({ counter = 1 }) => new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(counter)
-    }, 500)
-  })
+  [APP.LOGIN]: param => apiRequest({
+    _url: 'system.login',
+    data: param
+  }, false)
 })

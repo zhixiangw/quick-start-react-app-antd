@@ -1,10 +1,11 @@
 import React from 'react'
-import { Layout, Menu, Icon } from 'antd'
+import { Layout, Menu, Icon, Spin } from 'antd'
 import { NavLink } from 'react-router-dom'
 import Config from './config'
 import './style.less'
+import LoginForm from 'containers/Login'
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout
 
 export default class App extends React.Component {
 
@@ -12,11 +13,16 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
-      selectedKeys: [this.props.location.pathname]
-    };
+      selectedKeys: [this.props.location.pathname],
+      isLogin: null // null、true、false
+    }
   }
 
   componentDidMount() {
+    // 模拟接口请求
+    setTimeout(() => {
+      this.setState({ isLogin: false })
+    }, 1500)
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
@@ -36,15 +42,28 @@ export default class App extends React.Component {
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
-    });
-  };
+    })
+  }
 
-  render() {
+  handleLogin = (values) => {
+
+  }
+
+  renderLoginForm = () => {
+    return <LoginForm onLogin={this.handleLogin}/>
+  }
+
+  renderLoading = () => {
+    return <section className="loading-page"><Spin size="large" /></section>
+  }
+
+  renedrLayout = () => {
+    const { collapsed, selectedKeys } = this.state
     return (
       <Layout className="app-container">
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo">{this.state.collapsed ? '微影' : '微影管理后台'}</div>
-          <Menu theme="dark" selectedKeys={this.state.selectedKeys} mode="inline" >
+        <Sider trigger={null} collapsible collapsed={collapsed}>
+          <div className="logo">{collapsed ? '微影' : '微影管理后台'}</div>
+          <Menu theme="dark" selectedKeys={selectedKeys} mode="inline" >
             {Config.menus.map(menu => {
               return (<Menu.Item key={menu.path}>
                 <NavLink to={menu.path}>
@@ -59,7 +78,7 @@ export default class App extends React.Component {
           <Header style={{ background: '#fff', padding: 0 }}>
             <Icon
               className="trigger"
-              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+              type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
           </Header>
@@ -68,6 +87,18 @@ export default class App extends React.Component {
           </Content>
         </Layout>
       </Layout>
-    );
+    )
+  }
+
+  renderChildren = () => {
+    const { isLogin } = this.state
+    if (isLogin === null) {
+      return this.renderLoading()
+    }
+    return isLogin ? this.renedrLayout() : this.renderLoginForm()
+  }
+
+  render() {
+    return this.renderChildren()
   }
 }
