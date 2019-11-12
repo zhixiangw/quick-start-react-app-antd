@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import './style.less'
 
 class LoginForm extends React.Component {
@@ -26,7 +26,7 @@ class LoginForm extends React.Component {
                 <Input
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   placeholder="用户名"
-                />,
+                />
               )}
             </Form.Item>
             <Form.Item>
@@ -37,7 +37,7 @@ class LoginForm extends React.Component {
                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                   type="password"
                   placeholder="密码"
-                />,
+                />
               )}
             </Form.Item>
             <Form.Item className="login-form-forgot">
