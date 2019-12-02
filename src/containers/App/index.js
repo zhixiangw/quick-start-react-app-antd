@@ -21,8 +21,8 @@ export default class App extends React.Component {
   componentDidMount() {
     // 模拟接口请求
     setTimeout(() => {
-      this.setState({ isLogin: true })
-    }, 150)
+      this.setState({ isLogin: false })
+    }, 1500)
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
@@ -46,6 +46,7 @@ export default class App extends React.Component {
   }
 
   handleLogin = (values) => {
+    // 登录接口
     console.log(values)
     this.setState({ isLogin: true })
   }
