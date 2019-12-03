@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const Axios = axios.create({
-  baseURL: 'http://opapi.yourqianbao.cn',
+  // baseURL: '/',
   timeout: 5000,
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded',
-    token: localStorage.getItem('__movie_token')
+    // token: localStorage.getItem('__movie_token')
   },
   transformRequest: function(data) {
     var bodyFormData = new FormData();
