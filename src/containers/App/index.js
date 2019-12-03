@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import Config from './config'
 import './style.less'
 import LoginForm from 'containers/Login'
-import Axios from 'lib/request.service'
+import fetch from 'lib/fetch'
 
 const { Header, Sider, Content } = Layout
 
@@ -49,7 +49,7 @@ export default class App extends React.Component {
   handleLogin = (values) => {
     // 登录接口
     console.log(values);
-    Axios.post('admin/login/login', values)
+    fetch.post('admin/login/login', values)
     // this.setState({ isLogin: true })
   }
 
