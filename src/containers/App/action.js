@@ -1,13 +1,10 @@
 import { createActions } from 'redux-actions'
-import apiRequest from 'lib/request.service'
+import fetch from 'lib/fetch'
 
 export const APP = {
   LOGIN: 'LOGIN'
 }
 
 export default createActions({
-  [APP.LOGIN]: param => apiRequest({
-    _url: 'system.login',
-    data: param
-  }, false)
+  [APP.LOGIN]: param => fetch.post('admin/login/login', param)
 })

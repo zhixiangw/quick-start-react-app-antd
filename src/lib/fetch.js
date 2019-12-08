@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { message as antdMessage } from 'antd'
 import { APIError } from 'lib/error';
 
 const fetch = axios.create({
-  baseURL: '/',
+  baseURL: 'https://openapi.wanguo.press',
   crossDomain: true,
   withCredentials: false,
   responseType: 'json',
@@ -30,7 +31,17 @@ fetch.interceptors.response.use(async response => {
     error.url = url;
     // 自动登录逻辑
     if(code === -2 && autoLogin) {
-      global.location.replace(responseBody.url);
+      window.location.replace(responseBody.url);
+    }
+
+    // 账号不存在
+    if (code === 408) {
+      antdMessage.error('用户不存在')
+    }
+
+    // 用户密码错误
+    if (code === 409) {
+      antdMessage.error('用户密码错误')
     }
 
     return Promise.reject(error);

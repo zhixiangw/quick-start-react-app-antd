@@ -1,14 +1,17 @@
+import './style.less'
 import React from 'react'
 import { Layout, Menu, Icon, Spin } from 'antd'
 import { NavLink } from 'react-router-dom'
-import Config from './config'
-import './style.less'
 import LoginForm from 'containers/Login'
-import fetch from 'lib/fetch'
+import { connect } from 'react-redux'
+import LoginAction from './action'
+import Config from './config'
+
+console.log(LoginAction)
 
 const { Header, Sider, Content } = Layout
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   constructor(props) {
     super(props)
@@ -20,10 +23,9 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    // 模拟接口请求
     setTimeout(() => {
       this.setState({ isLogin: false })
-    }, 1500)
+    }, 600);
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
@@ -47,10 +49,7 @@ export default class App extends React.Component {
   }
 
   handleLogin = (values) => {
-    // 登录接口
-    console.log(values);
-    fetch.post('admin/login/login', values)
-    // this.setState({ isLogin: true })
+    this.props.login(values).then(() => this.setState({ isLogin: true }))
   }
 
   renderLoginForm = () => {
@@ -106,3 +105,9 @@ export default class App extends React.Component {
     return this.renderChildren()
   }
 }
+
+const mapStateToProps = (state) => ({
+  loginInfo: state.AppReducer.loginInfo
+});
+const mapDispatchToProps = dispatch => ({ login: payload => dispatch(LoginAction.login(payload)) });
+export default connect(mapStateToProps, mapDispatchToProps)(App);
