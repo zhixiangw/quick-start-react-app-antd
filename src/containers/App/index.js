@@ -4,10 +4,9 @@ import { Layout, Menu, Icon, Spin } from 'antd'
 import { NavLink } from 'react-router-dom'
 import LoginForm from 'containers/Login'
 import { connect } from 'react-redux'
+import Cookies from 'js-cookie'
 import LoginAction from './action'
 import Config from './config'
-
-console.log(LoginAction)
 
 const { Header, Sider, Content } = Layout
 
@@ -18,14 +17,11 @@ class App extends React.Component {
     this.state = {
       collapsed: false,
       selectedKeys: [this.props.location.pathname],
-      isLogin: null // null、true、false
+      isLogin: Cookies.get('admin_login') || null // null、true、false
     }
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({ isLogin: false })
-    }, 600);
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
