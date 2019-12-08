@@ -1,11 +1,12 @@
 import React from 'react'
-import { Table } from 'antd';
+import { Table, Divider } from 'antd';
 import { connect } from 'react-redux'
+import SearchForm from 'components/SearchForm'
 import OrderAction from './action'
 
 class Order extends React.Component {
   componentDidMount() {
-    this.props.queryOrderList()
+    // this.props.queryOrderList()
   }
 
   getColumns = () => {
@@ -76,8 +77,54 @@ class Order extends React.Component {
     })
   }
 
+  getFields = () => {
+    return [{
+      label: '用户手机号',
+      name: 'mobile'
+    }, {
+      label: '用户ID',
+      name: 'user_id'
+    }, {
+      label: '订单ID',
+      name: 'order_id'
+    }, {
+      label: '订单号',
+      name: 'order_number'
+    }, {
+      label: '订单状态',
+      name: 'status',
+      type: 'select',
+      options: [{
+        name: '支付成功',
+        value: '1'
+      }, {
+        name: '支付失败',
+        value: '2'
+      }, {
+        name: '正在支付',
+        value: '3'
+      }, {
+        name: '已退款',
+        value: '4'
+      }, {
+        name: '已出票',
+        value: '5'
+      }]
+    }]
+  }
+
+  handleSearch = (values) => {
+
+  }
+
   render() {
-    return <Table columns={this.getColumns()} dataSource={this.getDataSource()} />
+    return (
+      <React.Fragment>
+        <SearchForm fields={this.getFields()} onSearch={this.handleSearch}/>
+        <Divider />
+        <Table columns={this.getColumns()} dataSource={this.getDataSource()} />
+      </React.Fragment>
+    )
   }
 }
 
