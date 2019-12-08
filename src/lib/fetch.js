@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { message as antdMessage } from 'antd'
+import Cookies from 'js-cookie'
 import { APIError } from 'lib/error';
 
 const fetch = axios.create({
@@ -32,6 +33,14 @@ fetch.interceptors.response.use(async response => {
     // 自动登录逻辑
     if(code === -2 && autoLogin) {
       window.location.replace(responseBody.url);
+    }
+
+    // 未认证，无登录态
+    if(code === 401) {
+      Cookies.remove('admin_login')
+      setTimeout(() => {
+        window.location.reload()
+      }, 300);
     }
 
     // 账号不存在

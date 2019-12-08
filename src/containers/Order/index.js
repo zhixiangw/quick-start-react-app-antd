@@ -54,7 +54,7 @@ class Order extends React.Component {
       {
         title: '操作',
         key: 'action',
-        render: (action, record) => <a href={`/#/order-detail/${record.key}`}>详情</a>,
+        render: (action, record) => <a href={`/#/order/detail/${record.key}`}>详情</a>,
       },
     ]
   }

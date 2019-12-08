@@ -16,18 +16,28 @@ class App extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
-      selectedKeys: [this.props.location.pathname],
+      selectedKeys: this.getSelectedKey(),
       isLogin: Cookies.get('admin_login') || null // null、true、false
     }
   }
 
   componentDidMount() {
+    // 获取用户信息的接口调用
+    this.state.isLogin === null && setTimeout(() => {
+      this.setState({ isLogin: false })
+    }, 600);
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
-        this.setState({ selectedKeys: [this.props.location.pathname] })
+        this.setState({ selectedKeys: this.getSelectedKey() })
       }
     })
+  }
+
+  getSelectedKey = () => {
+    const { pathname } = this.props.location
+    const [path, router] = pathname.split('/')
+    return ['/' + router]
   }
 
   getPathname = (url) => {

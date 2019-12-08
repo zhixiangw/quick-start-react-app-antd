@@ -28,7 +28,7 @@ ReactDOM.render((
               <Route exact path="/movie" component={Movie}/>
               <Route exact path="/movie-scene" component={MovieScene}/>
               <Route exact path="/order" component={Order}/>
-              <Route exact path="/order-detail/:orderId" component={OrderDetail}/>
+              <Route exact path="/order/detail/:orderId" component={OrderDetail}/>
               <Route exact path="/user" component={User}/>
               <Route exact path="/setting" component={Setting}/>
               <Redirect from='/' to='/dashboard'/>

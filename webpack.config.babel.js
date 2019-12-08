@@ -96,6 +96,7 @@ export default {
     contentBase: './dist',
     port: '2333',
     host: 'localhost',
+    disableHostCheck: true,
     historyApiFallback: true,
     open: 'Chrome',
     hot: true,

@@ -6,7 +6,7 @@ import OrderAction from '../action'
 
 class OrderDetail extends React.Component {
   componentDidMount() {
-    this.props.queryOrderDetail()
+    // this.props.queryOrderDetail()
   }
 
   render() {

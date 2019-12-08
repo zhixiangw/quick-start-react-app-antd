@@ -7,6 +7,6 @@ export const ORDER = {
 }
 
 export default createActions({
-  [ORDER.LIST]: param => fetch.get('admin/orderList', param),
-  [ORDER.DETAIL]: param => fetch.get('admin/orderDetail', param)
+  [ORDER.LIST]: param => fetch.get('admin/order/orderList'),
+  [ORDER.DETAIL]: param => fetch.get(`admin/order/orderDetail?id=${param.orderId}`)
 })
