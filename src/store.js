@@ -4,9 +4,11 @@ import { connectRouter, routerMiddleware } from 'connected-react-router'
 import promiseMiddleware from 'redux-promise-middleware'
 
 import AppReducer from 'containers/App/reducer'
+import OrderReducer from 'containers/Order/reducer'
 
 const reducers = {
-  AppReducer
+  AppReducer,
+  OrderReducer
 }
 
 const middleware = routerMiddleware(history)
