@@ -4,9 +4,8 @@ import Cookies from 'js-cookie'
 import { APIError } from 'lib/error';
 
 const fetch = axios.create({
-  baseURL: 'https://openapi.wanguo.press',
-  crossDomain: true,
-  withCredentials: false,
+  baseURL: '//openapi.wanguo.press',
+  withCredentials: true,
   responseType: 'json',
   timeout: 10000,
   headers: {
