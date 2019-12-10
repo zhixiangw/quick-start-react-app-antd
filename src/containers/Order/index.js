@@ -1,12 +1,13 @@
 import React from 'react'
 import { Table, Divider } from 'antd';
 import { connect } from 'react-redux'
+import moment from 'moment'
 import SearchForm from 'components/SearchForm'
 import OrderAction from './action'
 
 class Order extends React.Component {
   componentDidMount() {
-    // this.props.queryOrderList()
+    this.props.queryOrderList()
   }
 
   getColumns = () => {
@@ -37,14 +38,10 @@ class Order extends React.Component {
         dataIndex: 'amount'
       },
       {
-        title: '下单时间',
+        title: <span>下单时间<br />支付时间</span>,
         key: 'orderTime',
-        dataIndex: 'orderTime'
-      },
-      {
-        title: '支付时间',
-        key: 'payTime',
-        dataIndex: 'payTime'
+        dataIndex: 'orderTime',
+        render: (orderTime, record) => <span>{orderTime}<br />{record.payTime}</span>
       },
       {
         title: '状态',
@@ -67,10 +64,10 @@ class Order extends React.Component {
         movieName: order.movie.name,
         cinemaName: order.ciname.name,
         showTime: order.show_time,
-        userName: 'w',
+        userName: order.ticketing_user || '--',
         amount: order.amount,
-        orderTime: order.created_at,
-        payTime: order.pay_time,
+        orderTime: order.ticketing_time && moment(order.ticketing_time).format('YYYY-MM-DD hh:mm:ss') || '--',
+        payTime: order.pay_time && moment(order.pay_time).format('YYYY-MM-DD hh:mm:ss') || '--',
         statusText: order.statusText,
         action: order.id
       }

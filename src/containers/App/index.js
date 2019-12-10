@@ -22,16 +22,23 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // 获取用户信息的接口调用
-    this.state.isLogin === null && setTimeout(() => {
-      this.setState({ isLogin: false })
-    }, 600);
+    this.props.info().then(this.login, this.logout).catch(this.logout)
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
         this.setState({ selectedKeys: this.getSelectedKey() })
       }
     })
+  }
+
+  login = () => {
+    Cookies.set('admin_login', 1)
+    this.setState({ isLogin: true })
+  }
+
+  logout = () => {
+    Cookies.remove('admin_login')
+    this.setState({ isLogin: false })
   }
 
   getSelectedKey = () => {
@@ -55,11 +62,11 @@ class App extends React.Component {
   }
 
   handleLogin = (values) => {
-    this.props.login(values).then(() => this.setState({ isLogin: true }))
+    this.props.login(values).then(this.login)
   }
 
   renderLoginForm = () => {
-    return <LoginForm onLogin={this.handleLogin}/>
+    return <LoginForm onLogin={this.handleLogin} />
   }
 
   renderLoading = () => {
@@ -113,7 +120,11 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  loginInfo: state.AppReducer.loginInfo
+  loginInfo: state.AppReducer.loginInfo,
+  userInfo: state.AppReducer.userInfo,
 });
-const mapDispatchToProps = dispatch => ({ login: payload => dispatch(LoginAction.login(payload)) });
+const mapDispatchToProps = dispatch => ({
+  login: payload => dispatch(LoginAction.login(payload)),
+  info: () => dispatch(LoginAction.info()),
+});
 export default connect(mapStateToProps, mapDispatchToProps)(App);

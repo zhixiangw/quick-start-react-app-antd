@@ -2,144 +2,7 @@ import { handleActions } from 'redux-actions'
 import { ORDER } from './action'
 
 const initState = {
-  orderList: [
-    {
-      'id': 60,
-      'user_id': 1,
-      'openid': 'oFfx45GTU1gtwQrv1jWMF9Kr_KWo',
-      'amount': 0.01,
-      'price': 33,
-      'sell_price': 28.1,
-      'prepay_id': 'wx072342311861630aacff18c51705726300',
-      'date': '2019-12-07',
-      'order_sn': 'movie_20191272342311476305707',
-      'seq_no': 201912080088977,
-      'count': 3,
-      'seats': [
-        {
-          'row': '12',
-          'column': '07',
-          'seat_no': '0000000000000001-12-07'
-        }
-      ],
-      'notify_time': '2019-12-07T15:43:17.000Z',
-      'pay_time': '2019-12-07T15:42:31.000Z',
-      'payed_time': '2019-12-07T15:43:17.000Z',
-      'created_at': '2019-12-07T15:42:31.000Z',
-      'updated_at': '2019-12-08T07:14:58.000Z',
-      'status': 3,
-      'note': '',
-      'ip': '220.112.125.151',
-      'show_time': '2019-12-08 13:20:00',
-      'cinema_id': 172,
-      'movie_id': 1258163,
-      'movie': {
-        'img': 'http://p0.meituan.net/w.h/movie/dd488887e8a1c8ab4723eee4026d25aa1973142.jpg',
-        'name': '利刃出鞘',
-        'ename': 'Knives Out',
-        'movie_id': 1258163
-      },
-      'ciname': {
-        'name': '浙江电影院',
-        'addr': '黄浦区浙江中路123号（近福州路）',
-        'cinema_id': 172
-      },
-      'seatsText': [
-        '12排07座'
-      ],
-      'surcharge': null,
-      'surchargeText': '',
-      'statusText': '待支付'
-    },
-    {
-      'id': 59,
-      'user_id': 1,
-      'openid': 'oFfx45GTU1gtwQrv1jWMF9Kr_KWo',
-      'amount': 0.01,
-      'price': 0.51,
-      'sell_price': 0.43,
-      'prepay_id': 'wx07225233267822b3e7fb15a91770650000',
-      'date': '2019-12-07',
-      'order_sn': 'movie_201912722523313751015497',
-      'seq_no': 201912080126413,
-      'count': 2,
-      'seats': [
-        '19071'
-      ],
-      'notify_time': '2019-12-07T14:53:29.000Z',
-      'pay_time': '2019-12-07T14:52:33.000Z',
-      'payed_time': '2019-12-07T14:53:28.000Z',
-      'created_at': '2019-12-07T14:52:33.000Z',
-      'updated_at': '2019-12-08T07:14:56.000Z',
-      'status': 2,
-      'note': '',
-      'ip': '220.112.125.151',
-      'show_time': '2019-12-08 10:20:00',
-      'cinema_id': 168,
-      'movie_id': 1217125,
-      'movie': {
-        'img': 'http://p1.meituan.net/w.h/moviemachine/f4df6f9c2c55e347266e35027da415251124290.jpg',
-        'name': '勇敢者游戏2：再战巅峰',
-        'ename': 'Jumanji 2: The Next Level',
-        'movie_id': 1217125
-      },
-      'ciname': {
-        'name': 'SFC上影影城（新世界店）',
-        'addr': '黄浦区南京西路2-68号新世界城12楼（靠近西藏中路）',
-        'cinema_id': 168
-      },
-      'seatsText': [
-        'undefined排undefined座'
-      ],
-      'surcharge': null,
-      'surchargeText': '',
-      'statusText': '支付失败'
-    },
-    {
-      'id': 46,
-      'user_id': 1,
-      'openid': 'oFfx45GTU1gtwQrv1jWMF9Kr_KWo',
-      'amount': 0.01,
-      'price': 0,
-      'sell_price': 0,
-      'prepay_id': 'wx07154802067583e1fcdbb4ca1463775800',
-      'date': '2019-12-07',
-      'order_sn': 'movie_20191271548190882738062',
-      'seq_no': 201912070120484,
-      'count': 1,
-      'seats': [
-        '0000000000000001-8-04'
-      ],
-      'notify_time': '2019-12-07T08:52:25.000Z',
-      'pay_time': '2019-12-07T07:48:02.000Z',
-      'payed_time': '2019-12-07T07:48:18.000Z',
-      'created_at': '2019-12-07T07:48:01.000Z',
-      'updated_at': '2019-12-08T06:44:04.000Z',
-      'status': 1,
-      'note': '',
-      'ip': '220.112.124.194',
-      'show_time': '2019-12-07 18:45:00',
-      'cinema_id': 228,
-      'movie_id': 1217041,
-      'movie': {
-        'img': 'http://p1.meituan.net/w.h/movie/6d1a970c7fefb016006b0af099d8ff38867262.jpg',
-        'name': '南方车站的聚会',
-        'ename': 'The Wild Goose Lake',
-        'movie_id': 1217041
-      },
-      'ciname': {
-        'name': '大光明电影院（南京西路店）',
-        'addr': '黄浦区南京西路216号（黄河路南京西路）',
-        'cinema_id': 228
-      },
-      'seatsText': [
-        'undefined排undefined座'
-      ],
-      'surcharge': null,
-      'surchargeText': '',
-      'statusText': '支付成功'
-    }
-  ],
+  orderList: [],
   orderDetail: {
     'cinema': {
       'id': 41,
@@ -250,8 +113,8 @@ const initState = {
 export default handleActions(
   {
     [ORDER.LIST + '_FULFILLED']: (state, { payload }) => {
-      console.log(payload)
-      return { ...state, orderList: [] }
+      const { data: { count, items = [] } } = payload
+      return { ...state, orderList: items, count }
     }
   },
   initState
