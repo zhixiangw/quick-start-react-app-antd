@@ -1,6 +1,6 @@
 import './style.less'
 import React from 'react'
-import { Layout, Menu, Icon, Spin } from 'antd'
+import { Layout, Menu, Icon, Spin, Dropdown } from 'antd'
 import { NavLink } from 'react-router-dom'
 import LoginForm from 'containers/Login'
 import { connect } from 'react-redux'
@@ -73,8 +73,21 @@ class App extends React.Component {
     return <section className="loading-page"><Spin size="large" /></section>
   }
 
+  renderUserMenu = () => {
+    return (
+      <Menu>
+        <Menu.Item key="0">
+          <a onClick={this.logout}>
+            退出登录
+          </a>
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
   renedrLayout = () => {
     const { collapsed, selectedKeys } = this.state
+    const { userInfo } = this.props
     return (
       <Layout className="app-container">
         <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -91,12 +104,19 @@ class App extends React.Component {
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }}>
+          <Header style={{ background: '#fff', padding: 0, display: 'flex' }}>
             <Icon
               className="trigger"
               type={collapsed ? 'menu-unfold' : 'menu-fold'}
               onClick={this.toggle}
             />
+            <div className="user-info" style={{ textAlign: 'right', flex: 1, paddingRight: 30 }}>
+              <Dropdown overlay={this.renderUserMenu()} placement="bottomRight">
+                <a className="ant-dropdown-link" href="#">
+                  {userInfo.name}<Icon type="down" />
+                </a>
+              </Dropdown>
+            </div>
           </Header>
           <Content className="app-content">
             {this.props.children}

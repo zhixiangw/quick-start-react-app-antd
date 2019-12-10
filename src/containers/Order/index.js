@@ -6,8 +6,17 @@ import SearchForm from 'components/SearchForm'
 import OrderAction from './action'
 
 class Order extends React.Component {
+  constructor(props) {
+    super(props)
+    this.limit = 10
+  }
+
   componentDidMount() {
-    this.props.queryOrderList()
+    this.getOrderList({ offset: 0, limit: this.limit })
+  }
+
+  getOrderList = (param) => {
+    return this.props.queryOrderList(param)
   }
 
   getColumns = () => {
@@ -74,6 +83,15 @@ class Order extends React.Component {
     })
   }
 
+  getPagination = () => {
+    const { count } = this.props
+    return {
+      hideOnSinglePage: true,
+      pageSize: this.limit,
+      total: count
+    }
+  }
+
   getFields = () => {
     return [{
       label: '用户手机号',
@@ -114,12 +132,20 @@ class Order extends React.Component {
 
   }
 
+  handleTableChange = ({ current }) => {
+    this.getOrderList({ offset: current * this.limit, limit: this.limit })
+  }
+
   render() {
     return (
       <React.Fragment>
         <SearchForm fields={this.getFields()} onSearch={this.handleSearch}/>
         <Divider />
-        <Table columns={this.getColumns()} dataSource={this.getDataSource()} />
+        <Table
+          onChange={this.handleTableChange}
+          columns={this.getColumns()}
+          dataSource={this.getDataSource()}
+          pagination={this.getPagination()}/>
       </React.Fragment>
     )
   }
@@ -127,7 +153,8 @@ class Order extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-  orderList: state.OrderReducer.orderList
+  orderList: state.OrderReducer.orderList,
+  count: state.OrderReducer.count,
 });
 const mapDispatchToProps = dispatch => ({ queryOrderList: payload => dispatch(OrderAction.list(payload)) });
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

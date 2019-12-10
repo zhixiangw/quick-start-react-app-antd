@@ -3,6 +3,7 @@ import { ORDER } from './action'
 
 const initState = {
   orderList: [],
+  count: 0,
   orderDetail: {
     'cinema': {
       'id': 41,

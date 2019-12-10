@@ -8,5 +8,5 @@ export const APP = {
 
 export default createActions({
   [APP.LOGIN]: param => fetch.post('admin/login/login', param),
-  [APP.INFO]: () => fetch.get('admin/order/orderList'),
+  [APP.INFO]: () => fetch.get('admin/login/info'),
 })
