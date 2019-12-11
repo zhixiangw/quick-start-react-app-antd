@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { message as antdMessage } from 'antd'
-import Cookies from 'js-cookie'
 import { APIError } from 'lib/error';
 
+
+export const baseURL = '//openapi.wanguo.press'
 const fetch = axios.create({
-  baseURL: '//openapi.wanguo.press',
+  baseURL,
   withCredentials: true,
   responseType: 'json',
   timeout: 10000,

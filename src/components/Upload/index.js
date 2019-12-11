@@ -1,5 +1,6 @@
 import React from 'react';
 import { Upload, Icon, Modal } from 'antd';
+import { baseURL } from 'lib/fetch'
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -54,8 +55,10 @@ export default class PicturesWall extends React.Component {
     return (
       <div className="clearfix">
         <Upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          action={`${baseURL}/admin/main/uploadImages`}
           listType="picture-card"
+          accept="image/*"
+          multiple={Boolean(1)}
           fileList={fileList}
           withCredentials={Boolean(1)}
           onPreview={this.handlePreview}
