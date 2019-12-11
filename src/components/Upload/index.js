@@ -22,11 +22,28 @@ function getBase64(file) {
 */
 
 export default class PicturesWall extends React.Component {
-  state = {
-    previewVisible: false,
-    previewImage: '',
-    fileList: [],
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList: this.getDefaultFileList(props),
+    };
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.fileList.length !== nextProps.fileList.length) {
+      this.setState({ fileList: this.getDefaultFileList(nextProps) })
+    }
+  }
+
+  getDefaultFileList = (props) => {
+    const { fileList } = props
+    if (Array.isArray(fileList)) {
+      return fileList.map((file, index) => ({ uid: index, name: 'images', status: 'done', url: file }))
+    }
+    return []
+  }
 
   handleCancel = () => this.setState({ previewVisible: false });
 
@@ -42,29 +59,34 @@ export default class PicturesWall extends React.Component {
     });
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList });
+  handleChange = ({ fileList }) => this.setState({ fileList }, () => {
+    const ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0])
+    this.props.onChange && this.props.onChange(ossFileUrls)
+  });
+
+  renderUploadButton = () => (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">点击上传</div>
+    </div>
+  );
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">点击上传</div>
-      </div>
-    );
+
     return (
       <div className="clearfix">
         <Upload
           action={`${baseURL}/admin/main/uploadImages`}
           listType="picture-card"
           accept="image/*"
+          name="images"
           multiple={Boolean(1)}
           fileList={fileList}
           withCredentials={Boolean(1)}
           onPreview={this.handlePreview}
-          onChange={this.handleChange}
-        >
-          {uploadButton}
+          onChange={this.handleChange} >
+            {this.renderUploadButton()}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img style={{ width: '100%' }} src={previewImage} />
