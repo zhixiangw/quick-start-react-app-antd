@@ -34,14 +34,6 @@ fetch.interceptors.response.use(async response => {
       window.location.replace(responseBody.url);
     }
 
-    // 未认证，无登录态
-    if(code === 401) {
-      Cookies.remove('admin_login')
-      setTimeout(() => {
-        window.location.reload()
-      }, 300);
-    }
-
     // 账号不存在
     if (code === 408) {
       antdMessage.error('用户不存在')

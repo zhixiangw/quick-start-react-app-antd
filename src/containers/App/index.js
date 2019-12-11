@@ -22,7 +22,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.props.info().then(this.login, this.logout).catch(this.logout)
+    this.props.info().then(this.setLoginInfo, this.removeLoginInfo).catch(this.removeLoginInfo)
     window.addEventListener('hashchange', (HashChangeEvent) => {
       const { newURL, oldURL } = HashChangeEvent
       if (this.getPathname(newURL) !== this.getPathname(oldURL)) {
@@ -31,14 +31,18 @@ class App extends React.Component {
     })
   }
 
-  login = () => {
+  setLoginInfo = () => {
     Cookies.set('admin_login', 1)
     this.setState({ isLogin: true })
   }
 
-  logout = () => {
+  removeLoginInfo = () => {
     Cookies.remove('admin_login')
     this.setState({ isLogin: false })
+  }
+
+  logout = () => {
+    this.props.logout().then(this.removeLoginInfo)
   }
 
   getSelectedKey = () => {
@@ -62,7 +66,10 @@ class App extends React.Component {
   }
 
   handleLogin = (values) => {
-    this.props.login(values).then(this.login)
+    this.props.login(values).then(() => {
+      this.setLoginInfo();
+      this.props.info();
+    })
   }
 
   renderLoginForm = () => {
@@ -145,6 +152,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = dispatch => ({
   login: payload => dispatch(LoginAction.login(payload)),
+  logout: () => dispatch(LoginAction.logout()),
   info: () => dispatch(LoginAction.info()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);
