@@ -1,6 +1,6 @@
 import './style.less'
 import React from 'react'
-import { Layout, Menu, Icon, Spin, Dropdown } from 'antd'
+import { Layout, Menu, Icon, Spin, Dropdown, Input } from 'antd'
 import { NavLink } from 'react-router-dom'
 import LoginForm from 'containers/Login'
 import { connect } from 'react-redux'
@@ -16,6 +16,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       collapsed: false,
+      password: '',
       selectedKeys: this.getSelectedKey(),
       isLogin: Cookies.get('admin_login') || null // null、true、false
     }
@@ -43,6 +44,24 @@ class App extends React.Component {
 
   logout = () => {
     this.props.logout().then(this.removeLoginInfo)
+  }
+
+  resetPassword = () => {
+    Modal.confirm({
+      title: '是否修改密码?',
+      content: <Input placeholder="请输入新密码" onChange={(e) => this.setState({ password: e.target.value })}/>,
+      onOk: () => {
+        const { password } = this.state
+        if (password) {
+          return new Promise((resolve, reject) => {
+            this.props.resetPassword({ password }).then(resolve, reject)
+          });
+        } else {
+          message.error('请输入密码')
+          return Promise.reject('请输入密码');
+        }
+      },
+    })
   }
 
   getSelectedKey = () => {
@@ -86,6 +105,11 @@ class App extends React.Component {
         <Menu.Item key="0">
           <a onClick={this.logout}>
             退出登录
+          </a>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <a onClick={this.resetPassword}>
+            重置密码
           </a>
         </Menu.Item>
       </Menu>
@@ -154,5 +178,6 @@ const mapDispatchToProps = dispatch => ({
   login: payload => dispatch(LoginAction.login(payload)),
   logout: () => dispatch(LoginAction.logout()),
   info: () => dispatch(LoginAction.info()),
+  resetPassword: (payload) => dispatch(LoginAction.reset(payload)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);
