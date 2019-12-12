@@ -5,10 +5,12 @@ import promiseMiddleware from 'redux-promise-middleware'
 
 import AppReducer from 'containers/App/reducer'
 import OrderReducer from 'containers/Order/reducer'
+import UserReducer from 'containers/User/reducer'
 
 const reducers = {
   AppReducer,
-  OrderReducer
+  OrderReducer,
+  UserReducer
 }
 
 const middleware = routerMiddleware(history)

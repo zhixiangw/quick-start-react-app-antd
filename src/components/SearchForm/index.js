@@ -36,7 +36,9 @@ class AdvancedSearchForm extends React.Component {
   handleSearch = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      this.props.onSearch(values)
+      if (!err) {
+        this.props.onSearch(values)
+      }
     });
   };
 
