@@ -8,15 +8,21 @@ import OrderAction from './action'
 class Order extends React.Component {
   constructor(props) {
     super(props)
-    this.limit = 10
+
+    this.state = {
+      limit: 10,
+      offset: 0,
+      filter: {}
+    }
   }
 
   componentDidMount() {
-    this.getOrderList({ offset: 0, limit: this.limit })
+    this.getOrderList()
   }
 
-  getOrderList = (param) => {
-    return this.props.queryOrderList(param)
+  getOrderList = () => {
+    const { offset, limit, filter } = this.state
+    return this.props.queryOrderList({ offset, limit, filter: JSON.stringify(filter) })
   }
 
   getColumns = () => {
@@ -95,7 +101,7 @@ class Order extends React.Component {
   getFields = () => {
     return [{
       label: '用户手机号',
-      name: 'mobile'
+      name: 'phone'
     }, {
       label: '用户ID',
       name: 'user_id'
@@ -104,36 +110,37 @@ class Order extends React.Component {
       name: 'order_id'
     }, {
       label: '订单号',
-      name: 'order_number'
+      name: 'order_sn'
     }, {
       label: '订单状态',
       name: 'status',
       type: 'select',
       options: [{
         name: '支付成功',
-        value: '1'
+        value: 1
       }, {
         name: '支付失败',
-        value: '2'
+        value: 2
       }, {
         name: '正在支付',
-        value: '3'
+        value: 3
       }, {
         name: '已退款',
-        value: '4'
+        value: 4
       }, {
         name: '已出票',
-        value: '5'
+        value: 5
       }]
     }]
   }
 
   handleSearch = (values) => {
-
+    this.setState({ filter: values }, this.getOrderList)
   }
 
   handleTableChange = ({ current }) => {
-    this.getOrderList({ offset: current * this.limit, limit: this.limit })
+    const { limit } = this.state
+    this.setState({ offset: current * limit }, this.getOrderList)
   }
 
   render() {
