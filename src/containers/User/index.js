@@ -90,7 +90,6 @@ class User extends React.Component {
 
   renderUserList = () => {
     const { userList } = this.props
-    console.log(UserAction)
     return userList.map(this.renderCardItem)
   }
 
