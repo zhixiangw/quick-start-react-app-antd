@@ -54,9 +54,10 @@ class User extends React.Component {
 
   onDeleteUser = (id) => {
     id = String(id)
-    Modal.delete({
+    Modal.confirm({
       title: '是否确定要删除这位用户?',
       content: '此操作不可逆，请谨慎考虑后，再操作！',
+      okType: 'danger',
       onOk: () => {
         return new Promise((resolve, reject) => {
           this.props.deleteUser(id).then(resolve, reject)
@@ -89,8 +90,10 @@ class User extends React.Component {
 
   renderUserList = () => {
     const { userList } = this.props
+    console.log(UserAction)
     return userList.map(this.renderCardItem)
   }
+
 
   render() {
     return (

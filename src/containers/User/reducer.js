@@ -9,7 +9,8 @@ export default handleActions(
   {
     [USER.LIST + '_FULFILLED']: (state, { payload }) => {
       const { data } = payload
-      return { ...state, userList: [data] }
+      const isValidUser = data.id
+      return { ...state, userList: isValidUser ? [data] : [] }
     },
   },
   initState
