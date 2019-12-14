@@ -46,6 +46,8 @@ fetch.interceptors.response.use(async response => {
     }
 
     return Promise.reject(error);
+  } else {
+    message && antdMessage.success(message)
   }
 
   return data;

@@ -1,6 +1,6 @@
 import './style.less'
 import React from 'react'
-import { Layout, Menu, Icon, Spin, Dropdown, Input } from 'antd'
+import { Layout, Menu, Icon, Spin, Dropdown, Input, Modal } from 'antd'
 import { NavLink } from 'react-router-dom'
 import LoginForm from 'containers/Login'
 import { connect } from 'react-redux'
@@ -143,7 +143,7 @@ class App extends React.Component {
             />
             <div className="user-info" style={{ textAlign: 'right', flex: 1, paddingRight: 30 }}>
               <Dropdown overlay={this.renderUserMenu()} placement="bottomRight">
-                <a className="ant-dropdown-link" href="#">
+                <a className="ant-dropdown-link">
                   {userInfo.name}<Icon type="down" />
                 </a>
               </Dropdown>

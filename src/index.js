@@ -14,6 +14,7 @@ import MovieScene from 'containers/MovieScene'
 import Order from 'containers/Order'
 import OrderDetail from 'containers/Order/OrderDetail'
 import User from 'containers/User'
+import UserDetail from 'containers/User/UserDetail'
 import Setting from 'containers/Setting'
 
 ReactDOM.render((
@@ -30,6 +31,7 @@ ReactDOM.render((
               <Route exact path="/order" component={Order}/>
               <Route exact path="/order/detail/:orderId" component={OrderDetail}/>
               <Route exact path="/user" component={User}/>
+              <Route exact path="/user/detail/:orderId" component={UserDetail}/>
               <Route exact path="/setting" component={Setting}/>
               <Redirect from='/' to='/dashboard'/>
             </Switch>

@@ -32,7 +32,7 @@ export default class PicturesWall extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.fileList.length !== nextProps.fileList.length) {
+    if (this.props.fileList && nextProps.fileList && this.props.fileList.length !== nextProps.fileList.length) {
       this.setState({ fileList: this.getDefaultFileList(nextProps) })
     }
   }
@@ -64,12 +64,21 @@ export default class PicturesWall extends React.Component {
     this.props.onChange && this.props.onChange(ossFileUrls)
   });
 
-  renderUploadButton = () => (
+  renderBtn = () => (
     <div>
       <Icon type="plus" />
       <div className="ant-upload-text">点击上传</div>
     </div>
-  );
+  )
+
+  renderUploadButton = () => {
+    const { fileList } = this.state
+    const max = this.props.maxLength
+    if (max) {
+      return fileList.length >= max ? null : this.renderBtn()
+    }
+    return this.renderBtn()
+  };
 
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
