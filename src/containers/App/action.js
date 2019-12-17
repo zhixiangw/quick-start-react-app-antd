@@ -12,5 +12,5 @@ export default createActions({
   [APP.LOGIN]: param => fetch.post('admin/user/login', param),
   [APP.LOGOUT]: () => fetch.post('admin/user/logout'),
   [APP.INFO]: () => fetch.get('admin/user/info'),
-  [APP.RESET]: () => fetch.post('admin/user/changePwd'),
+  [APP.RESET]: (param) => fetch.post('admin/user/changePwd', param),
 })
