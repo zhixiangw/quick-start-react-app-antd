@@ -31,7 +31,9 @@ class UserDetail extends React.Component {
 
   render() {
     const { userDetail } = this.props
-    return <CreateUserForm detail={userDetail} onSubmit={this.handleSubmit} />
+    const { orderId } = this.state
+    const type = orderId ? 'edit' : 'add'
+    return <CreateUserForm type={type} detail={userDetail} onSubmit={this.handleSubmit} />
   }
 }
 

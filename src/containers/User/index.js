@@ -34,6 +34,11 @@ class UserList extends React.Component {
         render: (avatar) => <Avatar src={avatar}/>
       },
       {
+        title: '昵称',
+        dataIndex: 'nickName',
+        key: 'nickName',
+      },
+      {
         title: '手机号码',
         dataIndex: 'phone',
         key: 'phone',
@@ -82,6 +87,7 @@ class UserList extends React.Component {
       return {
         key: user.id,
         avatar: user.avatar,
+        nickName: user.nickname || '--',
         phone: user.phone,
         userName: user.username,
         roles: user.roles && user.roles.join(',') || '--',
@@ -146,7 +152,7 @@ class UserList extends React.Component {
   }
 
   handleSearch = (values) => {
-    this.setState({ filter: values }, this.getUserList)
+    this.setState({ filter: values, offset: 0 }, this.getUserList)
   }
 
   handleTableChange = ({ current }) => {

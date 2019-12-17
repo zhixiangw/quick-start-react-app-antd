@@ -15,7 +15,6 @@ export default handleActions(
     },
     [USER.DETAIL + '_FULFILLED']: (state, { payload }) => {
       const { data } = payload
-      console.log(data)
       return { ...state, userDetail: data}
     },
   },

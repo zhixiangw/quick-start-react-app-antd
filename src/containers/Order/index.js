@@ -135,7 +135,7 @@ class Order extends React.Component {
   }
 
   handleSearch = (values) => {
-    this.setState({ filter: values }, this.getOrderList)
+    this.setState({ filter: values, offset: 0 }, this.getOrderList)
   }
 
   handleTableChange = ({ current }) => {

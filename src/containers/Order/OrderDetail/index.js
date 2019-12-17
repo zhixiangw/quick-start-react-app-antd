@@ -1,5 +1,5 @@
 import React from 'react'
-import { Descriptions, Card, message, Button } from 'antd';
+import { Descriptions, Card, Button } from 'antd';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Upload from 'components/Upload'
@@ -25,7 +25,7 @@ class OrderDetail extends React.Component {
   onSubmitOrderTicketing = () => {
     const { orderId } = this.props.match.params
     const { fileList } = this.state
-    this.props.submitOrderTicketing({ orderId, fileList }).then(() => message.info('保存成功'))
+    this.props.submitOrderTicketing({ orderId, fileList })
   }
 
   render() {

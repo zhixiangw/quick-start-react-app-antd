@@ -35,14 +35,14 @@ fetch.interceptors.response.use(async response => {
       window.location.replace(responseBody.url);
     }
 
-    // 账号不存在
     if (code === 408) {
+      // 账号不存在
       antdMessage.error('用户不存在')
-    }
-
-    // 用户密码错误
-    if (code === 409) {
+    } else if (code === 409) {
+      // 用户密码错误
       antdMessage.error('用户密码错误')
+    } else {
+      antdMessage.error(message)
     }
 
     return Promise.reject(error);
