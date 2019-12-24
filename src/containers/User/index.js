@@ -182,8 +182,8 @@ const mapStateToProps = (state) => ({
   count: state.UserReducer.count
 });
 const mapDispatchToProps = dispatch => ({
-  queryUserList: payload => dispatch(UserAction.list(payload)),
-  deleteUser: id => dispatch(UserAction.delete(id)),
-  passwordRest: payload => dispatch(UserAction.reset(payload)),
+  queryUserList: payload => dispatch(UserAction.userList(payload)),
+  deleteUser: id => dispatch(UserAction.userDelete(id)),
+  passwordRest: payload => dispatch(UserAction.userReset(payload)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(UserList);

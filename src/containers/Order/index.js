@@ -162,5 +162,6 @@ const mapStateToProps = (state) => ({
   orderList: state.OrderReducer.orderList,
   count: state.OrderReducer.count,
 });
-const mapDispatchToProps = dispatch => ({ queryOrderList: payload => dispatch(OrderAction.list(payload)) });
+
+const mapDispatchToProps = dispatch => ({ queryOrderList: payload => dispatch(OrderAction.orderList(payload)) });
 export default connect(mapStateToProps, mapDispatchToProps)(Order);

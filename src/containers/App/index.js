@@ -175,9 +175,9 @@ const mapStateToProps = (state) => ({
   userInfo: state.AppReducer.userInfo,
 });
 const mapDispatchToProps = dispatch => ({
-  login: payload => dispatch(LoginAction.login(payload)),
-  logout: () => dispatch(LoginAction.logout()),
-  info: () => dispatch(LoginAction.info()),
-  resetPassword: (payload) => dispatch(LoginAction.reset(payload)),
+  login: payload => dispatch(LoginAction.appLogin(payload)),
+  logout: () => dispatch(LoginAction.appLogout()),
+  info: () => dispatch(LoginAction.appInfo()),
+  resetPassword: (payload) => dispatch(LoginAction.appReset(payload)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);

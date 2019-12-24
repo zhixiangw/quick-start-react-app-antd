@@ -2,10 +2,10 @@ import { createActions } from 'redux-actions'
 import fetch from 'lib/fetch'
 
 export const APP = {
-  LOGIN: 'LOGIN',
-  LOGOUT: 'LOGOUT',
-  INFO: 'INFO',
-  RESET: 'RESET'
+  LOGIN: 'APP.LOGIN',
+  LOGOUT: 'APP.LOGOUT',
+  INFO: 'APP.INFO',
+  RESET: 'APP.RESET'
 }
 
 export default createActions({

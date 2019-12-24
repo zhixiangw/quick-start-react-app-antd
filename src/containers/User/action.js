@@ -3,11 +3,11 @@ import fetch from 'lib/fetch'
 import queryString from 'querystring'
 
 export const USER = {
-  LIST: 'LIST',
-  DELETE: 'DELETE',
-  RESET: 'RESET',
-  DETAIL: 'DETAIL',
-  CREATE: 'CREATE',
+  LIST: 'USER.LIST',
+  DELETE: 'USER.DELETE',
+  RESET: 'USER.RESET',
+  DETAIL: 'USER.DETAIL',
+  CREATE: 'USER.CREATE',
 }
 
 export default createActions({

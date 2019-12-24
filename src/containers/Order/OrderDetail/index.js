@@ -58,7 +58,7 @@ const mapStateToProps = (state) => ({
   orderDetail: state.OrderReducer.orderDetail
 });
 const mapDispatchToProps = dispatch => ({
-  queryOrderDetail: payload => dispatch(OrderAction.detail(payload)),
-  submitOrderTicketing: payload => dispatch(OrderAction.submit(payload)),
+  queryOrderDetail: payload => dispatch(OrderAction.orderDetail(payload)),
+  submitOrderTicketing: payload => dispatch(OrderAction.orderSubmit(payload)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);

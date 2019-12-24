@@ -41,7 +41,7 @@ const mapStateToProps = (state) => ({
   userDetail: state.UserReducer.userDetail
 });
 const mapDispatchToProps = dispatch => ({
-  queryUserDetail: payload => dispatch(UserAction.detail(payload)),
-  createUser: payload => dispatch(UserAction.create(payload))
+  queryUserDetail: payload => dispatch(UserAction.userDetail(payload)),
+  createUser: payload => dispatch(UserAction.userCreate(payload))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(UserDetail);

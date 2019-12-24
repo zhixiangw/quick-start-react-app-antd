@@ -3,9 +3,9 @@ import fetch from 'lib/fetch'
 import queryString from 'querystring'
 
 export const ORDER = {
-  LIST: 'LIST',
-  DETAIL: 'DETAIL',
-  SUBMIT: 'SUBMIT',
+  LIST: 'ORDER.LIST',
+  DETAIL: 'ORDER.DETAIL',
+  SUBMIT: 'ORDER.SUBMIT',
 }
 
 export default createActions({
