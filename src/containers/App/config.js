@@ -6,7 +6,14 @@ export default {
   }, {
     path: '/cinema',
     icon: 'video-camera',
-    name: '影院信息'
+    name: '影院信息',
+    children: [{
+      path: '/cinema/list',
+      name: '影院列表'
+    }, {
+      path: '/cinema/detail',
+      name: '影院配置'
+    }]
   }, {
     path: '/movie',
     icon: 'youtube',

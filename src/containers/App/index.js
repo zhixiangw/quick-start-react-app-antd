@@ -66,8 +66,11 @@ class App extends React.Component {
 
   getSelectedKey = () => {
     const { pathname } = this.props.location
-    const [path, router] = pathname.split('/')
-    return ['/' + router]
+    const [path, router, subRouter] = pathname.split('/')
+    if (subRouter) {
+      return [`/${router}`, `/${router}/${subRouter}`]
+    }
+    return [`/${router}`, `/${router}`]
   }
 
   getPathname = (url) => {
@@ -123,8 +126,25 @@ class App extends React.Component {
       <Layout className="app-container">
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="logo">{collapsed ? '微影' : '微影管理后台'}</div>
-          <Menu theme="dark" selectedKeys={selectedKeys} mode="inline" >
+          <Menu theme="dark" selectedKeys={[selectedKeys[1]]} defaultOpenKeys={[selectedKeys[0]]} mode="inline" >
             {Config.menus.map(menu => {
+              if (menu.children) {
+                return (
+                  <Menu.SubMenu key={menu.path} title={
+                    <span>
+                      <Icon type={menu.icon} />
+                      <span>{menu.name}</span>
+                    </span>
+                  }>
+                    {menu.children.map(child =>
+                      <Menu.Item key={child.path}>
+                        <NavLink to={child.path}>
+                          <span>{child.name}</span>
+                        </NavLink>
+                      </Menu.Item>)}
+                  </Menu.SubMenu>
+                )
+              }
               return (<Menu.Item key={menu.path}>
                 <NavLink to={menu.path}>
                   <Icon type={menu.icon} />

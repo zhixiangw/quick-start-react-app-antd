@@ -8,7 +8,8 @@ import { store, localHistory } from './store'
 
 import App from 'containers/App'
 import Dashboard from 'containers/Dashboard'
-import Cinema from 'containers/Cinema'
+import CinemaList from 'containers/Cinema'
+import CinemaDetail from 'containers/Cinema/CinemaDetail'
 import Movie from 'containers/Movie'
 import MovieScene from 'containers/MovieScene'
 import Order from 'containers/Order'
@@ -25,7 +26,8 @@ ReactDOM.render((
           return (<App history={history} location={location}>
             <Switch>
               <Route exact path="/dashboard" component={Dashboard}/>
-              <Route exact path="/cinema" component={Cinema}/>
+              <Route exact path="/cinema/list" component={CinemaList}/>
+              <Route exact path="/cinema/detail" component={CinemaDetail}/>
               <Route exact path="/movie" component={Movie}/>
               <Route exact path="/movie-scene" component={MovieScene}/>
               <Route exact path="/order" component={Order}/>
