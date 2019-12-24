@@ -122,11 +122,22 @@ class App extends React.Component {
   renedrLayout = () => {
     const { collapsed, selectedKeys } = this.state
     const { userInfo } = this.props
+    let isSelectedKeyExist = false
+    if (selectedKeys[1].split('/').length > 2) {
+      isSelectedKeyExist = Config.menus.find(m => {
+        if (m.children) {
+          return m.children.find(c => c.path == selectedKeys[1])
+        }
+        return m.path == selectedKeys[1]
+      })
+    } else {
+      isSelectedKeyExist = true
+    }
     return (
       <Layout className="app-container">
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="logo">{collapsed ? '微影' : '微影管理后台'}</div>
-          <Menu theme="dark" selectedKeys={[selectedKeys[1]]} defaultOpenKeys={[selectedKeys[0]]} mode="inline" >
+          <Menu theme="dark" selectedKeys={isSelectedKeyExist ? [selectedKeys[1]] : [selectedKeys[0]]} defaultOpenKeys={[selectedKeys[0]]} mode="inline" >
             {Config.menus.map(menu => {
               if (menu.children) {
                 return (
