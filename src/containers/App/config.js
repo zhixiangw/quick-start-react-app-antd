@@ -1,3 +1,6 @@
+// 菜单高亮 是根据路由的path进行匹配的。
+// 添加新菜单，请使用如下规则
+// /ruoter/subRouter?query=xxx
 export default {
   menus: [{
     path: '/dashboard',
