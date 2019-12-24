@@ -1,4 +1,12 @@
 {
   "editor.tabSize": 2,
-  "editor.detectIndentation": false
+  "editor.detectIndentation": false,
+  "editor.formatOnPaste": false,
+  "eslint.options": {
+    "configFile": ".eslintrc.js"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

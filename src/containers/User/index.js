@@ -31,7 +31,7 @@ class UserList extends React.Component {
         title: '头像',
         dataIndex: 'avatar',
         key: 'avatar',
-        render: (avatar) => <Avatar src={avatar}/>
+        render: (avatar) => <Avatar src={avatar} />
       },
       {
         title: '昵称',
@@ -70,9 +70,9 @@ class UserList extends React.Component {
           return (
             <span>
               <a href={`/#/user/detail/${record.key}`}>编辑</a>
-              <Divider type="vertical"/>
+              <Divider type="vertical" />
               <a onClick={this.handleDelete.bind(this, record.key)}>删除</a>
-              <Divider type="vertical"/>
+              <Divider type="vertical" />
               <a onClick={this.handleResetPassword.bind(this, record.key)}>重置密码</a>
             </span>
           )
@@ -116,6 +116,15 @@ class UserList extends React.Component {
       name: 'username'
     }]
   }
+  getButtons = () => {
+    return [{
+      label: '新增管理员',
+      type: 'primary',
+      onClick: () => this.props.history.push('/user/detail/0'),
+      icon: 'plus',
+      style: { marginLeft: 8 }
+    }]
+  }
 
   handleDelete = (id) => {
     Modal.confirm({
@@ -136,7 +145,7 @@ class UserList extends React.Component {
   handleResetPassword = (id) => {
     Modal.confirm({
       title: '是否重置此用户密码?',
-      content: <Input placeholder="请输入重置的新密码" onChange={(e) => this.setState({ password: e.target.value })}/>,
+      content: <Input placeholder="请输入重置的新密码" onChange={(e) => this.setState({ password: e.target.value })} />,
       onOk: () => {
         const { password } = this.state
         if (password) {
@@ -163,15 +172,13 @@ class UserList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Button type="primary" onClick={() => this.props.history.push('/user/detail/0')}><Icon type="plus"/>新增管理员</Button>
-        <Divider />
-        <SearchForm fields={this.getFields()} onSearch={this.handleSearch}/>
+        <SearchForm fields={this.getFields()} buttons={this.getButtons()} onSearch={this.handleSearch} />
         <Divider />
         <Table
           onChange={this.handleTableChange}
           columns={this.getColumns()}
           dataSource={this.getDataSource()}
-          pagination={this.getPagination()}/>
+          pagination={this.getPagination()} />
       </React.Fragment>
     )
   }

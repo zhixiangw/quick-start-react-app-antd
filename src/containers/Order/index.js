@@ -78,7 +78,7 @@ class Order extends React.Component {
         movieName: order.movie.name,
         cinemaName: order.ciname.name,
         showTime: order.show_time,
-        userName: order.ticketing_user || '--',
+        userName: order.user.name || '--',
         amount: order.amount,
         orderTime: order.created_at && moment(order.created_at).format('YYYY-MM-DD hh:mm:ss') || '--',
         payTime: order.pay_time && moment(order.pay_time).format('YYYY-MM-DD hh:mm:ss') || '--',
