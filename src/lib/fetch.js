@@ -3,7 +3,8 @@ import { message as antdMessage } from 'antd'
 import { APIError } from 'lib/error';
 
 
-export const baseURL = '//openapi.wanguo.press'
+// export const baseURL = '//openapi.wanguo.press'
+export const baseURL = 'http://localhost:7001'
 const fetch = axios.create({
   baseURL,
   withCredentials: true,
@@ -31,7 +32,7 @@ fetch.interceptors.response.use(async response => {
     error.code = code;
     error.url = url;
     // 自动登录逻辑
-    if(code === -2 && autoLogin) {
+    if (code === -2 && autoLogin) {
       window.location.replace(responseBody.url);
     }
 

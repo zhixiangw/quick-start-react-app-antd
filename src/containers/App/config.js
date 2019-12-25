@@ -9,26 +9,34 @@ export default {
   }, {
     path: '/cinema',
     icon: 'video-camera',
-    name: '影院信息',
+    name: '影院管理',
     children: [{
       path: '/cinema/list',
       name: '影院列表'
-    }, {
-      path: '/cinema/detail',
-      name: '影院配置'
     }]
   }, {
     path: '/movie',
     icon: 'youtube',
-    name: '电影信息'
-  }, {
-    path: '/movie-scene',
-    icon: 'scissor',
-    name: '场次信息'
+    name: '电影管理',
+    children: [{
+      path: '/movie/list',
+      name: '电影列表'
+    }, {
+      path: '/movie-scene',
+      icon: 'scissor',
+      name: '场次列表'
+    }]
   }, {
     path: '/order',
     icon: 'ordered-list',
-    name: '订单信息'
+    name: '订单管理',
+    children: [{
+      path: '/order/list',
+      name: '订单列表'
+    }, {
+      path: '/order/subscribe',
+      name: '订阅通知'
+    }]
   }, {
     path: '/user',
     icon: 'team',

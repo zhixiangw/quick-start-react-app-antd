@@ -6,11 +6,13 @@ import promiseMiddleware from 'redux-promise-middleware'
 import AppReducer from 'containers/App/reducer'
 import OrderReducer from 'containers/Order/reducer'
 import UserReducer from 'containers/User/reducer'
+import CinemaReducer from 'containers/Cinema/reducer'
 
 const reducers = {
   AppReducer,
   OrderReducer,
-  UserReducer
+  UserReducer,
+  CinemaReducer,
 }
 
 const middleware = routerMiddleware(history)

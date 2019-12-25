@@ -25,20 +25,20 @@ ReactDOM.render((
         <Route render={({ location, history }) => {
           return (<App history={history} location={location}>
             <Switch>
-              <Route exact path="/dashboard" component={Dashboard}/>
-              <Route exact path="/cinema/list" component={CinemaList}/>
-              <Route exact path="/cinema/detail" component={CinemaDetail}/>
-              <Route exact path="/movie" component={Movie}/>
-              <Route exact path="/movie-scene" component={MovieScene}/>
-              <Route exact path="/order" component={Order}/>
-              <Route exact path="/order/detail/:orderId" component={OrderDetail}/>
-              <Route exact path="/user" component={User}/>
-              <Route exact path="/user/detail/:orderId" component={UserDetail}/>
-              <Route exact path="/setting" component={Setting}/>
-              <Redirect from='/' to='/dashboard'/>
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/cinema/list" component={CinemaList} />
+              <Route exact path="/cinema/detail" component={CinemaDetail} />
+              <Route exact path="/movie" component={Movie} />
+              <Route exact path="/movie-scene" component={MovieScene} />
+              <Route exact path="/order/list" component={Order} />
+              <Route exact path="/order/detail/:orderId" component={OrderDetail} />
+              <Route exact path="/user" component={User} />
+              <Route exact path="/user/detail/:orderId" component={UserDetail} />
+              <Route exact path="/setting" component={Setting} />
+              <Redirect from='/' to='/dashboard' />
             </Switch>
           </App>)
-        }}/>
+        }} />
       </HashRouter>
     </ConnectedRouter>
   </Provider>
