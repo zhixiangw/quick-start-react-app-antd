@@ -1,6 +1,6 @@
 import './style.less'
 import React from 'react'
-import { Layout, Menu, Icon, Spin, Dropdown, Input, Modal } from 'antd'
+import { Layout, Menu, Icon, Spin, Dropdown, Input, Modal, Badge } from 'antd'
 import { NavLink } from 'react-router-dom'
 import LoginForm from 'containers/Login'
 import { connect } from 'react-redux'
@@ -49,7 +49,7 @@ class App extends React.Component {
   resetPassword = () => {
     Modal.confirm({
       title: '是否修改密码?',
-      content: <Input placeholder="请输入新密码" onChange={(e) => this.setState({ password: e.target.value })}/>,
+      content: <Input placeholder="请输入新密码" onChange={(e) => this.setState({ password: e.target.value })} />,
       onOk: () => {
         const { password } = this.state
         if (password) {
@@ -173,6 +173,7 @@ class App extends React.Component {
               onClick={this.toggle}
             />
             <div className="user-info" style={{ textAlign: 'right', flex: 1, paddingRight: 30 }}>
+              <Badge count={88} className="bell-badge"><Icon style={{ fontSize: '16px', padding: '4px' }} type="bell" /></Badge>
               <Dropdown overlay={this.renderUserMenu()} placement="bottomRight">
                 <a className="ant-dropdown-link">
                   {userInfo.name}<Icon type="down" />
