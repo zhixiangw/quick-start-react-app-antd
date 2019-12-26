@@ -1,5 +1,5 @@
 import React from 'react'
-import { Descriptions, Card, Button } from 'antd';
+import { Descriptions, Card, Button, Radio, Input } from 'antd';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Upload from 'components/Upload'
@@ -9,29 +9,42 @@ class OrderDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      fileList: []
+      fileList: [],
+      isTicket: true,
+      remark: ''
     }
   }
 
   componentDidMount() {
     const { orderId } = this.props.match.params
-    this.props.queryOrderDetail(orderId)
+    this.props.queryOrderDetail(orderId).then(() => {
+      const { orderDetail = {} } = this.props
+      const { order = {} } = orderDetail || {}
+      const fileList = order.ticketing && JSON.parse(order.ticketing) || []
+      this.setState({ isTicket: Boolean(order.is_ticket), fileList, remark: order.remark || '' })
+    })
   }
 
   handleFileChange = (fileList) => {
     this.setState({ fileList })
   }
 
+  handleChange = (type, e) => {
+    this.setState({
+      [type]: e.target.value,
+    })
+  }
+
   onSubmitOrderTicketing = () => {
     const { orderId } = this.props.match.params
-    const { fileList } = this.state
-    this.props.submitOrderTicketing({ orderId, fileList })
+    const { fileList, remark, isTicket } = this.state
+    this.props.submitOrderTicketing({ orderId, fileList, remark, is_ticket: isTicket ? 1 : 2 })
   }
 
   render() {
     const { orderDetail = {} } = this.props
+    const { isTicket, fileList, remark } = this.state
     const { movie = {}, cinema = {}, order = {}, user = {} } = orderDetail || {}
-    const fileList = order.ticketing && JSON.parse(order.ticketing) || []
     return (
       <React.Fragment >
         <Descriptions title="订单详情" >
@@ -45,9 +58,16 @@ class OrderDetail extends React.Component {
           <Descriptions.Item label="状态">{order.statusText} </Descriptions.Item>
           <Descriptions.Item label="座位排座">{order.seatsText && order.seatsText.join(',')}</Descriptions.Item>
           <Descriptions.Item label="总票数">{order.count}</Descriptions.Item>
+          <Descriptions.Item label="出票状态">
+            <Radio.Group onChange={this.handleChange.bind(this, 'isTicket')} value={isTicket}>
+              <Radio value={true}>出票成功</Radio>
+              <Radio value={false}>出票成功</Radio>
+            </Radio.Group>
+          </Descriptions.Item>
         </Descriptions >
         <Card title="上传票证" extra={<Button type="primary" onClick={this.onSubmitOrderTicketing}>保存票证信息</Button>}>
           <Upload fileList={fileList} onChange={this.handleFileChange} />
+          <Input.TextArea rows={4} onChange={this.handleChange.bind(this, 'remark')} value={remark} placeholder="备注信息" />
         </Card>
       </React.Fragment>
     )

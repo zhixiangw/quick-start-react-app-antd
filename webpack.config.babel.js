@@ -29,49 +29,49 @@ export default {
   },
   module: {
     rules: [{
-        test: /\.(js|jsx)$/,
-        use: 'babel-loader'
+      test: /\.(js|jsx)$/,
+      use: 'babel-loader'
+    },
+    {
+      test: /\.(css|scss)$/,
+      use: [{
+        loader: MiniCssExtractPlugin.loader,
+      }, {
+        loader: 'style-loader'
       },
       {
-        test: /\.(css|scss)$/,
-        use: [{
-            loader: MiniCssExtractPlugin.loader,
-          }, {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'sass-loader'
-          }
-        ]
+        loader: 'css-loader'
       },
       {
-        test: /\.less$/,
-        use: [
-          {
-            loader: 'style-loader'
-          }, {
-            loader: 'css-loader'
-          }, {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(gif|jpg|png|bmp|eot|woff|woff2|ttf|svg)/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 8192,
-            outputPath: 'images'
-          }
-        }]
+        loader: 'sass-loader'
       }
+      ]
+    },
+    {
+      test: /\.less$/,
+      use: [
+        {
+          loader: 'style-loader'
+        }, {
+          loader: 'css-loader'
+        }, {
+          loader: 'less-loader',
+          options: {
+            javascriptEnabled: true
+          }
+        }
+      ]
+    },
+    {
+      test: /\.(gif|jpg|png|bmp|eot|woff|woff2|ttf|svg)/,
+      use: [{
+        loader: 'url-loader',
+        options: {
+          limit: 8192,
+          outputPath: 'images'
+        }
+      }]
+    }
     ]
   },
   plugins: [
