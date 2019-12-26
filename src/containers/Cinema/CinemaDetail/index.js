@@ -1,209 +1,89 @@
-
 import React from 'react'
-import { Form, Button, Input, Switch, Select, Upload, Icon } from 'antd';
-import { baseURL } from 'lib/fetch'
+import { Switch, Card, Button, Radio, Input, Form } from 'antd';
+import { connect } from 'react-redux'
+import moment from 'moment'
+import Upload from 'components/Upload'
+import Action from '../action'
 
-class CreateCinemaForm extends React.Component {
-  state = {
-    confirmDirty: false,
-  };
-
-  handleConfirmBlur = e => {
-    const { value } = e.target;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  };
-
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('俩次输入密码不一致!');
-    } else {
-      callback();
+class cinemaDetail extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      status: 1,
     }
-  };
+  }
 
-  validateToNextPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
-    }
-    callback();
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        if (values.confirm) {
-          delete values.confirm
-        }
-        values.avatar = values.avatar[0].url || values.avatar[0].response.data.oss_urls[0]
-        values.roles = values.roles.join(',')
-        values.status = values.status ? '1' : '0'
-        values.password = values.password || ''
-        this.props.onSubmit(values)
+  componentDidMount() {
+    const { id } = this.props.match.params
+    this.props.queryDetail(id).then(res => {
+      if (res && res.value && res.value.data) {
+        this.setState({
+          status: res.value.data.status,
+        });
       }
+    })
+  }
+
+  handleFileChange = (fileList) => {
+    this.setState({ fileList })
+  }
+
+  onStatusChange = (e) => {
+    this.setState({
+      status: e.target.value,
     });
-  };
+    const { id } = this.props.match.params
+    Action.changestatus({ id, status: e.target.value });
+  }
 
   render() {
-    const { type } = this.props
-    const { getFieldDecorator, getFieldValue } = this.props.form;
-
+    const { detail = {} } = this.props;
     const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
-      },
-    };
+      labelCol: { span: 4 },
+      wrapperCol: { span: 14 },
+    }
     return (
-      <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        <Form.Item label='用户昵称'>
-          {getFieldDecorator('nickname', {
-            rules: [{ required: true, message: '请输入昵称!', whitespace: true }],
-          })(<Input placeholder="请输入用户昵称" />)}
+      <Form layout="horizontal">
+        <Form.Item label="影院ID" {...formItemLayout}>
+          {detail.cinema_id}
         </Form.Item>
-        <Form.Item label='用户头像'>
-          {getFieldDecorator('avatar', {
-            valuePropName: 'fileList',
-            getValueFromEvent: e => {
-              if (Array.isArray(e)) {
-                return e;
-              }
-              return e && e.fileList;
-            },
-            rules: [{ required: true, message: '请上传用户头像!' }],
-          })(<Upload
-            action={`${baseURL}/admin/main/uploadImages`}
-            listType="picture-card"
-            accept="image/*"
-            name="images"
-            withCredentials={Boolean(1)}>
-            {getFieldValue('avatar')[0] ? null :
-              <div>
-                <Icon type="plus" />
-                <div className="ant-upload-text">点击上传</div>
-              </div>}
-          </Upload>)}
+        <Form.Item label="影院名称" {...formItemLayout}>
+          {detail.name}
         </Form.Item>
-        <Form.Item label='登录账号'>
-          {getFieldDecorator('username', {
-            rules: [{ required: true, message: '请输入登录账号!', whitespace: true }],
-          })(<Input disabled={type === 'edit'} placeholder="请输入登录账号" />)}
+        <Form.Item label="地址" {...formItemLayout}>
+          {detail.addr}
         </Form.Item>
-        {
-          type === 'add'
-            ? <React.Fragment>
-              <Form.Item label="登录密码" hasFeedback>
-                {getFieldDecorator('password', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入登录密码!',
-                    },
-                    {
-                      validator: this.validateToNextPassword,
-                    },
-                  ],
-                })(<Input.Password placeholder="请输入登录密码" />)}
-              </Form.Item>
-              <Form.Item label="确认密码" hasFeedback>
-                {getFieldDecorator('confirm', {
-                  rules: [
-                    {
-                      required: true,
-                      message: '请输入确认的密码!',
-                    },
-                    {
-                      validator: this.compareToFirstPassword,
-                    },
-                  ],
-                })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-              </Form.Item>
-            </React.Fragment>
-            : null
-        }
-        <Form.Item label='OpenId'>
-          {getFieldDecorator('openid', {
-            rules: [{ required: true, message: '请输入OpenId!', whitespace: true }],
-          })(<Input placeholder="请输入OpenId" />)}
+        <Form.Item label="经纬度" {...formItemLayout}>
+          {detail.lat},{detail.lng}
         </Form.Item>
-        <Form.Item label="手机号码">
-          {getFieldDecorator('phone', {
-            rules: [{ required: true, message: '请输入手机号码!' }],
-          })(<Input placeholder="请输入手机号码" />)}
+        <Form.Item label="创建时间" {...formItemLayout}>
+          {detail.created_at && moment(detail.created_at).format('YYYY-MM-DD hh:mm:ss') || '--'}
         </Form.Item>
-        <Form.Item label="角色">
-          {getFieldDecorator('roles', {
-            rules: [
-              { required: true, message: '请选择角色!', type: 'array' },
-            ],
-          })(
-            <Select mode="multiple" placeholder="请选择角色!">
-              <Select.Option value="superadmin">超级管理员</Select.Option>
-              <Select.Option value="admin">管理员</Select.Option>
-              <Select.Option value="manage">经理</Select.Option>
-            </Select>,
-          )}
+        <Form.Item label="更新时间" {...formItemLayout}>
+          {detail.updated_at && moment(detail.updated_at).format('YYYY-MM-DD hh:mm:ss') || '--'}
         </Form.Item>
-        <Form.Item label="是否启用">
-          {getFieldDecorator('status', { valuePropName: 'checked' })(<Switch />)}
+        <Form.Item label="通知标签" {...formItemLayout}>
+          {detail.tags && detail.tags.join(',')}
         </Form.Item>
-        <Form.Item label="备注">
-          {getFieldDecorator('remark')(
-            <Input.TextArea
-              placeholder="请输入备注信息"
-              autosize={{ minRows: 3, maxRows: 5 }} />)}
+        <Form.Item label="天猫在售" {...formItemLayout}>
+          {detail.sell ? '在售' : '禁售'}
         </Form.Item>
-        <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
-            提交
-          </Button>
+        <Form.Item label="状态" {...formItemLayout}>
+          <Radio.Group onChange={this.onStatusChange} value={this.state.status}>
+            <Radio value={1}>开启</Radio>
+            <Radio value={0}>关闭</Radio>
+          </Radio.Group>
         </Form.Item>
       </Form>
     );
   }
 }
 
-const WrappedCinemaForm = Form.create({
-  name: 'cinemaForm',
-  mapPropsToFields: ({ detail, type }) => {
-    if (type === 'add') {
-      detail = {}
-    }
-    return {
-      nickname: Form.createFormField({ value: detail.nickname }),
-      avatar: Form.createFormField({
-        value: detail.avatar ? [{
-          uid: -1,
-          url: detail.avatar
-        }] : []
-      }),
-      username: Form.createFormField({ value: detail.username }),
-      password: Form.createFormField({ value: detail.password }),
-      openid: Form.createFormField({ value: detail.openid }),
-      phone: Form.createFormField({ value: detail.phone }),
-      roles: Form.createFormField({ value: detail.roles }),
-      status: Form.createFormField({ value: Boolean(detail.status) }),
-      remark: Form.createFormField({ value: detail.remark }),
-    }
-  }
-})(CreateCinemaForm);
-
-export default WrappedCinemaForm
+const mapStateToProps = (state) => ({
+  detail: state.CinemaReducer.detail
+});
+const mapDispatchToProps = dispatch => ({
+  queryDetail: payload => dispatch(Action.detail(payload)),
+  submit: payload => dispatch(Action.submitCinema(payload)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(cinemaDetail);

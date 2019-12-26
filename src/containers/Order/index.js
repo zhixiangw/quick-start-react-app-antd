@@ -139,7 +139,7 @@ class Order extends React.Component {
 
   handleTableChange = ({ current }) => {
     const { limit } = this.state
-    this.setState({ offset: current * limit }, this.getOrderList)
+    this.setState({ offset: (current - 1) * limit }, this.getOrderList)
   }
 
   render() {

@@ -27,7 +27,7 @@ ReactDOM.render((
             <Switch>
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/cinema/list" component={CinemaList} />
-              <Route exact path="/cinema/detail" component={CinemaDetail} />
+              <Route exact path="/cinema/detail/:id" component={CinemaDetail} />
               <Route exact path="/movie" component={Movie} />
               <Route exact path="/movie-scene" component={MovieScene} />
               <Route exact path="/order/list" component={Order} />

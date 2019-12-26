@@ -43,7 +43,7 @@ class CinemaList extends React.Component {
         key: 'addr',
       },
       {
-        title: '标签',
+        title: '通知标签',
         key: 'tags',
         dataIndex: 'tags'
       },
@@ -96,7 +96,7 @@ class CinemaList extends React.Component {
     const { count } = this.props
     return {
       hideOnSinglePage: true,
-      pageSize: this.limit,
+      pageSize: this.state.limit,
       total: count
     }
   }
@@ -150,7 +150,7 @@ class CinemaList extends React.Component {
 
   handleTableChange = ({ current }) => {
     const { limit } = this.state
-    this.setState({ offset: current * limit }, this.getList)
+    this.setState({ offset: (current - 1) * limit }, this.getList)
   }
 
   render() {

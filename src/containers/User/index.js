@@ -166,7 +166,7 @@ class UserList extends React.Component {
 
   handleTableChange = ({ current }) => {
     const { limit } = this.state
-    this.setState({ offset: current * limit }, this.getUserList)
+    this.setState({ offset: (current - 1) * limit }, this.getUserList)
   }
 
   render() {
