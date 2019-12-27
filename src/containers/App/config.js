@@ -13,6 +13,9 @@ export default {
     children: [{
       path: '/cinema/list',
       name: '影院列表'
+    }, {
+      path: '/cinema/subscribe',
+      name: '订阅通知'
     }]
   }, {
     path: '/movie',
@@ -33,9 +36,6 @@ export default {
     children: [{
       path: '/order/list',
       name: '订单列表'
-    }, {
-      path: '/order/subscribe',
-      name: '订阅通知'
     }]
   }, {
     path: '/user',

@@ -25,6 +25,14 @@ export default handleActions(
       const { data } = payload
       return { ...state, tags: data }
     },
+    [CINEMA.TAGSLIST + '_FULFILLED']: (state, { payload }) => {
+      const { data: { count, items = [] } } = payload
+      return { ...state, tagsList: items, tagsCount: count }
+    },
+    [CINEMA.TAGSINFO + '_FULFILLED']: (state, { payload }) => {
+      const { data } = payload
+      return { ...state, tagsInfo: data }
+    },
   },
   initState
 )

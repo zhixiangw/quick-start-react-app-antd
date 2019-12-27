@@ -41,7 +41,13 @@ class CreateUserForm extends React.Component {
         values.roles = values.roles.join(',')
         values.status = values.status ? '1' : '0'
         values.password = values.password || ''
-        this.props.onSubmit(values)
+        this.props.onSubmit(values).then((res) => {
+          if (res.value && res.value.code === 0) {
+            setTimeout(() => {
+              this.props.history.goBack();
+            }, 1500);
+          }
+        })
       }
     });
   };
@@ -77,7 +83,7 @@ class CreateUserForm extends React.Component {
         <Form.Item label='用户昵称'>
           {getFieldDecorator('nickname', {
             rules: [{ required: true, message: '请输入昵称!', whitespace: true }],
-          })(<Input placeholder="请输入用户昵称"/>)}
+          })(<Input placeholder="请输入用户昵称" />)}
         </Form.Item>
         <Form.Item label='用户头像'>
           {getFieldDecorator('avatar', {
@@ -95,21 +101,21 @@ class CreateUserForm extends React.Component {
             accept="image/*"
             name="images"
             withCredentials={Boolean(1)}>
-              {getFieldValue('avatar')[0] ? null :
+            {getFieldValue('avatar')[0] ? null :
               <div>
                 <Icon type="plus" />
                 <div className="ant-upload-text">点击上传</div>
               </div>}
           </Upload>)}
         </Form.Item>
-        <Form.Item label='登录账号'>
+        <Form.Item label='姓名'>
           {getFieldDecorator('username', {
-            rules: [{ required: true, message: '请输入登录账号!', whitespace: true }],
-          })(<Input disabled={type === 'edit'} placeholder="请输入登录账号"/>)}
+            rules: [{ required: true, message: '请输入真实姓名!', whitespace: true }],
+          })(<Input disabled={type === 'edit'} placeholder="请输入真实姓名" />)}
         </Form.Item>
         {
-        type === 'add'
-          ? <React.Fragment>
+          type === 'add'
+            ? <React.Fragment>
               <Form.Item label="登录密码" hasFeedback>
                 {getFieldDecorator('password', {
                   rules: [
@@ -137,7 +143,7 @@ class CreateUserForm extends React.Component {
                 })(<Input.Password onBlur={this.handleConfirmBlur} />)}
               </Form.Item>
             </React.Fragment>
-          : null
+            : null
         }
         <Form.Item label='OpenId'>
           {getFieldDecorator('openid', {
@@ -167,9 +173,9 @@ class CreateUserForm extends React.Component {
         </Form.Item>
         <Form.Item label="备注">
           {getFieldDecorator('remark')(
-          <Input.TextArea
-            placeholder="请输入备注信息"
-            autosize={{ minRows: 3, maxRows: 5 }}/>)}
+            <Input.TextArea
+              placeholder="请输入备注信息"
+              autosize={{ minRows: 3, maxRows: 5 }} />)}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
@@ -189,10 +195,12 @@ const WrappedCreateUserForm = Form.create({
     }
     return {
       nickname: Form.createFormField({ value: detail.nickname }),
-      avatar: Form.createFormField({ value: detail.avatar ? [{
-        uid: -1,
-        url: detail.avatar
-      }] : [] }),
+      avatar: Form.createFormField({
+        value: detail.avatar ? [{
+          uid: -1,
+          url: detail.avatar
+        }] : []
+      }),
       username: Form.createFormField({ value: detail.username }),
       password: Form.createFormField({ value: detail.password }),
       openid: Form.createFormField({ value: detail.openid }),

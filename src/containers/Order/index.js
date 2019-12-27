@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Divider } from 'antd';
+import { Table, Divider, Button } from 'antd';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import SearchForm from 'components/SearchForm'
@@ -65,7 +65,13 @@ class Order extends React.Component {
     {
       title: '操作',
       key: 'action',
-      render: (action, record) => < a href={`/#/order/detail/${record.key}`} > 出票 </a>,
+      render: (action, record) => {
+        let disabled = false;
+        if (record.status !== 1) {
+          disabled = true;
+        }
+        return (<Button disabled={disabled} href={`/#/order/detail/${record.key}`} > 出票 </Button>)
+      },
     },
     ]
   }
@@ -75,6 +81,7 @@ class Order extends React.Component {
     return orderList.map(order => {
       return {
         key: order.id,
+        status: order.status,
         movieName: order.movie.name,
         cinemaName: order.ciname.name,
         showTime: order.show_time,

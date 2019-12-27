@@ -126,28 +126,9 @@ class CinemaList extends React.Component {
       label: '同步',
       type: 'danger',
       onClick: () => this.syncCinema(),
-      icon: 'plus',
+      icon: 'cloud-download',
       style: { marginLeft: 8 }
     }]
-  }
-
-
-  handleResetPassword = (id) => {
-    Modal.confirm({
-      title: '是否重置此用户密码?',
-      content: <Input placeholder="请输入重置的新密码" onChange={(e) => this.setState({ password: e.target.value })} />,
-      onOk: () => {
-        const { password } = this.state
-        if (password) {
-          return new Promise((resolve, reject) => {
-            this.props.passwordRest({ password, id: String(id) }).then(resolve, reject)
-          });
-        } else {
-          message.error('请输入密码')
-          return Promise.reject('请输入密码');
-        }
-      },
-    })
   }
 
   handleSearch = (values) => {

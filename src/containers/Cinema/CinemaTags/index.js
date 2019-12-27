@@ -1,7 +1,6 @@
 import React from 'react'
-import { Checkbox, Button, Row, Input, Form } from 'antd';
+import { Checkbox, Button, Form } from 'antd';
 import { connect } from 'react-redux'
-import moment from 'moment'
 import Action from '../action'
 
 class cinemaTags extends React.Component {
@@ -31,7 +30,13 @@ class cinemaTags extends React.Component {
         const { id } = this.props.match.params
         values.id = ~~id;
         values.originValues = this.state.originValues;
-        this.props.onSubmit(values)
+        this.props.onSubmit(values).then((res) => {
+          if (res.value && res.value.code === 0) {
+            setTimeout(() => {
+              this.props.history.goBack();
+            }, 1500);
+          }
+        })
       }
     });
   }
@@ -39,12 +44,23 @@ class cinemaTags extends React.Component {
   render() {
     const { tags = [], cinemaTags = [] } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: { span: 4 },
+      wrapperCol: { span: 8 },
+    };
     const rd = tags.map((item, index) => (<Checkbox key={index} value={item.id}>{item.note}({item.tag})</Checkbox>))
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item label="影院标签">
+        <Form.Item {...formItemLayout} label="影院标签">
           {getFieldDecorator('tags', {
             initialValue: this.state.originValues,
+            rules: [
+              {
+                required: true,
+                message: '请选择影院标签',
+                type: 'array'
+              },
+            ],
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               {rd}
@@ -71,6 +87,6 @@ const mapDispatchToProps = dispatch => ({
   onSubmit: payload => dispatch(Action.submitCinematag(payload)),
 });
 
-const WrappedNormalLoginForm = Form.create({ name: 'tags_form' })(connect(mapStateToProps, mapDispatchToProps)(cinemaTags));
+const WrappedNormalLoginForm = Form.create({ name: 'cinema_tags_form' })(connect(mapStateToProps, mapDispatchToProps)(cinemaTags));
 
 export default WrappedNormalLoginForm;

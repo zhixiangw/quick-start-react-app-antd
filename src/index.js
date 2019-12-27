@@ -15,6 +15,8 @@ import Movie from 'containers/Movie'
 import MovieScene from 'containers/MovieScene'
 import Order from 'containers/Order'
 import OrderDetail from 'containers/Order/OrderDetail'
+import Subscribe from 'containers/Cinema/Subscribe'
+import SubscribeForm from 'containers/Cinema/Subscribe/Form'
 import User from 'containers/User'
 import UserDetail from 'containers/User/UserDetail'
 import Setting from 'containers/Setting'
@@ -30,6 +32,8 @@ ReactDOM.render((
               <Route exact path="/cinema/list" component={CinemaList} />
               <Route exact path="/cinema/detail/:id" component={CinemaDetail} />
               <Route exact path="/cinema/tags/:id" component={CinemaTags} />
+              <Route exact path="/cinema/subscribe" component={Subscribe} />
+              <Route exact path="/cinema/subscribeForm/:id" component={SubscribeForm} />
               <Route exact path="/movie" component={Movie} />
               <Route exact path="/movie-scene" component={MovieScene} />
               <Route exact path="/order/list" component={Order} />
