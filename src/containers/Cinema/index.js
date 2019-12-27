@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Table, Input, Avatar, Modal, Button, Icon } from 'antd';
+import { Divider, Table, Input, Modal, Button } from 'antd';
 import { connect } from 'react-redux'
 import SearchForm from 'components/SearchForm'
 import Action from './action'
@@ -65,10 +65,16 @@ class CinemaList extends React.Component {
       {
         title: '操作',
         key: 'action',
+        width: 160,
         render: (action, record) => {
           return (
             <span>
-              <a href={`/#/cinema/detail/${record.key}`}>编辑</a>
+              <Button type="primary" href={`/#/cinema/detail/${record.key}`}>
+                编辑
+              </Button>
+              <Button href={`/#/cinema/tags/${record.key}`}>
+                标签
+              </Button>
             </span>
           )
         },
@@ -79,7 +85,7 @@ class CinemaList extends React.Component {
     const { list = [] } = this.props
     return list.map(record => {
       return {
-        key: record.id,
+        key: record.cinema_id,
         cinemaId: record.cinema_id,
         name: record.name,
         addr: record.addr || '--',
@@ -118,7 +124,7 @@ class CinemaList extends React.Component {
   getButtons = () => {
     return [{
       label: '同步',
-      type: 'primary',
+      type: 'danger',
       onClick: () => this.syncCinema(),
       icon: 'plus',
       style: { marginLeft: 8 }

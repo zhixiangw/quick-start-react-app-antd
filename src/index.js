@@ -10,6 +10,7 @@ import App from 'containers/App'
 import Dashboard from 'containers/Dashboard'
 import CinemaList from 'containers/Cinema'
 import CinemaDetail from 'containers/Cinema/CinemaDetail'
+import CinemaTags from 'containers/Cinema/CinemaTags'
 import Movie from 'containers/Movie'
 import MovieScene from 'containers/MovieScene'
 import Order from 'containers/Order'
@@ -28,6 +29,7 @@ ReactDOM.render((
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/cinema/list" component={CinemaList} />
               <Route exact path="/cinema/detail/:id" component={CinemaDetail} />
+              <Route exact path="/cinema/tags/:id" component={CinemaTags} />
               <Route exact path="/movie" component={Movie} />
               <Route exact path="/movie-scene" component={MovieScene} />
               <Route exact path="/order/list" component={Order} />

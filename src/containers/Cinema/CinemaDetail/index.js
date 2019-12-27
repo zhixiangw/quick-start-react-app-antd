@@ -1,8 +1,7 @@
 import React from 'react'
-import { Switch, Card, Button, Radio, Input, Form } from 'antd';
+import { Radio, Form } from 'antd';
 import { connect } from 'react-redux'
 import moment from 'moment'
-import Upload from 'components/Upload'
 import Action from '../action'
 
 class cinemaDetail extends React.Component {
@@ -22,10 +21,6 @@ class cinemaDetail extends React.Component {
         });
       }
     })
-  }
-
-  handleFileChange = (fileList) => {
-    this.setState({ fileList })
   }
 
   onStatusChange = (e) => {

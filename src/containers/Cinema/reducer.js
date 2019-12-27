@@ -17,6 +17,14 @@ export default handleActions(
       const { data } = payload
       return { ...state, detail: data }
     },
+    [CINEMA.CINEMATAGS + '_FULFILLED']: (state, { payload }) => {
+      const { data } = payload
+      return { ...state, cinemaTags: data }
+    },
+    [CINEMA.TAGS + '_FULFILLED']: (state, { payload }) => {
+      const { data } = payload
+      return { ...state, tags: data }
+    },
   },
   initState
 )
