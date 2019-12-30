@@ -58,6 +58,7 @@ class OrderDetail extends React.Component {
           <Descriptions.Item label="状态">{order.statusText} </Descriptions.Item>
           <Descriptions.Item label="座位排座">{order.seatsText && order.seatsText.join(',')}</Descriptions.Item>
           <Descriptions.Item label="总票数">{order.count}</Descriptions.Item>
+          <Descriptions.Item label="出票人">{order.ticketing_user || '--'}  / {order.ticketing_time && moment(order.ticketing_time).format('YYYY-MM-DD hh:mm:ss') || '--'}</Descriptions.Item>
           <Descriptions.Item label="出票状态">
             <Radio.Group onChange={this.handleChange.bind(this, 'isTicket')} value={isTicket}>
               <Radio value={true}>出票成功</Radio>

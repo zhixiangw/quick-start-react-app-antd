@@ -66,11 +66,13 @@ class Order extends React.Component {
       title: '操作',
       key: 'action',
       render: (action, record) => {
-        let disabled = false;
+        let res;
         if (record.status !== 1) {
-          disabled = true;
+          res = (<Button href={`/#/order/detail/${record.key}`} > 查看 </Button>)
+        } else {
+          res = (<Button type="primary" href={`/#/order/detail/${record.key}`} > 出票 </Button>)
         }
-        return (<Button disabled={disabled} href={`/#/order/detail/${record.key}`} > 出票 </Button>)
+        return res
       },
     },
     ]
