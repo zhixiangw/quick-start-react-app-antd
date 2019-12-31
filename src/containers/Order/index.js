@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Divider, Button } from 'antd';
+import { Table, Divider, Button, Modal, Form, Input } from 'antd';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import SearchForm from 'components/SearchForm'
@@ -12,7 +12,10 @@ class Order extends React.Component {
     this.state = {
       limit: 10,
       offset: 0,
-      filter: {}
+      filter: {},
+      refundItem: {},
+      visible: false,
+      confirmLoading: false,
     }
   }
 
@@ -27,6 +30,10 @@ class Order extends React.Component {
 
   getColumns = () => {
     return [{
+      title: 'ID',
+      dataIndex: 'key',
+      key: 'orderID',
+    }, {
       title: '电影名称',
       dataIndex: 'movieName',
       key: 'movieName',
@@ -66,12 +73,13 @@ class Order extends React.Component {
       title: '操作',
       key: 'action',
       render: (action, record) => {
-        let res;
+        const res = [];
         if (record.status !== 1) {
-          res = (<Button href={`/#/order/detail/${record.key}`} > 查看 </Button>)
+          res.push(<Button href={`/#/order/detail/${record.key}`} > 查看 </Button>)
         } else {
-          res = (<Button type="primary" href={`/#/order/detail/${record.key}`} > 出票 </Button>)
+          res.push(<Button type="primary" href={`/#/order/detail/${record.key}`} > 出票 </Button>)
         }
+        res.push(<Button disabled={~~record.status !== 1} type="danger" onClick={this.handleRefund.bind(this, record)} > 退款 </Button>)
         return res
       },
     },
@@ -151,7 +159,55 @@ class Order extends React.Component {
     this.setState({ offset: (current - 1) * limit }, this.getOrderList)
   }
 
+  handleRefund = (record) => {
+    this.setState({
+      visible: true,
+      refundItem: {
+        id: record.key,
+        amount: record.amount,
+      }
+    });
+  }
+
+  handleOk = e => {
+    const form = this.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      // 加载中
+      this.setState({
+        confirmLoading: true,
+      });
+      this.props.onSubmit(values).then((res) => {
+        if (res.value && res.value.code === 0) {
+          this.setState({
+            confirmLoading: false,
+          });
+          this.setState({
+            confirmLoading: false,
+          });
+          this.getOrderList()
+        }
+      }).catch(e => {
+        this.setState({
+          confirmLoading: false,
+        });
+      })
+    });
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+      confirmLoading: false,
+    });
+  };
+
   render() {
+    const { getFieldDecorator } = this.props.form
+    const { confirmLoading } = this.state
+
     return (
       <React.Fragment >
         <SearchForm fields={this.getFields()} onSearch={this.handleSearch} />
@@ -161,16 +217,47 @@ class Order extends React.Component {
           columns={this.getColumns()}
           dataSource={this.getDataSource()}
           pagination={this.getPagination()} />
+        <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          confirmLoading={confirmLoading}
+          okText='保存'
+          cancelText='提交'
+        >
+          <Form>
+            {getFieldDecorator('id', { initialValue: this.state.refundItem.id })(
+              <Input type='hidden' />
+            )}
+            <Form.Item label='退款金额'>
+              {getFieldDecorator('refund_amount', {
+                rules: [
+                  { required: true, message: '请输入退款金额', }
+                ],
+                initialValue: this.state.refundItem.amount,
+              })(
+                <Input placeholder='请输入退款金额' />
+              )}
+            </Form.Item>
+          </Form>
+        </Modal>
       </React.Fragment>
     )
   }
 }
-
 
 const mapStateToProps = (state) => ({
   orderList: state.OrderReducer.orderList,
   count: state.OrderReducer.count,
 });
 
-const mapDispatchToProps = dispatch => ({ queryOrderList: payload => dispatch(OrderAction.orderList(payload)) });
-export default connect(mapStateToProps, mapDispatchToProps)(Order);
+const mapDispatchToProps = dispatch => ({
+  queryOrderList: payload => dispatch(OrderAction.orderList(payload)),
+  onSubmit: payload => dispatch(OrderAction.orderRefund(payload)),
+});
+
+const WrappedNormalLoginForm = Form.create({ name: 'cinema_tags_form' })(connect(mapStateToProps, mapDispatchToProps)(Order));
+
+
+export default WrappedNormalLoginForm;

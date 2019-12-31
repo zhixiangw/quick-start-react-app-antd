@@ -6,13 +6,15 @@ export const ORDER = {
   LIST: 'ORDER.LIST',
   DETAIL: 'ORDER.DETAIL',
   SUBMIT: 'ORDER.SUBMIT',
+  REFUND: 'ORDER.REFUND',
 }
 
 export default createActions({
-  [ORDER.LIST]: (param) => fetch.get('admin/order/orderList?'+ queryString.stringify(param)),
+  [ORDER.LIST]: (param) => fetch.get('admin/order/orderList?' + queryString.stringify(param)),
   [ORDER.DETAIL]: orderId => fetch.get(`admin/order/orderDetail?id=${orderId}`),
-  [ORDER.SUBMIT]: ({orderId, fileList}) => fetch.post(
+  [ORDER.SUBMIT]: ({ orderId, fileList }) => fetch.post(
     `admin/order/ticket?id=${orderId}`, {
-    ticketing: JSON.stringify(fileList), is_ticket: '1'}
-  ),
+    ticketing: JSON.stringify(fileList), is_ticket: '1'
+  }),
+  [ORDER.REFUND]: (param) => fetch.post(`admin/order/refund`, param),
 })

@@ -17,19 +17,21 @@ export default {
       path: '/cinema/subscribe',
       name: '订阅通知'
     }]
-  }, {
-    path: '/movie',
-    icon: 'youtube',
-    name: '电影管理',
-    children: [{
-      path: '/movie/list',
-      name: '电影列表'
-    }, {
-      path: '/movie-scene',
-      icon: 'scissor',
-      name: '场次列表'
-    }]
-  }, {
+  },
+  // {
+  //   path: '/movie',
+  //   icon: 'youtube',
+  //   name: '电影管理',
+  //   children: [{
+  //     path: '/movie/list',
+  //     name: '电影列表'
+  //   }, {
+  //     path: '/movie-scene',
+  //     icon: 'scissor',
+  //     name: '场次列表'
+  //   }]
+  // },
+  {
     path: '/order',
     icon: 'ordered-list',
     name: '订单管理',

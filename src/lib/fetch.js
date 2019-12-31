@@ -3,8 +3,8 @@ import { message as antdMessage } from 'antd'
 import { APIError } from 'lib/error';
 
 
-// export const baseURL = '//openapi.wanguo.press'
-export const baseURL = 'http://localhost:7001'
+export const baseURL = '//openapi.wanguo.press'
+// export const baseURL = 'http://localhost:7001'
 const fetch = axios.create({
   baseURL,
   withCredentials: true,
