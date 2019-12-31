@@ -91,7 +91,7 @@ class UserList extends React.Component {
         phone: user.phone,
         userName: user.username,
         roles: user.roles && user.roles.join(',') || '--',
-        createdAt: user.created_at && moment(user.created_at).format('YYYY-MM-DD hh:mm:ss') || '--',
+        createdAt: user.created_at && moment(user.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         status: user.status ? '可用' : '禁用',
         action: user.id
       }

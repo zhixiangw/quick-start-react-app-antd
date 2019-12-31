@@ -52,10 +52,10 @@ class cinemaDetail extends React.Component {
           {detail.lat},{detail.lng}
         </Form.Item>
         <Form.Item label="创建时间" {...formItemLayout}>
-          {detail.created_at && moment(detail.created_at).format('YYYY-MM-DD hh:mm:ss') || '--'}
+          {detail.created_at && moment(detail.created_at).format('YYYY-MM-DD HH:mm:ss') || '--'}
         </Form.Item>
         <Form.Item label="更新时间" {...formItemLayout}>
-          {detail.updated_at && moment(detail.updated_at).format('YYYY-MM-DD hh:mm:ss') || '--'}
+          {detail.updated_at && moment(detail.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--'}
         </Form.Item>
         <Form.Item label="通知标签" {...formItemLayout}>
           {detail.tags && detail.tags.join(',')}

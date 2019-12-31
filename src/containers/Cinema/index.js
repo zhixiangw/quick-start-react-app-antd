@@ -90,7 +90,7 @@ class CinemaList extends React.Component {
         name: record.name,
         addr: record.addr || '--',
         sell: record.sell,
-        updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD hh:mm:ss') || '--',
+        updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         tags: record.tags && record.tags.join(',') || '--',
         status: record.status ? '开启' : '关闭',
         sell: record.sell ? '在售' : '禁售',

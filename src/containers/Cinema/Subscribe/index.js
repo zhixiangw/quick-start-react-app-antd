@@ -90,8 +90,8 @@ class Subscribe extends React.Component {
         tag: record.tag,
         note: record.note,
         user: record.user.join(','),
-        createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD hh:mm:ss') || '--',
-        updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD hh:mm:ss') || '--',
+        createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
+        updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         status: record.status ? '开启' : '关闭',
       }
     })

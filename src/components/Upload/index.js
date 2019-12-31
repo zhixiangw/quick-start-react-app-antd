@@ -50,7 +50,7 @@ export default class PicturesWall extends React.Component {
   handlePreview = async file => {
     if (!file.url && !file.preview) {
       const preview = await getBase64(file.originFileObj);
-      file = {...file, preview}
+      file = { ...file, preview }
     }
 
     this.setState({
@@ -95,7 +95,7 @@ export default class PicturesWall extends React.Component {
           withCredentials={Boolean(1)}
           onPreview={this.handlePreview}
           onChange={this.handleChange} >
-            {this.renderUploadButton()}
+          {this.renderUploadButton()}
         </Upload>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img style={{ width: '100%' }} src={previewImage} />
