@@ -63,7 +63,7 @@ export default class PicturesWall extends React.PureComponent {
   handleChange = ({ fileList }) => this.setState({ fileList: [...fileList] }, () => {
     let ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0] || '')
     this.props.onChange && this.props.onChange(ossFileUrls)
-  });
+  })
 
   renderBtn = () => (
     <div>

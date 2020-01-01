@@ -27,7 +27,7 @@ class OrderDetail extends React.Component {
   }
 
   handleFileChange = (fileList) => {
-    this.setState({ fileList })
+    this.setState({ fileLists: fileList })
   }
 
   handleChange = (type, e) => {
