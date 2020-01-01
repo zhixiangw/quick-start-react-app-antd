@@ -183,13 +183,13 @@ class Order extends React.Component {
       this.props.onSubmit(values).then((res) => {
         if (res.value && res.value.code === 0) {
           this.setState({
-            confirmLoading: false,
-          });
-          this.setState({
-            confirmLoading: false,
+            visible: false,
           });
           this.getOrderList()
         }
+        this.setState({
+          confirmLoading: false,
+        });
       }).catch(e => {
         this.setState({
           confirmLoading: false,
