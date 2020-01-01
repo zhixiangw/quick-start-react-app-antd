@@ -59,10 +59,13 @@ export default class PicturesWall extends React.Component {
     });
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList }, () => {
-    const ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0])
+  handleChange = ({ fileList, file, event }) => {
+    this.setState({
+      fileList: [...fileList]
+    })
+    const ossFileUrls = fileList.filter(i => i.status === 'done').map(file => file.url || file.response && file.response.data.oss_urls[0])
     this.props.onChange && this.props.onChange(ossFileUrls)
-  });
+  }
 
   renderBtn = () => (
     <div>

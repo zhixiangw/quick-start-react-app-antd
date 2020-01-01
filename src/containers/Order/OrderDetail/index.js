@@ -9,7 +9,7 @@ class OrderDetail extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      fileList: [],
+      fileLists: [],
       isTicket: true,
       remark: ''
     }
@@ -21,12 +21,12 @@ class OrderDetail extends React.Component {
       const { orderDetail = {} } = this.props
       const { order = {} } = orderDetail || {}
       const fileList = order.ticketing && JSON.parse(order.ticketing) || []
-      this.setState({ isTicket: Boolean(order.ticketing_status), fileList, remark: order.remark || '' })
+      this.setState({ isTicket: Boolean(order.ticketing_status), fileLists: fileList, remark: order.remark || '' })
     })
   }
 
   handleFileChange = (fileList) => {
-    this.setState({ fileList })
+    this.setState({ fileLists: fileList })
   }
 
   handleChange = (type, e) => {
@@ -37,13 +37,13 @@ class OrderDetail extends React.Component {
 
   onSubmitOrderTicketing = () => {
     const { orderId } = this.props.match.params
-    const { fileList, remark, isTicket } = this.state
-    this.props.submitOrderTicketing({ orderId, fileList, remark, is_ticket: isTicket ? 1 : 2 })
+    const { fileLists, remark, isTicket } = this.state
+    this.props.submitOrderTicketing({ orderId, fileList: fileLists, remark, is_ticket: isTicket ? 1 : 2 })
   }
 
   render() {
     const { orderDetail = {} } = this.props
-    const { isTicket, fileList, remark } = this.state
+    const { isTicket, fileLists, remark } = this.state
     const { movie = {}, cinema = {}, order = {}, user = {} } = orderDetail || {}
     return (
       <React.Fragment >
@@ -67,7 +67,7 @@ class OrderDetail extends React.Component {
           </Descriptions.Item>
         </Descriptions >
         <Card title="上传票证" extra={<Button type="primary" onClick={this.onSubmitOrderTicketing}>保存票证信息</Button>}>
-          <Upload fileList={fileList} onChange={this.handleFileChange} />
+          <Upload fileList={fileLists} onChange={this.handleFileChange} />
           <Input.TextArea rows={4} onChange={this.handleChange.bind(this, 'remark')} value={remark} placeholder="备注信息" />
         </Card>
       </React.Fragment>
