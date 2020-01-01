@@ -21,26 +21,27 @@ function getBase64(file) {
   }
 */
 
-export default class PicturesWall extends React.Component {
+export default class PicturesWall extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: this.getDefaultFileList(props),
+      fileList: [],
+      defaultFileList: [...this.getDefaultFileList(props)]
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.fileList && nextProps.fileList && this.props.fileList.length !== nextProps.fileList.length) {
-      this.setState({ fileList: this.getDefaultFileList(nextProps) })
+    if (this.props.defaultFileList && nextProps.defaultFileList && this.props.defaultFileList.length !== nextProps.defaultFileList.length) {
+      this.setState({ defaultFileList: [...this.getDefaultFileList(nextProps)] })
     }
   }
 
   getDefaultFileList = (props) => {
-    const { fileList } = props
-    if (Array.isArray(fileList)) {
-      return fileList.map((file, index) => ({ uid: index, name: 'images', status: 'done', url: file }))
+    const { defaultFileList } = props
+    if (Array.isArray(defaultFileList)) {
+      return defaultFileList.map((file, index) => ({ uid: index, name: 'images', status: file ? 'done' : 'uploading', url: file }))
     }
     return []
   }
@@ -59,8 +60,8 @@ export default class PicturesWall extends React.Component {
     });
   };
 
-  handleChange = ({ fileList }) => this.setState({ fileList }, () => {
-    const ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0])
+  handleChange = ({ fileList }) => this.setState({ fileList: [...fileList] }, () => {
+    let ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0] || '')
     this.props.onChange && this.props.onChange(ossFileUrls)
   });
 
@@ -81,8 +82,7 @@ export default class PicturesWall extends React.Component {
   };
 
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
-
+    const { previewVisible, previewImage, fileList, defaultFileList } = this.state;
     return (
       <div className="clearfix">
         <Upload
@@ -91,7 +91,8 @@ export default class PicturesWall extends React.Component {
           accept="image/*"
           name="images"
           multiple={Boolean(1)}
-          fileList={fileList}
+          fileList={fileList.length ? fileList : defaultFileList}
+          defaultFileList={defaultFileList}
           withCredentials={Boolean(1)}
           onPreview={this.handlePreview}
           onChange={this.handleChange} >

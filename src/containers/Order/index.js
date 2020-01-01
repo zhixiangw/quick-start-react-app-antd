@@ -75,11 +75,11 @@ class Order extends React.Component {
       render: (action, record) => {
         const res = [];
         if (record.status !== 1) {
-          res.push(<Button href={`/#/order/detail/${record.key}`} > 查看 </Button>)
+          res.push(<Button key="1" href={`/#/order/detail/${record.key}`} > 查看 </Button>)
         } else {
-          res.push(<Button type="primary" href={`/#/order/detail/${record.key}`} > 出票 </Button>)
+          res.push(<Button key="2" type="primary" href={`/#/order/detail/${record.key}`} > 出票 </Button>)
         }
-        res.push(<Button disabled={~~record.status !== 1} type="danger" onClick={this.handleRefund.bind(this, record)} > 退款 </Button>)
+        res.push(<Button key="3" disabled={~~record.status !== 1} type="danger" onClick={this.handleRefund.bind(this, record)} > 退款 </Button>)
         return res
       },
     },
