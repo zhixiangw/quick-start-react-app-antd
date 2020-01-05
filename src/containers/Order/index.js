@@ -80,7 +80,7 @@ class Order extends React.Component {
           res.push(<Button key="2" type="primary" href={`/#/order/detail/${record.key}`} > 出票 </Button>)
         }
         // status 1支付成功 6退款失败
-        res.push(<Button key="3" disabled={~~record.status !== 1 && ~~record.status !== 6} type="danger" onClick={this.handleRefund.bind(this, record)} > 退款 </Button>)
+        res.push(<Button key="3" disabled={~~record.status !== 1 && ~~record.status !== 6 && ~~record.status !== 5} type="danger" onClick={this.handleRefund.bind(this, record)} > 退款 </Button>)
         return res
       },
     },
