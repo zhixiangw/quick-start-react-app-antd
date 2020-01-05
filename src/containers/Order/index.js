@@ -224,7 +224,7 @@ class Order extends React.Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           confirmLoading={confirmLoading}
-          okText='保存'
+          okText='提交'
           cancelText='取消'
         >
           <Form>
