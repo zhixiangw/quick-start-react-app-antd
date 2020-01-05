@@ -225,7 +225,7 @@ class Order extends React.Component {
           onCancel={this.handleCancel}
           confirmLoading={confirmLoading}
           okText='保存'
-          cancelText='提交'
+          cancelText='取消'
         >
           <Form>
             {getFieldDecorator('id', { initialValue: this.state.refundItem.id })(

@@ -50,7 +50,7 @@ class OrderDetail extends React.Component {
       <React.Fragment >
         <Descriptions title="订单详情" >
           <Descriptions.Item label="影院名称">{cinema.name}</Descriptions.Item>
-          <Descriptions.Item label="原价">{order.price} 元</Descriptions.Item>
+          <Descriptions.Item label="原价">{order.price}</Descriptions.Item>
           <Descriptions.Item label="用户">{user.name || '--'}({order.phone || '--'})</Descriptions.Item>
           <Descriptions.Item label="电影名称">{movie.name} </Descriptions.Item>
           <Descriptions.Item label="实付金额">{order.amount}</Descriptions.Item>
