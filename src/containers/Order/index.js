@@ -99,7 +99,7 @@ class Order extends React.Component {
         userName: order.user.name || '--',
         amount: order.amount,
         orderTime: order.created_at && moment(order.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
-        payTime: order.pay_time && moment(order.pay_time).format('YYYY-MM-DD HH:mm:ss') || '--',
+        payTime: order.payed_time && moment(order.payed_time).format('YYYY-MM-DD HH:mm:ss') || '--',
         statusText: order.statusText,
         action: order.id
       }

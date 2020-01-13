@@ -22,7 +22,7 @@ class OrderDetail extends React.Component {
       const { orderDetail = {} } = this.props
       const { order = {} } = orderDetail || {}
       const fileList = order.ticketing && JSON.parse(order.ticketing) || []
-      this.setState({ isTicket: order.ticketing_status == 1 ? true : false, defaultFileList: fileList, remark: order.ticketing_remark || '' })
+      this.setState({ isTicket: order.ticketing_status == 2 ? false : true, defaultFileList: fileList, remark: order.ticketing_remark || '' })
     })
   }
 
