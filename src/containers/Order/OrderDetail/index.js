@@ -1,9 +1,11 @@
 import React from 'react'
-import { Descriptions, Card, Button, Radio, Input } from 'antd';
+import { Descriptions, Card, Button, Radio, Input, Spin } from 'antd';
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Upload from 'components/Upload'
+import fetch, { baseURL } from 'lib/fetch'
 import OrderAction from '../action'
+import './style.less'
 
 class OrderDetail extends React.Component {
   constructor(props) {
@@ -12,7 +14,8 @@ class OrderDetail extends React.Component {
       fileList: [],
       defaultFileList: [],
       isTicket: true,
-      remark: ''
+      remark: '',
+      uploading: false
     }
   }
 
@@ -22,7 +25,7 @@ class OrderDetail extends React.Component {
       const { orderDetail = {} } = this.props
       const { order = {} } = orderDetail || {}
       const fileList = order.ticketing && JSON.parse(order.ticketing) || []
-      this.setState({ isTicket: order.ticketing_status == 2 ? false : true, defaultFileList: fileList, remark: order.ticketing_remark || '' })
+      this.setState({ isTicket: order.ticketing_status == 2 ? false : true, defaultFileList: fileList, fileList, remark: order.ticketing_remark || '' })
     })
   }
 
@@ -36,6 +39,24 @@ class OrderDetail extends React.Component {
     })
   }
 
+  handlePaste = (e) => {
+    e.preventDefault()
+    const data = e.clipboardData || window.clipboardData
+    const items = data.items || []
+    const file = items.length && items[items.length - 1] && items[items.length - 1].getAsFile() || null
+    if (file) {
+      const formdata = new FormData()
+      formdata.append('file', file)
+      this.setState({ uploading: true })
+      fetch.post(`${baseURL}/admin/main/uploadImages`, formdata).then(res => {
+        const ossFile = res.data.oss_urls || []
+        const fileList = this.state.fileList.concat(ossFile);
+        console.log(fileList)
+        this.setState({ fileList, defaultFileList: fileList, uploading: false })
+      }).catch(() => this.setState({ uploading: false }))
+    }
+  }
+
   onSubmitOrderTicketing = () => {
     const { orderId } = this.props.match.params
     const { fileList, remark, isTicket } = this.state
@@ -44,7 +65,7 @@ class OrderDetail extends React.Component {
 
   render() {
     const { orderDetail = {} } = this.props
-    const { isTicket, defaultFileList, remark } = this.state
+    const { isTicket, defaultFileList, remark, uploading } = this.state
     const { movie = {}, cinema = {}, order = {}, user = {} } = orderDetail || {}
     return (
       <React.Fragment >
@@ -69,6 +90,13 @@ class OrderDetail extends React.Component {
         </Descriptions >
         <Card title="上传票证" extra={<Button type="primary" onClick={this.onSubmitOrderTicketing}>保存票证信息</Button>}>
           <Upload defaultFileList={defaultFileList} onChange={this.handleFileChange} />
+          <Spin spinning={uploading}>
+            <Input.TextArea
+              className="paste-box"
+              onPasteCapture={this.handlePaste}
+              onChange={e => e.preventDefault()}
+              value={'可通过剪切板粘贴上传或者快捷键 ctrl + v 上传'} />
+          </Spin>
           <Input.TextArea rows={4} onChange={this.handleChange.bind(this, 'remark')} value={remark} placeholder="备注信息" />
         </Card>
       </React.Fragment>

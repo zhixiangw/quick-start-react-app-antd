@@ -34,7 +34,7 @@ export default class PicturesWall extends React.PureComponent {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.defaultFileList && nextProps.defaultFileList && this.props.defaultFileList.length !== nextProps.defaultFileList.length) {
-      this.setState({ defaultFileList: [...this.getDefaultFileList(nextProps)] })
+      this.setState({ defaultFileList: [...this.getDefaultFileList(nextProps)], fileList: [...this.getDefaultFileList(nextProps)] })
     }
   }
 
@@ -83,6 +83,7 @@ export default class PicturesWall extends React.PureComponent {
 
   render() {
     const { previewVisible, previewImage, fileList, defaultFileList } = this.state;
+    console.log(fileList)
     return (
       <div className="clearfix">
         <Upload
