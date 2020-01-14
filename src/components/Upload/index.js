@@ -27,23 +27,14 @@ export default class PicturesWall extends React.PureComponent {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: [],
-      defaultFileList: [...this.getDefaultFileList(props)]
+      fileList: props.fileList
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.defaultFileList && nextProps.defaultFileList && this.props.defaultFileList.length !== nextProps.defaultFileList.length) {
-      this.setState({ defaultFileList: [...this.getDefaultFileList(nextProps)], fileList: [...this.getDefaultFileList(nextProps)] })
+    if (this.props.fileList && nextProps.fileList && this.props.fileList.length !== nextProps.fileList.length) {
+      this.setState({ fileList: nextProps.fileList })
     }
-  }
-
-  getDefaultFileList = (props) => {
-    const { defaultFileList } = props
-    if (Array.isArray(defaultFileList)) {
-      return defaultFileList.map((file, index) => ({ uid: index, name: 'images', status: file ? 'done' : 'uploading', url: file }))
-    }
-    return []
   }
 
   handleCancel = () => this.setState({ previewVisible: false });
@@ -61,8 +52,7 @@ export default class PicturesWall extends React.PureComponent {
   };
 
   handleChange = ({ fileList }) => this.setState({ fileList: [...fileList] }, () => {
-    let ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0] || '')
-    this.props.onChange && this.props.onChange(ossFileUrls)
+    this.props.onChange && this.props.onChange(fileList)
   })
 
   renderBtn = () => (
@@ -82,8 +72,7 @@ export default class PicturesWall extends React.PureComponent {
   };
 
   render() {
-    const { previewVisible, previewImage, fileList, defaultFileList } = this.state;
-    console.log(fileList)
+    const { previewVisible, previewImage, fileList } = this.state;
     return (
       <div className="clearfix">
         <Upload
@@ -92,8 +81,7 @@ export default class PicturesWall extends React.PureComponent {
           accept="image/*"
           name="images"
           multiple={Boolean(1)}
-          fileList={fileList.length ? fileList : defaultFileList}
-          defaultFileList={defaultFileList}
+          fileList={fileList}
           withCredentials={Boolean(1)}
           onPreview={this.handlePreview}
           onChange={this.handleChange} >
