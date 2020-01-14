@@ -12,7 +12,6 @@ class OrderDetail extends React.Component {
     super(props)
     this.state = {
       fileList: [],
-      defaultFileList: [],
       isTicket: true,
       remark: '',
       uploading: false
@@ -24,9 +23,17 @@ class OrderDetail extends React.Component {
     this.props.queryOrderDetail(orderId).then(() => {
       const { orderDetail = {} } = this.props
       const { order = {} } = orderDetail || {}
-      const fileList = order.ticketing && JSON.parse(order.ticketing) || []
-      this.setState({ isTicket: order.ticketing_status == 2 ? false : true, defaultFileList: fileList, fileList, remark: order.ticketing_remark || '' })
+      let fileList = order.ticketing && JSON.parse(order.ticketing) || []
+      fileList = this.getDefaultFileList(fileList)
+      this.setState({ isTicket: order.ticketing_status == 2 ? false : true, fileList, remark: order.ticketing_remark || '' })
     })
+  }
+
+  getDefaultFileList = (fileList) => {
+    if (Array.isArray(fileList)) {
+      return fileList.map((file, index) => ({ uid: index, name: 'images', status: file ? 'done' : 'uploading', url: file }))
+    }
+    return []
   }
 
   handleFileChange = (fileList) => {
@@ -49,10 +56,11 @@ class OrderDetail extends React.Component {
       formdata.append('file', file)
       this.setState({ uploading: true })
       fetch.post(`${baseURL}/admin/main/uploadImages`, formdata).then(res => {
+        let { fileList } = this.state
         const ossFile = res.data.oss_urls || []
-        const fileList = this.state.fileList.concat(ossFile);
-        console.log(fileList)
-        this.setState({ fileList, defaultFileList: fileList, uploading: false })
+        const ossFileObj = { uid: fileList.length, name: 'images', status: 'done', url: ossFile[0] }
+        fileList = fileList.concat(ossFileObj);
+        this.setState({ fileList, uploading: false })
       }).catch(() => this.setState({ uploading: false }))
     }
   }
@@ -60,12 +68,14 @@ class OrderDetail extends React.Component {
   onSubmitOrderTicketing = () => {
     const { orderId } = this.props.match.params
     const { fileList, remark, isTicket } = this.state
-    this.props.submitOrderTicketing({ orderId, ticketing: JSON.stringify(fileList), remark, is_ticket: isTicket ? '1' : '2' })
+    const ossFileUrls = fileList.map(file => file.url || file.response && file.response.data.oss_urls[0] || '')
+    const ticketing = JSON.stringify(ossFileUrls)
+    this.props.submitOrderTicketing({ orderId, ticketing, remark, is_ticket: isTicket ? '1' : '2' })
   }
 
   render() {
     const { orderDetail = {} } = this.props
-    const { isTicket, defaultFileList, remark, uploading } = this.state
+    const { isTicket, fileList, remark, uploading } = this.state
     const { movie = {}, cinema = {}, order = {}, user = {} } = orderDetail || {}
     return (
       <React.Fragment >
@@ -89,7 +99,7 @@ class OrderDetail extends React.Component {
           </Descriptions.Item>
         </Descriptions >
         <Card title="上传票证" extra={<Button type="primary" onClick={this.onSubmitOrderTicketing}>保存票证信息</Button>}>
-          <Upload defaultFileList={defaultFileList} onChange={this.handleFileChange} />
+          <Upload fileList={fileList} onChange={this.handleFileChange} />
           <Spin spinning={uploading}>
             <Input.TextArea
               className="paste-box"
