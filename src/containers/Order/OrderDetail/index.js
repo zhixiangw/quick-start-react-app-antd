@@ -57,7 +57,7 @@ class OrderDetail extends React.Component {
           <Descriptions.Item label="下单时间">{order.created_at && moment(order.created_at).format('YYYY-MM-DD HH:mm:ss') || '--'}</Descriptions.Item>
           <Descriptions.Item label="场次">{order.show_time}</Descriptions.Item>
           <Descriptions.Item label="状态">{order.statusText} </Descriptions.Item>
-          <Descriptions.Item label="支付时间">{order.pay_time && moment(order.pay_time).format('YYYY-MM-DD HH:mm:ss') || '--'}</Descriptions.Item>
+          <Descriptions.Item label="支付时间">{order.payed_time && moment(order.payed_time).format('YYYY-MM-DD HH:mm:ss') || '--'}</Descriptions.Item>
           <Descriptions.Item label="座位排座">{order.seatsText && order.seatsText.join(',')} （共{order.count}张）</Descriptions.Item>
           <Descriptions.Item label="出票人">{order.ticketing_user || '--'}  / {order.ticketing_time && moment(order.ticketing_time).format('YYYY-MM-DD HH:mm:ss') || '--'}</Descriptions.Item>
           <Descriptions.Item label="出票状态">
