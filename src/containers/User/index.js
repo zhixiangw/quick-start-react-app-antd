@@ -83,6 +83,10 @@ class UserList extends React.Component {
 
   getDataSource = () => {
     const { userList = [] } = this.props
+    const rolesMap = {
+      superadmin: "超级管理员",
+      manage: "管理员(出票)",
+    }
     return userList.map(user => {
       return {
         key: user.id,
@@ -90,7 +94,7 @@ class UserList extends React.Component {
         nickName: user.nickname || '--',
         phone: user.phone,
         userName: user.username,
-        roles: user.roles && user.roles.join(',') || '--',
+        roles: user.roles && user.roles.map(r => rolesMap[r]).join(',') || '--',
         createdAt: user.created_at && moment(user.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         status: user.status ? '可用' : '禁用',
         action: user.id

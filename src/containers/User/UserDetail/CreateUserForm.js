@@ -163,8 +163,7 @@ class CreateUserForm extends React.Component {
           })(
             <Select mode="multiple" placeholder="请选择角色!">
               <Select.Option value="superadmin">超级管理员</Select.Option>
-              <Select.Option value="admin">管理员</Select.Option>
-              <Select.Option value="manage">经理</Select.Option>
+              <Select.Option value="manage">管理员(出票)</Select.Option>
             </Select>,
           )}
         </Form.Item>

@@ -5,16 +5,20 @@ export default {
   menus: [{
     path: '/dashboard',
     icon: 'dashboard',
+    key: 'dashboard',
     name: '数据概览'
   }, {
     path: '/cinema',
     icon: 'video-camera',
+    key: 'cinema',
     name: '影院管理',
     children: [{
       path: '/cinema/list',
+      key: 'cinemaList',
       name: '影院列表'
     }, {
       path: '/cinema/subscribe',
+      key: 'cinemaSubscribe',
       name: '订阅通知'
     }]
   },
@@ -22,12 +26,15 @@ export default {
   //   path: '/movie',
   //   icon: 'youtube',
   //   name: '电影管理',
+  //   key: 'movie',
   //   children: [{
   //     path: '/movie/list',
+  //     key: 'movieList',
   //     name: '电影列表'
   //   }, {
   //     path: '/movie-scene',
   //     icon: 'scissor',
+  //     key: 'movieScene',
   //     name: '场次列表'
   //   }]
   // },
@@ -35,17 +42,21 @@ export default {
     path: '/order',
     icon: 'ordered-list',
     name: '订单管理',
+    key: 'order',
     children: [{
       path: '/order/list',
+      key: 'orderList',
       name: '订单列表'
     }]
   }, {
     path: '/user',
     icon: 'team',
+    key: 'userSetting',
     name: '用户设置'
   }, {
     path: '/setting',
     icon: 'setting',
+    key: 'system',
     name: '系统设置'
   }]
 }

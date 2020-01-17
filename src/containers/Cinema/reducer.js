@@ -9,6 +9,10 @@ const initState = {
 
 export default handleActions(
   {
+    [CINEMA.ALL + '_FULFILLED']: (state, { payload }) => {
+      const { data } = payload
+      return { ...state, allCinemas: data }
+    },
     [CINEMA.LIST + '_FULFILLED']: (state, { payload }) => {
       const { data: { count, items = [] } } = payload
       return { ...state, list: items, count }

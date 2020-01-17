@@ -7,6 +7,7 @@ export const CINEMA = {
   DELETE: 'DELETE',
   DETAIL: 'DETAIL',
   CREATE: 'CREATE',
+  ALL: 'ALL',
   TAGS: 'TAGS',
   SUBMIT: 'SUBMIT.CINEMA',
   CINEMATAGS: 'CINEMA.TAGS',
@@ -20,6 +21,7 @@ export const CINEMA = {
 
 export default createActions({
   [CINEMA.LIST]: (param) => fetch.get('admin/cinema/list?' + queryString.stringify(param)),
+  [CINEMA.ALL]: (param) => fetch.get('admin/cinema/all'),
   [CINEMA.DELETE]: (id) => fetch.post('admin/cinema/delete', { id }),
   [CINEMA.DETAIL]: (id) => fetch.get('admin/cinema/detail?id=' + id),
   [CINEMA.CINEMATAGS]: (id) => fetch.get('admin/cinema/cinemaTags?id=' + id),
