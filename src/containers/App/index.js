@@ -122,6 +122,7 @@ class App extends React.Component {
   renedrLayout = () => {
     const { collapsed, selectedKeys } = this.state
     const { userInfo } = this.props
+    const permission = userInfo.permission && userInfo.permission.menu || []
     let isSelectedKeyExist = false
     if (selectedKeys[1].split('/').length > 2) {
       isSelectedKeyExist = Config.menus.find(m => {
@@ -139,6 +140,9 @@ class App extends React.Component {
           <div className="logo">{collapsed ? '微影' : '微影管理后台'}</div>
           <Menu theme="dark" selectedKeys={isSelectedKeyExist ? [selectedKeys[1]] : [selectedKeys[0]]} defaultOpenKeys={[selectedKeys[0]]} mode="inline" >
             {Config.menus.map(menu => {
+              if (permission.length && !permission.includes(menu.path.split('/')[1])) {
+                return null
+              }
               if (menu.children) {
                 return (
                   <Menu.SubMenu key={menu.path} title={
@@ -147,12 +151,16 @@ class App extends React.Component {
                       <span>{menu.name}</span>
                     </span>
                   }>
-                    {menu.children.map(child =>
-                      <Menu.Item key={child.path}>
+                    {menu.children.map(child => {
+                      if (permission.length && !permission.includes(child.path.split('/')[1])) {
+                        return null
+                      }
+                      return <Menu.Item key={child.path}>
                         <NavLink to={child.path}>
                           <span>{child.name}</span>
                         </NavLink>
-                      </Menu.Item>)}
+                      </Menu.Item>
+                    })}
                   </Menu.SubMenu>
                 )
               }
