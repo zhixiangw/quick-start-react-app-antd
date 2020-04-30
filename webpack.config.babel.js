@@ -4,7 +4,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
 export default {
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.[hash:16].js'
@@ -29,6 +29,10 @@ export default {
   },
   module: {
     rules: [{
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
+      },
+      {
         test: /\.(js|jsx)$/,
         use: 'babel-loader'
       },
@@ -85,6 +89,7 @@ export default {
     })
   ],
   resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
     alias: {
       containers: path.resolve(__dirname, 'src/containers')
     }

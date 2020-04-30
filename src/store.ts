@@ -11,7 +11,7 @@ const reducers = {
 
 const middleware = routerMiddleware(history)
 const localHistory = createBrowserHistory()
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers =(<any> window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   combineReducers({
     ...reducers,

@@ -1,11 +1,22 @@
-import React from 'react'
+import * as React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Button } from 'antd'
 
 import AppAction from './action'
 
-class App extends React.Component {
+interface IProps {
+  reducer: {
+    counter: number
+  },
+  action: {
+    incrementCount: Function,
+    decrementCount: Function
+  },
+  history: any
+}
+
+class App extends React.Component<IProps> {
   handleIncrementClick = () => {
     let { counter } = this.props.reducer
     counter++
@@ -25,7 +36,7 @@ class App extends React.Component {
       height: 300,
       width: '100%',
       backgroundColor: 'red'
-    }
+    } as React.CSSProperties
     return (
       <div style={style}>
         <Button type="primary" onClick={this.handleIncrementClick}>incrementCount</Button>
