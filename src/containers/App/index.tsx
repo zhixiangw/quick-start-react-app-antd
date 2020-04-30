@@ -42,7 +42,7 @@ class App extends React.Component<IProps> {
         <Button type="primary" onClick={this.handleIncrementClick}>incrementCount</Button>
         <Button onClick={this.handleDecrementClick}>decrementCount</Button>
         <Button type="dashed">Dashed</Button>
-        <Button type="danger" onClick={() => this.props.history.push('/home')}>to Home</Button>
+        <Button type="link" onClick={() => this.props.history.push('/home')}>to Home</Button>
         <p>{counter}</p>
       </div>
     )
