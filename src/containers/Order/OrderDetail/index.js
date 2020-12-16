@@ -77,6 +77,11 @@ class OrderDetail extends React.Component {
     const { orderDetail = {} } = this.props
     const { isTicket, fileList, remark, uploading } = this.state
     const { movie = {}, cinema = {}, order = {}, user = {} } = orderDetail || {}
+    let snacksRender = null;
+    if (order.snack_voucher) {
+      snacksRender = <Descriptions title="附加商品" ><Descriptions.Item label="小食品">{order.snack_note}({order.snack_voucher})</Descriptions.Item></Descriptions >;
+    }
+
     return (
       <React.Fragment >
         <Descriptions title="订单详情" >
@@ -98,6 +103,7 @@ class OrderDetail extends React.Component {
             </Radio.Group>
           </Descriptions.Item>
         </Descriptions >
+        {snacksRender}
         <Card title="上传票证" extra={<Button type="primary" onClick={this.onSubmitOrderTicketing}>保存票证信息</Button>}>
           <Upload fileList={fileList} onChange={this.handleFileChange} />
           <Spin spinning={uploading}>

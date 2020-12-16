@@ -49,6 +49,25 @@ export default {
       name: '订单列表'
     }]
   }, {
+    path: '/voucher',
+    icon: 'ordered-list',
+    // icon: 'account-book-outlined',
+    key: 'voucher',
+    name: '优惠券管理',
+    children: [{
+      path: '/voucher/movieList',
+      key: 'voucherMovieList',
+      name: '影票抵扣列表'
+    }, {
+      path: '/voucher/snacksList',
+      key: 'voucherSnacksList',
+      name: '商品抵扣列表'
+    }, {
+      path: '/voucher/memberList',
+      key: 'voucherMemberList',
+      name: '会员兑换列表'
+    }]
+  }, {
     path: '/user',
     icon: 'team',
     key: 'userSetting',

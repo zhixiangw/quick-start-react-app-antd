@@ -20,6 +20,10 @@ import SubscribeForm from 'containers/Cinema/Subscribe/Form'
 import User from 'containers/User'
 import UserDetail from 'containers/User/UserDetail'
 import Setting from 'containers/Setting'
+import VoucherMember from 'containers/Voucher/Member'
+import VoucherMemberForm from 'containers/Voucher/Member/Form'
+import VoucherSnacks from 'containers/Voucher/Snacks'
+import VoucherMovie from 'containers/Voucher/Movie'
 
 ReactDOM.render((
   <Provider store={store}>
@@ -40,6 +44,12 @@ ReactDOM.render((
               <Route exact path="/order/detail/:orderId" component={OrderDetail} />
               <Route exact path="/user" component={User} />
               <Route exact path="/user/detail/:orderId" component={UserDetail} />
+              <Route exact path="/voucher/movieList" component={VoucherMovie} />
+              <Route exact path="/voucher/movieForm/:id" component={VoucherMemberForm} />
+              <Route exact path="/voucher/snacksList" component={VoucherSnacks} />
+              <Route exact path="/voucher/snacksForm/:id" component={VoucherMemberForm} />
+              <Route exact path="/voucher/memberList" component={VoucherMember} />
+              <Route exact path="/voucher/memberForm/:id" component={VoucherMemberForm} />
               <Route exact path="/setting" component={Setting} />
               <Redirect from='/' to='/dashboard' />
             </Switch>
