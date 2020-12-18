@@ -1,30 +1,44 @@
 import React from 'react'
-import { creatHistory, Button, Select, Input, Form, Switch, Icon  } from 'antd';
+import { DatePicker, Button, Select, Input, Form, Switch, Icon  } from 'antd';
 import { connect } from 'react-redux'
 import Action from '../action'
+import moment from 'moment';
 
 class MemberForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      originValues: []
+      originValues: [],
+      voucherType: [],
+      movieVoucher: [],
+      snacksVoucher: [],
     }
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
     Promise.all([
-      this.props.memberTypes()
-    ]).then(() => {
+      this.props.voucherConfig(),
+      this.props.memberTypes(),
+    ]).then(([config={}]) => {
       if (~~id) {
         this.props.queryInfo({ id })
       }
+      const {
+        movieVoucher = [],
+        voucherType = [],
+        snacksVoucher = []
+      } = config.value.data;
+      this.state.voucherType = voucherType;
+      this.state.movieVoucher = movieVoucher;
+      this.state.snacksVoucher = snacksVoucher;
     })
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
+      console.log(values,err);
       if (!err) {
         const { id } = this.props.match.params
         values.id = ~~id;
@@ -43,28 +57,23 @@ class MemberForm extends React.Component {
 
   remove = k => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys = form.getFieldValue('data');
-    // We need at least one passenger
-    if (keys.length === 1) {
-      return;
-    }
-
-    // can use data-binding to set
+    keys.splice(k, 1);
     form.setFieldsValue({
-      keys: keys.filter(key => key !== k),
+      data: keys,
     });
   };
 
   add = () => {
     const { form } = this.props;
-    // can use data-binding to get
     const keys = form.getFieldValue('data');
-    const nextKeys = keys.concat(id++);
-    // can use data-binding to set
-    // important! notify form to detect changes
+    keys.push({
+      id: 1,
+      type: 1,
+      num: 1
+    });
     form.setFieldsValue({
-      keys: nextKeys,
+      data: keys,
     });
   };
 
@@ -91,74 +100,91 @@ class MemberForm extends React.Component {
       },
     };
 
-    const sopts = this.props.allMemberType.map(item => (<Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>))
+    const sopts = this.props.allMemberType.map(item => (<Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>));
+    
+    const voucherTypeOpts = this.state.voucherType.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
+    const movieVoucherOpts = this.state.movieVoucher.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
+    const snacksVoucherOpts = this.state.snacksVoucher.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
 
     const { getFieldDecorator, getFieldValue  } = this.props.form;
     
     getFieldDecorator('data', { initialValue: info.data || [] });
     const keys = getFieldValue('data');
-    console.log(keys,"_+_+_+_+_+_+_+_+_+_+_+")
-    const formItems = keys.map((value, index) => (
-      <Form.Item
-        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-        label={(index === 0 ? '附赠折扣券数据' : '')}
-        required={false}
-        key={index}
-      >
-        <Form.Item style={{ display: 'inline-block' }}>
-          {getFieldDecorator(`voucher[${index}][type]`, {
-            initialValue: value.type,
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "请选择券类型",
-              },
-            ],
-          })(
-            <Select placeholder="选择券类型" optionFilterProp="children" filterOption={this.filterOption}>
-              <Select.Option key="1" value="1">{item.name}</Select.Option>
-            </Select>,
-          )}
+
+    const formItems = keys.map((value, index) =>{
+      let renderOtp;
+      if(~~value.type === 1) {
+        renderOtp = movieVoucherOpts;
+      } else {
+        renderOtp = snacksVoucherOpts;
+      }
+
+      return (
+        <Form.Item
+          {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+          label={(index === 0 ? '附赠折扣券数据' : '')}
+          required={false}
+          key={index}
+        >
+          <Form.Item style={{ display: 'inline-block' }}>
+            {getFieldDecorator(`voucher[${index}][type]`, {
+              initialValue: ~~value.type,
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  type: 'integer', 
+                  message: "请选择券类型",
+                },
+              ],
+            })(
+              <Select placeholder="选择券类型" optionFilterProp="children" filterOption={this.filterOption}>
+                {voucherTypeOpts}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item style={{ display: 'inline-block' }}>
+            {getFieldDecorator(`voucher[${index}]['id']`, {
+              initialValue: value.id,
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  type: 'integer', 
+                  message: "请选择抵扣券",
+                },
+              ],
+            })(
+              <Select placeholder="选择券类型" optionFilterProp="children" filterOption={this.filterOption}>
+                {renderOtp}
+              </Select>
+            )}
+          </Form.Item>
+          <Form.Item style={{ display: 'inline-block' }}>
+            {getFieldDecorator(`voucher[${index}]['num']`, {
+              initialValue: value.num,
+              validateTrigger: ['onChange', 'onBlur'],
+              rules: [
+                {
+                  required: true,
+                  type: 'integer', 
+                  message: "请填写数量",
+                },
+              ],
+            })(<Input placeholder="发放数量" />)}
+          </Form.Item>
+          <Form.Item style={{ display: 'inline-block' }}>
+              <Icon
+                className="dynamic-delete-button"
+                type="minus-circle-o"
+                onClick={() => this.remove(index)}
+              />
+          </Form.Item>
         </Form.Item>
-        <Form.Item style={{ display: 'inline-block' }}>
-          {getFieldDecorator(`voucher[${index}]['id']`, {
-            initialValue: value.id,
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "请选择抵扣券",
-              },
-            ],
-          })(<Input placeholder="选择抵扣券" />)}
-        </Form.Item>
-        <Form.Item style={{ display: 'inline-block' }}>
-          {getFieldDecorator(`voucher[${index}]['num']`, {
-            initialValue: value.num,
-            validateTrigger: ['onChange', 'onBlur'],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "请填写数量",
-              },
-            ],
-          })(<Input placeholder="发放数量" />)}
-        </Form.Item>
-        <Form.Item style={{ display: 'inline-block' }}>
-          {keys.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              onClick={() => this.remove(index)}
-            />
-          ) : null}
-        </Form.Item>
-      </Form.Item>
-    ));
+      )
+    });
+    const expireDate = typeof(info.expire_date)==='string'? new Date(info.expire_date):info.expire_date;
+
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item {...formItemLayout} label="名称">
@@ -194,13 +220,23 @@ class MemberForm extends React.Component {
             ],
           })(<Input placeholder="请输入兑换天数" />)}
         </Form.Item>
+        <Form.Item {...formItemLayout} label="过期时间">
+        {getFieldDecorator('expire_date', {
+            initialValue: expireDate,
+            rules: [{
+              type: 'object', 
+              required: true, 
+              message: '请选择过期时间' 
+            }]
+           })(<DatePicker />)}
+        </Form.Item>
         <Form.Item {...formItemLayout} label="兑换会员类型">
           {getFieldDecorator('type_id', {
             initialValue: info.type_id,
             rules: [{
               required: true,
               message: '请选择会员类型',
-              type: 'array'
+              type: 'integer'
             }],
           })(
             <Select placeholder="请选择" optionFilterProp="children" filterOption={this.filterOption}>
@@ -228,7 +264,7 @@ class MemberForm extends React.Component {
         {formItems}
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-            <Icon type="plus" /> Add field
+            <Icon type="plus" /> 添加附赠折扣券
           </Button>
         </Form.Item>
         <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
@@ -247,8 +283,9 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = dispatch => ({
   memberTypes: payload => dispatch(Action.memberTypes(payload)),
+  voucherConfig: payload => dispatch(Action.voucherConfig(payload)),
   queryInfo: payload => dispatch(Action.memberDetail(payload)),
-  onSubmit: payload => dispatch(Action.tagsSave(payload)),
+  onSubmit: payload => dispatch(Action.memberUpsert(payload)),
 });
 
 const WrappedNormalLoginForm = Form.create({ name: 'vmember_form' })(connect(mapStateToProps, mapDispatchToProps)(MemberForm));

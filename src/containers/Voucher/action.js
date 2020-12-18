@@ -13,6 +13,7 @@ export const VOUCHER = {
   SNACKSDETAIL: 'SNACKS.DETAIL',
   SNACKSUPSERT: 'SNACKS.UPSERT',
   ALLMEMBERTYPE: 'MEMBER.TYPES',
+  VOUCHERCONFIG: 'VOUCHER.CONFIG',
 }
 
 export default createActions({
@@ -26,4 +27,5 @@ export default createActions({
   [VOUCHER.SNACKSDETAIL]: (param) => fetch.get('admin/voucher/SnacksDetail?'+ queryString.stringify(param)),
   [VOUCHER.SNACKSUPSERT]: (param) => fetch.post('admin/voucher/SnacksUpsert', param),
   [VOUCHER.ALLMEMBERTYPE]: () => fetch.get('admin/main/allMemberType'),
+  [VOUCHER.VOUCHERCONFIG]: () => fetch.get('admin/voucher/config'),
 })
