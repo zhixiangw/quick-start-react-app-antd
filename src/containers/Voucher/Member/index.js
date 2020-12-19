@@ -17,7 +17,9 @@ class memberList extends React.Component {
   }
 
   componentDidMount() {
-    this.getList()
+    this.props.memberTypes().then(res=>{
+      this.getList();
+    })
   }
 
   getList = () => {
@@ -37,7 +39,6 @@ class memberList extends React.Component {
         key: 'icon',
         width: 70,
         render: (action, record) => {
-          console.log(record)
           return (
             <img width="30"  src={`${record.icon}`} alt= "" />
           )
@@ -58,7 +59,7 @@ class memberList extends React.Component {
       {
         title: '会员类型',
         key: 'type',
-        dataIndex: 'type_id'
+        dataIndex: 'type'
       },
       {
         title: '抵扣数(天)',
@@ -100,14 +101,14 @@ class memberList extends React.Component {
   }
 
   getDataSource = () => {
-    const { list = [] } = this.props
+    const { list = [], allMemberType=[] } = this.props;
     return list.map(record => {
       return {
         key: record.id,
         name: record.name,
         icon: record.icon, 
         desc: record.desc, 
-        type_id: record.type_id, 
+        type: (allMemberType.find(i=>i.id===record.type_id) ||{})['name'] , 
         value: record.value, 
         createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
@@ -136,10 +137,12 @@ class memberList extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  allMemberType: state.VoucherReducer.allMemberType,
   list: state.VoucherReducer.list,
   count: state.VoucherReducer.count
 });
 const mapDispatchToProps = dispatch => ({
+  memberTypes: payload => dispatch(Action.memberTypes(payload)),
   queryList: payload => dispatch(Action.memberList(payload)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(memberList);

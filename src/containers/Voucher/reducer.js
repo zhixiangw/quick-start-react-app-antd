@@ -19,7 +19,7 @@ export default handleActions(
       return { ...state, detail: data }
     },
     [VOUCHER.MOVIELIST + '_FULFILLED']: (state, { payload }) => {
-      const { data: { count, items = [] } } = payload
+      const { data: { count, items = [] } } = payload;
       return { ...state, list: items, count }
     },
     [VOUCHER.MOVIEDETAIL + '_FULFILLED']: (state, { payload }) => {

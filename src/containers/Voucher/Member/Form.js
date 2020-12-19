@@ -1,5 +1,5 @@
 import React from 'react'
-import { DatePicker, Button, Select, Input, Form, Switch, Icon  } from 'antd';
+import { DatePicker, Button, Select, Input, Form, Switch, Icon, InputNumber, message  } from 'antd';
 import { connect } from 'react-redux'
 import Action from '../action'
 import moment from 'moment';
@@ -35,18 +35,36 @@ class MemberForm extends React.Component {
     })
   }
 
+  handleTypeChange(index, value){
+    const { form } = this.props;
+    const data = form.getFieldValue('data');
+    data[index].type = value;
+    form.setFieldsValue({
+      data,
+    });
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       console.log(values,err);
       if (!err) {
         const { id } = this.props.match.params
-        values.id = ~~id;
-        this.props.onSubmit(values).then((res) => {
+        const postData = {
+          ...values,
+          id: ~~id,
+          data: values.voucher,
+          expire_date: values.expire_date.format("YYYY-MM-DD")
+        }
+        delete postData.voucher;
+        this.props.onSubmit(postData).then((res) => {
           if (res.value && res.value.code === 0) {
+            message.success('保存成功');
             setTimeout(() => {
               this.props.history.goBack();
             }, 1500);
+          } else {
+            message.error(`保存失败[${res.value.message}]`);
           }
         })
       }
@@ -79,7 +97,7 @@ class MemberForm extends React.Component {
 
   render() {
     const { id } = this.props.match.params
-    let { info = {}} = this.props
+    let { info = {}, allMemberType} = this.props
     if (!~~id) {
       info = {}
     }
@@ -100,7 +118,7 @@ class MemberForm extends React.Component {
       },
     };
 
-    const sopts = this.props.allMemberType.map(item => (<Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>));
+    const sopts = allMemberType.map(item => (<Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>));
     
     const voucherTypeOpts = this.state.voucherType.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
     const movieVoucherOpts = this.state.movieVoucher.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
@@ -138,7 +156,9 @@ class MemberForm extends React.Component {
                 },
               ],
             })(
-              <Select placeholder="选择券类型" optionFilterProp="children" filterOption={this.filterOption}>
+              <Select placeholder="选择券类型" optionFilterProp="children" filterOption={this.filterOption}        
+              onChange={this.handleTypeChange.bind(this, index)}
+              >
                 {voucherTypeOpts}
               </Select>
             )}
@@ -162,16 +182,16 @@ class MemberForm extends React.Component {
           </Form.Item>
           <Form.Item style={{ display: 'inline-block' }}>
             {getFieldDecorator(`voucher[${index}]['num']`, {
-              initialValue: value.num,
+              initialValue: `${value.num}`,
               validateTrigger: ['onChange', 'onBlur'],
               rules: [
                 {
                   required: true,
-                  type: 'integer', 
+                  type: 'string', 
                   message: "请填写数量",
                 },
               ],
-            })(<Input placeholder="发放数量" />)}
+            })(<InputNumber min={1} placeholder="发放数量" />)}
           </Form.Item>
           <Form.Item style={{ display: 'inline-block' }}>
               <Icon
@@ -183,8 +203,8 @@ class MemberForm extends React.Component {
         </Form.Item>
       )
     });
-    const expireDate = typeof(info.expire_date)==='string'? new Date(info.expire_date):info.expire_date;
-
+    
+    const expireDate = moment(info.expire_date);
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item {...formItemLayout} label="名称">
@@ -218,7 +238,7 @@ class MemberForm extends React.Component {
                 message: '请输入兑换天数',
               },
             ],
-          })(<Input placeholder="请输入兑换天数" />)}
+          })(<InputNumber min={1} placeholder="请输入兑换天数" />)}
         </Form.Item>
         <Form.Item {...formItemLayout} label="过期时间">
         {getFieldDecorator('expire_date', {

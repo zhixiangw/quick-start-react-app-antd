@@ -1,84 +1,149 @@
 import React from 'react'
-import { Radio, Form } from 'antd';
+import { Divider, Table, Input, Avatar, Modal, Button, Icon } from 'antd';
 import { connect } from 'react-redux'
-import moment from 'moment'
+import SearchForm from 'components/SearchForm'
 import Action from '../action'
+import moment from 'moment';
 
-class cinemaDetail extends React.Component {
+class memberList extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      status: 1,
+      limit: 10,
+      offset: 0,
+      filter: {}
     }
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params
-    this.props.queryDetail(id).then(res => {
-      if (res && res.value && res.value.data) {
-        this.setState({
-          status: res.value.data.status,
-        });
+    this.props.memberTypes().then(res=>{
+      this.getList();
+    })
+  }
+
+  getList = () => {
+    const { offset, limit, filter } = this.state
+    return this.props.queryList({ offset, limit, filter: JSON.stringify(filter) })
+  }
+
+  getColumns = () => {
+    return [
+      {
+        title: 'ID',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'ICON',
+        key: 'icon',
+        width: 70,
+        render: (action, record) => {
+          return (
+            <img width="30"  src={`${record.icon}`} alt= "" />
+          )
+        },
+      },
+      {
+        title: '名称',
+        width: 150,
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '详情',
+        key: 'desc',
+        width: 250,
+        dataIndex: 'desc'
+      },
+      {
+        title: '抵扣方式',
+        key: 'type',
+        dataIndex: 'type'
+      },
+      {
+        title: '有效时间(天)',
+        key: 'value',
+        dataIndex: 'value'
+      },
+      {
+        title: '过期时间',
+        key: 'expireDate',
+        dataIndex: 'expireDate',
+      },
+      {
+        title: '状态',
+        key: 'status',
+        dataIndex: 'status',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        width: 90,
+        render: (action, record) => {
+          return (
+            <span>
+              <Button href={`/#/voucher/movieForm/${record.key}`} type="primary" >编辑</Button>
+            </span>
+          )
+        },
+      },
+    ]
+  }
+
+  getPagination = () => {
+    const { count } = this.props
+    return {
+      hideOnSinglePage: true,
+      pageSize: this.limit,
+      total: count
+    }
+  }
+
+  getDataSource = () => {
+    const { list = [], allMemberType=[] } = this.props;
+    return list.map(record => {
+      return {
+        key: record.id,
+        name: record.name,
+        icon: record.icon, 
+        desc: record.desc, 
+        type: record.type, 
+        value: record.voucher_expire, 
+        createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
+        updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
+        expireDate: record.expire_date && moment(record.expire_date).format('YYYY-MM-DD HH:mm:ss') || '--',
+        status: record.status ? '开启' : '关闭',
       }
     })
   }
 
-  onStatusChange = (e) => {
-    this.setState({
-      status: e.target.value,
-    });
-    const { id } = this.props.match.params
-    Action.changestatus({ id, status: e.target.value });
+  handleTableChange = ({ current }) => {
+    const { limit } = this.state
+    this.setState({ offset: (current - 1) * limit }, this.getTagsList)
   }
 
   render() {
-    const { detail = {} } = this.props;
-    const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 14 },
-    }
     return (
-      <Form layout="horizontal">
-        <Form.Item label="影院ID" {...formItemLayout}>
-          {detail.cinema_id}
-        </Form.Item>
-        <Form.Item label="影院名称" {...formItemLayout}>
-          {detail.name}
-        </Form.Item>
-        <Form.Item label="地址" {...formItemLayout}>
-          {detail.addr}
-        </Form.Item>
-        <Form.Item label="经纬度" {...formItemLayout}>
-          {detail.lat},{detail.lng}
-        </Form.Item>
-        <Form.Item label="创建时间" {...formItemLayout}>
-          {detail.created_at && moment(detail.created_at).format('YYYY-MM-DD HH:mm:ss') || '--'}
-        </Form.Item>
-        <Form.Item label="更新时间" {...formItemLayout}>
-          {detail.updated_at && moment(detail.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--'}
-        </Form.Item>
-        <Form.Item label="通知标签" {...formItemLayout}>
-          {detail.tags && detail.tags.join(',')}
-        </Form.Item>
-        <Form.Item label="天猫在售" {...formItemLayout}>
-          {detail.sell ? '在售' : '禁售'}
-        </Form.Item>
-        <Form.Item label="状态" {...formItemLayout}>
-          <Radio.Group onChange={this.onStatusChange} value={this.state.status}>
-            <Radio value={1}>开启</Radio>
-            <Radio value={0}>关闭</Radio>
-          </Radio.Group>
-        </Form.Item>
-      </Form>
-    );
+      <React.Fragment>
+        <Table
+          onChange={this.handleTableChange}
+          columns={this.getColumns()}
+          dataSource={this.getDataSource()}
+          pagination={this.getPagination()} />
+      </React.Fragment>
+    )
   }
 }
 
 const mapStateToProps = (state) => ({
-  detail: state.CinemaReducer.detail
+  allMemberType: state.VoucherReducer.allMemberType,
+  list: state.VoucherReducer.list,
+  count: state.VoucherReducer.count
 });
 const mapDispatchToProps = dispatch => ({
-  queryDetail: payload => dispatch(Action.detail(payload)),
-  submit: payload => dispatch(Action.submitCinema(payload)),
+  memberTypes: payload => dispatch(Action.memberTypes(payload)),
+  queryList: payload => dispatch(Action.movieList(payload)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(cinemaDetail);
+
+export default connect(mapStateToProps, mapDispatchToProps)(memberList);
