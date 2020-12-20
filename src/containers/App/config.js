@@ -19,7 +19,7 @@ export default {
     }, {
       path: '/cinema/subscribe',
       key: 'cinemaSubscribe',
-      name: '订阅通知'
+      name: '标签&通知'
     }]
   },
   // {

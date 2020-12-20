@@ -2,6 +2,7 @@ import React from 'react'
 import { DatePicker, Button, Select, Input, Form, Switch, Icon, InputNumber, message  } from 'antd';
 import { connect } from 'react-redux'
 import Action from '../action'
+import cinameAction from '../../Cinema/action'
 import moment from 'moment';
 
 class MovieForm extends React.Component {
@@ -9,6 +10,7 @@ class MovieForm extends React.Component {
     super(props)
     this.state = {
       originValues: [],
+      cinemaTags: [],
       voucherMatchType: [],
     }
   }
@@ -16,24 +18,28 @@ class MovieForm extends React.Component {
   componentDidMount() {
     const { id } = this.props.match.params
     Promise.all([
-      this.props.voucherConfig()
-    ]).then(([config={}]) => {
+      this.props.voucherConfig(),
+      this.props.queryTags(),
+    ]).then(([config={}, tags = {}]) => {
       if (~~id) {
         this.props.queryInfo({ id })
       }
+      console.log()
       const {
         voucherMatchType = [],
       } = config.value.data;
+      const {
+        data: tagsItems=[]
+      } = tags.value;
       this.state.voucherMatchType = voucherMatchType;
+      this.state.cinemaTags = tagsItems;
     })
   }
 
-  handleTypeChange(index, value){
+  handleTypeChange(value){
     const { form } = this.props;
-    const data = form.getFieldValue('data');
-    data[index].type = value;
     form.setFieldsValue({
-      data,
+      type: value,
     });
   }
 
@@ -68,7 +74,7 @@ class MovieForm extends React.Component {
 
   render() {
     const { id } = this.props.match.params
-    let { info = {}, allMemberType} = this.props
+    let { info = {}, allMemberType, tagsList } = this.props
     if (!~~id) {
       info = {}
     }
@@ -84,10 +90,29 @@ class MovieForm extends React.Component {
     };
     
     const sopts = this.state.voucherMatchType.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
-
-    const { getFieldDecorator, getFieldValue  } = this.props.form;
-    
-    getFieldDecorator('data', { initialValue: info.data || [] });
+    const { getFieldDecorator  } = this.props.form;
+console.log(this.state.cinemaTags)
+    // 匹配类型
+    const matchField = null;
+    if(info.type === 2) {
+      // 影院tag匹配
+      matchField = (<Form.Item {...formItemLayout} label="选择影院TAG">
+      {getFieldDecorator('data.tags', {
+        initialValue: info.voucher_expire,
+        rules: [
+          {
+            required: true,
+            message: '请选择影院TAG',
+          },
+        ],
+      })(<Select placeholder="请选择" optionFilterProp="children" 
+      filterOption={this.filterOption}     
+      onChange={this.handleTypeChange}
+      >
+        {sopts}
+      </Select>)}
+    </Form.Item>);
+    }
     
     const expireDate = moment(info.expire_date);
     return (
@@ -144,9 +169,12 @@ class MovieForm extends React.Component {
               type: 'integer'
             }],
           })(
-            <Select placeholder="请选择" optionFilterProp="children" filterOption={this.filterOption}>
+            <Select placeholder="请选择" optionFilterProp="children" 
+            filterOption={this.filterOption}     
+            onChange={this.handleTypeChange}
+            >
               {sopts}
-            </Select>,
+            </Select>
           )}
         </Form.Item>
         <Form.Item {...formItemLayout} label="抵扣描述备注">
@@ -181,6 +209,7 @@ const mapStateToProps = (state) => ({
   allMemberType: state.VoucherReducer.allMemberType,
 });
 const mapDispatchToProps = dispatch => ({
+  queryTags: payload => dispatch(cinameAction.tags(payload)),
   voucherConfig: payload => dispatch(Action.voucherConfig(payload)),
   queryInfo: payload => dispatch(Action.movieDetail(payload)),
   onSubmit: payload => dispatch(Action.movieUpsert(payload)),
