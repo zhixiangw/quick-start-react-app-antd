@@ -1,92 +1,161 @@
 import React from 'react'
-import { Checkbox, Button, Form } from 'antd';
+import { Divider, Table, Input, Avatar, Modal, Button, Icon } from 'antd';
 import { connect } from 'react-redux'
+import SearchForm from 'components/SearchForm'
 import Action from '../action'
+import moment from 'moment';
 
-class cinemaTags extends React.Component {
+class SnacksList extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
-      originValues: [],
+      limit: 10,
+      offset: 0,
+      filter: {},
+      voucherMatchType: [],
     }
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params
-    this.props.queryTags()
-    this.props.queryCinemaTags(id).then(res => {
-      if (res && res.value && res.value.data) {
-        this.setState({
-          originValues: res.value.data.map(i => i.id),
-        });
+    this.props.voucherConfig().then(res=>{
+      this.getList();
+      const {
+        voucherMatchType = [],
+      } = res.value.data;
+      this.state.voucherMatchType = voucherMatchType;
+    })
+  }
+
+  getList = () => {
+    const { offset, limit, filter } = this.state
+    return this.props.queryList({ offset, limit, filter: JSON.stringify(filter) })
+  }
+
+  getColumns = () => {
+    return [
+      {
+        title: 'ID',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'ICON',
+        key: 'icon',
+        width: 70,
+        render: (action, record) => {
+          return (
+            <img width="30"  src={`${record.icon}`} alt= "" />
+          )
+        },
+      },
+      {
+        title: '名称',
+        width: 150,
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '展示折扣文案',
+        width: 150,
+        dataIndex: 'show_discount',
+        key: 'show_discount',
+      },
+      {
+        title: '详情',
+        key: 'desc',
+        width: 250,
+        dataIndex: 'desc'
+      },
+      {
+        title: '抵扣方式',
+        key: 'type',
+        dataIndex: 'type'
+      },
+      {
+        title: '有效时间(天)',
+        key: 'value',
+        dataIndex: 'value'
+      },
+      {
+        title: '过期时间',
+        key: 'expireDate',
+        dataIndex: 'expireDate',
+      },
+      {
+        title: '状态',
+        key: 'status',
+        dataIndex: 'status',
+      },
+      {
+        title: '操作',
+        key: 'action',
+        width: 90,
+        render: (action, record) => {
+          return (
+            <span>
+              <Button href={`/#/voucher/snacksForm/${record.key}`} type="primary" >编辑</Button>
+            </span>
+          )
+        },
+      },
+    ]
+  }
+
+  getPagination = () => {
+    const { count } = this.props
+    return {
+      hideOnSinglePage: true,
+      pageSize: this.limit,
+      total: count
+    }
+  }
+
+  getDataSource = () => {
+    const { list = [] } = this.props;
+    const { voucherMatchType = [] } = this.state;
+    return list.map(record => {
+      return {
+        key: record.id,
+        name: record.name,
+        icon: record.icon, 
+        desc: record.desc, 
+        show_discount: record.show_discount, 
+        type: (voucherMatchType.find(i=>i.value===record.type) || {}).label , 
+        value: record.voucher_expire, 
+        createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
+        updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
+        expireDate: record.expire_date && moment(record.expire_date).format('YYYY-MM-DD HH:mm:ss') || '--',
+        status: record.status ? '开启' : '关闭',
       }
     })
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const { id } = this.props.match.params
-        values.id = ~~id;
-        values.originValues = this.state.originValues;
-        this.props.onSubmit(values).then((res) => {
-          if (res.value && res.value.code === 0) {
-            setTimeout(() => {
-              this.props.history.goBack();
-            }, 1500);
-          }
-        })
-      }
-    });
+  handleTableChange = ({ current }) => {
+    const { limit } = this.state
+    this.setState({ offset: (current - 1) * limit }, this.getTagsList)
   }
 
   render() {
-    const { tags = [], cinemaTags = [] } = this.props;
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 8 },
-    };
-    const rd = tags.map((item, index) => (<Checkbox key={index} value={item.id}>{item.note}({item.tag})</Checkbox>))
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item {...formItemLayout} label="影院标签">
-          {getFieldDecorator('tags', {
-            initialValue: this.state.originValues,
-            rules: [
-              {
-                required: true,
-                message: '请选择影院标签',
-                type: 'array'
-              },
-            ],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              {rd}
-            </Checkbox.Group>,
-          )}
-        </Form.Item>
-        <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-          <Button type="primary" htmlType="submit">
-            提交
-          </Button>
-        </Form.Item>
-      </Form>
-    );
+      <React.Fragment>
+        <Table
+          onChange={this.handleTableChange}
+          columns={this.getColumns()}
+          dataSource={this.getDataSource()}
+          pagination={this.getPagination()} />
+      </React.Fragment>
+    )
   }
 }
 
 const mapStateToProps = (state) => ({
-  tags: state.CinemaReducer.tags,
-  cinemaTags: state.CinemaReducer.cinemaTags
+  list: state.VoucherReducer.list,
+  count: state.VoucherReducer.count
 });
 const mapDispatchToProps = dispatch => ({
-  queryTags: payload => dispatch(Action.tags(payload)),
-  queryCinemaTags: payload => dispatch(Action.cinemaTags(payload)),
-  onSubmit: payload => dispatch(Action.submitCinematag(payload)),
+  voucherConfig: payload => dispatch(Action.voucherConfig(payload)),
+  queryList: payload => dispatch(Action.snacksList(payload)),
 });
 
-const WrappedNormalLoginForm = Form.create({ name: 'cinema_tags_form' })(connect(mapStateToProps, mapDispatchToProps)(cinemaTags));
-
-export default WrappedNormalLoginForm;
+export default connect(mapStateToProps, mapDispatchToProps)(SnacksList);

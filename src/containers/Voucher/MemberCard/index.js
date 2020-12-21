@@ -5,7 +5,7 @@ import SearchForm from 'components/SearchForm'
 import Action from '../action'
 import moment from 'moment';
 
-class movieList extends React.Component {
+class SnacksList extends React.Component {
   constructor(props) {
     super(props)
 
@@ -13,17 +13,17 @@ class movieList extends React.Component {
       limit: 10,
       offset: 0,
       filter: {},
-      voucherMatchType: [],
+      distcounts: [],
     }
   }
 
   componentDidMount() {
-    this.props.voucherConfig().then(res=>{
+    this.props.queryAllDiscount().then(res=>{
       this.getList();
       const {
-        voucherMatchType = [],
+        items = [],
       } = res.value.data;
-      this.state.voucherMatchType = voucherMatchType;
+      this.state.distcounts = items;
     })
   }
 
@@ -56,20 +56,21 @@ class movieList extends React.Component {
         key: 'name',
       },
       {
+        title: '展示文案',
+        width: 150,
+        dataIndex: 'note',
+        key: 'note',
+      },
+      {
         title: '详情',
         key: 'desc',
         width: 250,
         dataIndex: 'desc'
       },
       {
-        title: '抵扣方式',
-        key: 'type',
-        dataIndex: 'type'
-      },
-      {
-        title: '有效时间(天)',
-        key: 'value',
-        dataIndex: 'value'
+        title: '折扣信息',
+        key: 'discount',
+        dataIndex: 'discount'
       },
       {
         title: '过期时间',
@@ -88,7 +89,7 @@ class movieList extends React.Component {
         render: (action, record) => {
           return (
             <span>
-              <Button href={`/#/voucher/movieForm/${record.key}`} type="primary" >编辑</Button>
+              <Button href={`/#/voucher/snacksForm/${record.key}`} type="primary" >编辑</Button>
             </span>
           )
         },
@@ -107,15 +108,15 @@ class movieList extends React.Component {
 
   getDataSource = () => {
     const { list = [] } = this.props;
-    const { voucherMatchType = [] } = this.state;
+    const { distcounts = [] } = this.state;
     return list.map(record => {
       return {
         key: record.id,
         name: record.name,
         icon: record.icon, 
         desc: record.desc, 
-        type: (voucherMatchType.find(i=>i.value===record.type) || {}).label , 
-        value: record.voucher_expire, 
+        note: record.note, 
+        discount: (distcounts.find(i=>i.id === record.preferential) || {}).name, 
         createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         expireDate: record.expire_date && moment(record.expire_date).format('YYYY-MM-DD HH:mm:ss') || '--',
@@ -147,8 +148,8 @@ const mapStateToProps = (state) => ({
   count: state.VoucherReducer.count
 });
 const mapDispatchToProps = dispatch => ({
-  voucherConfig: payload => dispatch(Action.voucherConfig(payload)),
-  queryList: payload => dispatch(Action.movieList(payload)),
+  queryAllDiscount: payload => dispatch(Action.allDiscount(payload)),
+  queryList: payload => dispatch(Action.membercardList(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(movieList);
+export default connect(mapStateToProps, mapDispatchToProps)(SnacksList);

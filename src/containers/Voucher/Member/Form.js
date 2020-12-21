@@ -1,13 +1,16 @@
 import React from 'react'
-import { DatePicker, Button, Select, Input, Form, Switch, Icon, InputNumber, message  } from 'antd';
+import { DatePicker, Button, Select, Input, Form, Switch, Icon, InputNumber, message, Upload  } from 'antd';
 import { connect } from 'react-redux'
 import Action from '../action'
 import moment from 'moment';
+import { baseURL } from 'lib/fetch'
 
 class MemberForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      info: {},
+      fileList: [],
       originValues: [],
       voucherType: [],
       movieVoucher: [],
@@ -22,7 +25,22 @@ class MemberForm extends React.Component {
       this.props.memberTypes(),
     ]).then(([config={}]) => {
       if (~~id) {
-        this.props.queryInfo({ id })
+        this.props.queryInfo({ id }).then(res=>{
+          // icon
+          const { data: info={} } = res.value;
+          let fileList = [];
+          if(info.icon) {
+            const arr = info.icon.split ('/');
+            fileList = [{
+              uid: '-1',
+              name: arr.pop(),
+              status: 'done',
+              url: info.icon,
+              thumbUrl: info.icon,
+            }];
+            this.setState({ fileList, info });
+          }
+        })
       }
       const {
         movieVoucher = [],
@@ -47,11 +65,15 @@ class MemberForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      console.log(values,err);
       if (!err) {
-        const { id } = this.props.match.params
+        const { id } = this.props.match.params;
+        let icon = values.icon[0]['url'];
+        if(!icon) {
+          icon = values.icon[0]['response']['data']['oss_urls'][0];
+        }
         const postData = {
           ...values,
+          icon,
           id: ~~id,
           data: values.voucher,
           expire_date: values.expire_date.format("YYYY-MM-DD")
@@ -70,6 +92,18 @@ class MemberForm extends React.Component {
       }
     });
   }
+
+  normFile = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    if(e && e.fileList) {
+      let fileList = [...e.fileList];
+      fileList = fileList.slice(-1);
+      this.setState({ fileList });
+      return fileList;
+    }
+  };
 
   filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 
@@ -97,7 +131,8 @@ class MemberForm extends React.Component {
 
   render() {
     const { id } = this.props.match.params
-    let { info = {}, allMemberType} = this.props
+    let { allMemberType} = this.props;
+    let { info } = this.state;
     if (!~~id) {
       info = {}
     }
@@ -127,7 +162,7 @@ class MemberForm extends React.Component {
     const { getFieldDecorator, getFieldValue  } = this.props.form;
     
     getFieldDecorator('data', { initialValue: info.data || [] });
-    const keys = getFieldValue('data');
+    const keys = getFieldValue('data') || [];
 
     const formItems = keys.map((value, index) =>{
       let renderOtp;
@@ -218,16 +253,31 @@ class MemberForm extends React.Component {
             ],
           })(<Input placeholder="请输入名称" />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="ICON">
+        <Form.Item {...formItemLayout}  label="ICON">
           {getFieldDecorator('icon', {
-            initialValue: info.icon,
+            initialValue: this.state.fileList,
+            valuePropName: 'fileList',
+            getValueFromEvent: this.normFile,
             rules: [
               {
                 required: true,
-                message: '请输入ICON',
+                message: '请上传ICON',
               },
             ],
-          })(<Input placeholder="请输入ICON" />)}
+          })(
+            <Upload 
+            action={`${baseURL}/admin/main/uploadImages`}
+            accept="image/*"
+            name="images"
+            listType="picture-card"
+            withCredentials={Boolean(1)}
+            >
+              <Button>
+                <Icon type="upload" />
+                上传图片
+                </Button>
+            </Upload>
+          )}
         </Form.Item>
         <Form.Item {...formItemLayout} label="兑换天数">
           {getFieldDecorator('value', {
@@ -250,7 +300,7 @@ class MemberForm extends React.Component {
             }]
            })(<DatePicker />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="兑换会员类型">
+        <Form.Item {...formItemLayout} label="兑换会员卡">
           {getFieldDecorator('type_id', {
             initialValue: info.type_id,
             rules: [{
@@ -298,7 +348,6 @@ class MemberForm extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  info: state.VoucherReducer.detail,
   allMemberType: state.VoucherReducer.allMemberType,
 });
 const mapDispatchToProps = dispatch => ({

@@ -8,6 +8,7 @@ import OrderReducer from 'containers/Order/reducer'
 import UserReducer from 'containers/User/reducer'
 import CinemaReducer from 'containers/Cinema/reducer'
 import VoucherReducer from 'containers/Voucher/reducer'
+import MoviesReducer from 'containers/Movie/reducer'
 
 const reducers = {
   AppReducer,
@@ -15,6 +16,7 @@ const reducers = {
   UserReducer,
   CinemaReducer,
   VoucherReducer,
+  MoviesReducer,
 }
 
 const middleware = routerMiddleware(history)

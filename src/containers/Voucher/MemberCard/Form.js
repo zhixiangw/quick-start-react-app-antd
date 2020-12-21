@@ -7,7 +7,7 @@ import cinameAction from '../../Cinema/action'
 import movieAction from '../../Movie/action'
 import { baseURL } from 'lib/fetch'
 
-class MovieForm extends React.Component {
+class SnacksForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -51,9 +51,11 @@ class MovieForm extends React.Component {
       const {
         data: tagsItems= []
       } = tags.value;
-      this.state.voucherMatchType = voucherMatchType;
-      this.state.valueMatchType = valueMatchType;
-      this.state.cinemaTags = tagsItems;
+      this.setState({ 
+        voucherMatchType, 
+        valueMatchType,
+        cinemaTags:tagsItems 
+      });
     })
   }
 
@@ -127,7 +129,7 @@ class MovieForm extends React.Component {
     }
   };
 
-  filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+  filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   render() {
     const { id } = this.props.match.params
@@ -146,10 +148,10 @@ class MovieForm extends React.Component {
         sm: { span: 20 },
       },
     };
+    
     // 匹配类型
     const sopts = this.state.voucherMatchType.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
-    // 券面抵扣类型
-    const valueTypeOpts = this.state.valueMatchType.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
+    
     // 匹配类型
     let matchField = null;
     if(info.type === 2) {
@@ -198,38 +200,10 @@ class MovieForm extends React.Component {
       </Select>)}
     </Form.Item>);
     }
-
-    // 券面类型值
-    let valueMatchField = null;
-    if(info.data) {
-      if(info.data.type === 2) {
-        valueMatchField = (<Form.Item {...formItemLayout} label="券面值">
-        {getFieldDecorator('data["value"]', {
-          initialValue: info.data && info.data.value,
-          rules: [
-            {
-              required: true,
-              message: '请输入券面值',
-            },
-          ],
-        })(<InputNumber min={1} max={1000} placeholder="券面值,大于1，抵扣xxx元" />)}
-      </Form.Item>);
-      } else if(info.data.type === 3) {
-        valueMatchField = (<Form.Item {...formItemLayout} label="券面值">
-        {getFieldDecorator('data["value"]', {
-          initialValue: info.data && info.data.value,
-          rules: [
-            {
-              required: true,
-              message: '请输入券面值',
-            },
-          ],
-        })(<InputNumber min={0} max={1} placeholder="券面值,小于1,八折=0.8" />)}
-      </Form.Item>);
-      }
-    }
     
+    // 过期时间
     const expireDate = moment(info.expire_date);
+
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item {...formItemLayout} label="名称">
@@ -268,6 +242,17 @@ class MovieForm extends React.Component {
                 </Button>
             </Upload>
           )}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="展示折扣文案">
+          {getFieldDecorator('show_discount', {
+            initialValue: info.show_discount,
+            rules: [
+              {
+                required: true,
+                message: '请输入展示折扣文案',
+              },
+            ],
+          })(<Input placeholder="请输入展示折扣文案" />)}
         </Form.Item>
         <Form.Item {...formItemLayout} label="券有效期(天)">
           {getFieldDecorator('voucher_expire', {
@@ -319,24 +304,6 @@ class MovieForm extends React.Component {
             ],
           })(<Input.TextArea rows={4} placeholder="请输入抵扣描述" />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="券面抵扣类型">
-          {getFieldDecorator('data["type"]', {
-            initialValue: info.data && info.data.type,
-            rules: [{
-              required: true,
-              message: '请选择券面抵扣类型',
-              type: 'integer'
-            }],
-          })(
-            <Select placeholder="请选择" optionFilterProp="children" 
-            filterOption={this.filterOption}     
-            onChange={this.handleValueTypeChange.bind(this)}
-            >
-              {valueTypeOpts}
-            </Select>
-          )}
-        </Form.Item>
-        {valueMatchField}
         <Form.Item {...formItemLayout} label="状态">
           {getFieldDecorator('status', {
             valuePropName: 'checked',
@@ -361,10 +328,10 @@ const mapDispatchToProps = dispatch => ({
   queryTags: payload => dispatch(cinameAction.tags(payload)),
   searchMovies: payload => dispatch(movieAction.moviesSearch(payload)),
   voucherConfig: payload => dispatch(Action.voucherConfig(payload)),
-  queryInfo: payload => dispatch(Action.movieDetail(payload)),
-  onSubmit: payload => dispatch(Action.movieUpsert(payload)),
+  queryInfo: payload => dispatch(Action.snacksDetail(payload)),
+  onSubmit: payload => dispatch(Action.snacksUpsert(payload)),
 });
 
-const WrappedNormalLoginForm = Form.create({ name: 'vmovie_form' })(connect(mapStateToProps, mapDispatchToProps)(MovieForm));
+const WrappedNormalLoginForm = Form.create({ name: 'vsnacks_form' })(connect(mapStateToProps, mapDispatchToProps)(SnacksForm));
 
 export default WrappedNormalLoginForm;

@@ -55,6 +55,10 @@ export default {
     key: 'voucher',
     name: '优惠券管理',
     children: [{
+      path: '/voucher/memberCard',
+      key: 'voucherMemberCard',
+      name: '会员卡管理'
+    }, {
       path: '/voucher/movieList',
       key: 'voucherMovieList',
       name: '影票抵扣列表'

@@ -38,6 +38,10 @@ export default handleActions(
       const { data: { items = [] } } = payload;
       return { ...state, allMemberType: items }
     },
+    [VOUCHER.MEMBERCARDLIST + '_FULFILLED']: (state, { payload }) => {
+      const { data: { count, items = [] } } = payload
+      return { ...state, list: items, count }
+    },
   },
   initState
 )
