@@ -22,6 +22,27 @@ class memberList extends React.Component {
     })
   }
 
+  getFields = () => {
+    return [{
+      label: '名称',
+      name: 'name'
+    }]
+  }
+
+  getButtons = () => {
+    return [{
+      label: '新增',
+      type: 'primary',
+      onClick: () => this.props.history.push('/voucher/memberForm/0'),
+      icon: 'plus',
+      style: { marginLeft: 8 }
+    }]
+  }
+
+  handleSearch = (values) => {
+    this.setState({ filter: values, offset: 0 }, this.getList)
+  }
+
   getList = () => {
     const { offset, limit, filter } = this.state
     return this.props.queryList({ offset, limit, filter: JSON.stringify(filter) })
@@ -126,6 +147,8 @@ class memberList extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <SearchForm fields={this.getFields()} buttons={this.getButtons()} onSearch={this.handleSearch} />
+        <Divider />
         <Table
           onChange={this.handleTableChange}
           columns={this.getColumns()}

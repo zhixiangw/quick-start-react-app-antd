@@ -51,9 +51,11 @@ class MovieForm extends React.Component {
       const {
         data: tagsItems= []
       } = tags.value;
-      this.state.voucherMatchType = voucherMatchType;
-      this.state.valueMatchType = valueMatchType;
-      this.state.cinemaTags = tagsItems;
+      this.setState({
+        voucherMatchType,
+        valueMatchType,
+        cinemaTags: tagsItems,
+      });
     })
   }
 
@@ -134,7 +136,7 @@ class MovieForm extends React.Component {
     let { info = {}, form } = this.props;
     const { getFieldDecorator  } = form;
     if (!~~id) {
-      info = {}
+      info = {};
     }
     const formItemLayout = {
       labelCol: {

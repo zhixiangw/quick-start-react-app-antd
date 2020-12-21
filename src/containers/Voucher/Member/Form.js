@@ -47,9 +47,11 @@ class MemberForm extends React.Component {
         voucherType = [],
         snacksVoucher = []
       } = config.value.data;
-      this.state.voucherType = voucherType;
-      this.state.movieVoucher = movieVoucher;
-      this.state.snacksVoucher = snacksVoucher;
+      this.setState({
+        movieVoucher,
+        snacksVoucher,
+        voucherType,
+      });
     })
   }
 
