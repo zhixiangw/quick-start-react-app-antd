@@ -11,6 +11,8 @@ class SnacksList extends React.Component {
 
     this.state = {
       limit: 10,
+      list: [],
+      count: 10,
       offset: 0,
       filter: {},
     }
@@ -43,7 +45,18 @@ class SnacksList extends React.Component {
 
   getList = () => {
     const { offset, limit, filter } = this.state
-    return this.props.queryList({ offset, limit, filter: JSON.stringify(filter) })
+    return this.props.queryList({ offset, limit, filter: JSON.stringify(filter) }).then(res=>{
+      const { message, code, data } = (res && res.value || {})
+      if(code === 0){
+        const { items = [], count = 0 } = data;
+        this.setState({
+          list: items,
+          count
+        })
+      } else {
+        message.error(`保存失败[${message}]`);
+      }
+    })
   }
 
   getColumns = () => {
@@ -129,7 +142,7 @@ class SnacksList extends React.Component {
 
   handleTableChange = ({ current }) => {
     const { limit } = this.state
-    this.setState({ offset: (current - 1) * limit }, this.getTagsList)
+    this.setState({ offset: (current - 1) * limit }, this.getList)
   }
 
   render() {
@@ -147,10 +160,7 @@ class SnacksList extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  list: state.VoucherReducer.list,
-  count: state.VoucherReducer.count
-});
+const mapStateToProps = (state) => ({});
 const mapDispatchToProps = dispatch => ({
   queryList: payload => dispatch(Action.membercardList(payload)),
 });

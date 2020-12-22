@@ -10,6 +10,7 @@ class MembercardForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      info:{},
       fileList: [],
       originValues: [],
       cinemaTags: [],
@@ -39,8 +40,8 @@ class MembercardForm extends React.Component {
               url: info.icon,
               thumbUrl: info.icon,
             }];
-            this.setState({ fileList });
           }
+          this.setState({ fileList, info });
         })
       }
       const {
@@ -59,12 +60,12 @@ class MembercardForm extends React.Component {
   }
 
   handleTypeChange(value){
-    const { info = {}, form } = this.props;
+    const { info = {} } = this.state;
     info.type = value;
   }
 
   handleValueTypeChange(value){
-    const { info = {} } = this.props;
+    const { info = {} } = this.state;
     if(!info.data) {
       info.data = {};
     }
@@ -129,7 +130,8 @@ class MembercardForm extends React.Component {
   filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   render() {
-    let { info = {}, form } = this.props;
+    let { form } = this.props;
+    let { info } = this.state;
     const { getFieldDecorator  } = form;
 
     const formItemLayout = {
@@ -282,10 +284,7 @@ class MembercardForm extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  info: state.VoucherReducer.detail,
-  searchItems: state.MoviesReducer.searchItems
-});
+const mapStateToProps = (state) => ({});
 const mapDispatchToProps = dispatch => ({
   queryTags: payload => dispatch(cinameAction.tags(payload)),
   searchMovies: payload => dispatch(movieAction.moviesSearch(payload)),
