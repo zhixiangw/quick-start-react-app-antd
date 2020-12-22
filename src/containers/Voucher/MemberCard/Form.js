@@ -129,12 +129,9 @@ class MembercardForm extends React.Component {
   filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   render() {
-    const { id } = this.props.match.params
     let { info = {}, form } = this.props;
     const { getFieldDecorator  } = form;
-    if (!~~id) {
-      info = {}
-    }
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },

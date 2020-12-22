@@ -132,12 +132,9 @@ class MemberForm extends React.Component {
   };
 
   render() {
-    const { id } = this.props.match.params
     let { allMemberType} = this.props;
     let { info } = this.state;
-    if (!~~id) {
-      info = {}
-    }
+    
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
