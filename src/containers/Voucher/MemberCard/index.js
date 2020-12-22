@@ -1,5 +1,5 @@
 import React from 'react'
-import { Divider, Table, Input, Avatar, Modal, Button, Icon } from 'antd';
+import { Divider, Table, Button } from 'antd';
 import { connect } from 'react-redux'
 import SearchForm from 'components/SearchForm'
 import Action from '../action'
@@ -13,18 +13,11 @@ class SnacksList extends React.Component {
       limit: 10,
       offset: 0,
       filter: {},
-      distcounts: [],
     }
   }
 
   componentDidMount() {
-    this.props.queryAllDiscount().then(res=>{
-      this.getList();
-      const {
-        items = [],
-      } = res.value.data;
-      this.state.distcounts = items;
-    })
+    this.getList();
   }
 
   getFields = () => {
@@ -89,11 +82,6 @@ class SnacksList extends React.Component {
         dataIndex: 'desc'
       },
       {
-        title: '折扣信息',
-        key: 'discount',
-        dataIndex: 'discount'
-      },
-      {
         title: '状态',
         key: 'status',
         dataIndex: 'status',
@@ -124,7 +112,6 @@ class SnacksList extends React.Component {
 
   getDataSource = () => {
     const { list = [] } = this.props;
-    const { distcounts = [] } = this.state;
     return list.map(record => {
       return {
         key: record.id,
@@ -132,7 +119,6 @@ class SnacksList extends React.Component {
         icon: record.icon, 
         desc: record.desc, 
         note: record.note, 
-        discount: (distcounts.find(i=>i.id === record.preferential) || {}).name, 
         createdAt: record.created_at && moment(record.created_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         updatedAt: record.updated_at && moment(record.updated_at).format('YYYY-MM-DD HH:mm:ss') || '--',
         expireDate: record.expire_date && moment(record.expire_date).format('YYYY-MM-DD HH:mm:ss') || '--',
@@ -166,7 +152,6 @@ const mapStateToProps = (state) => ({
   count: state.VoucherReducer.count
 });
 const mapDispatchToProps = dispatch => ({
-  queryAllDiscount: payload => dispatch(Action.allDiscount(payload)),
   queryList: payload => dispatch(Action.membercardList(payload)),
 });
 

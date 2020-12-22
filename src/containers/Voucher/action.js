@@ -17,7 +17,6 @@ export const VOUCHER = {
   MEMBERCARDLIST: 'MEMBERCARD.LIST',
   MEMBERCARDDETAIL: 'MEMBERCARD.DETAIL',
   MEMBERCARDUPSERT: 'MEMBERCARD.UPSERT',
-  ALLDISCOUNT: 'ALL.DISCOUNT',
 }
 
 export default createActions({
@@ -30,8 +29,7 @@ export default createActions({
   [VOUCHER.SNACKSLIST]: (param) => fetch.get('admin/voucher/snacksList?' + queryString.stringify(param)),
   [VOUCHER.SNACKSDETAIL]: (param) => fetch.get('admin/voucher/snacksDetail?'+ queryString.stringify(param)),
   [VOUCHER.SNACKSUPSERT]: (param) => fetch.post('admin/voucher/snacksUpsert', param),
-  [VOUCHER.ALLMEMBERTYPE]: () => fetch.get('admin/main/allMemberType'),
-  [VOUCHER.ALLDISCOUNT]: () => fetch.get('admin/main/allDiscount'),
+  [VOUCHER.ALLMEMBERTYPE]: () => fetch.get('admin/main/allMemberCard'),
   [VOUCHER.VOUCHERCONFIG]: () => fetch.get('admin/voucher/config'),
   [VOUCHER.MEMBERCARDLIST]: (param) => fetch.get('admin/voucher/memberCardList?' + queryString.stringify(param)),
   [VOUCHER.MEMBERCARDDETAIL]: (param) => fetch.get('admin/voucher/memberCardDetail?'+ queryString.stringify(param)),

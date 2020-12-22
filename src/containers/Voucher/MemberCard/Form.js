@@ -1,6 +1,5 @@
 import React from 'react'
-import moment from 'moment';
-import { DatePicker, Button, Select, Input, Form, Switch, Icon, InputNumber, message, Upload  } from 'antd';
+import { Button, Select, Input, Form, Switch, Icon, message, Upload, InputNumber } from 'antd';
 import { connect } from 'react-redux'
 import Action from '../action'
 import cinameAction from '../../Cinema/action'
@@ -13,17 +12,19 @@ class MembercardForm extends React.Component {
     this.state = {
       fileList: [],
       originValues: [],
-      distcounts: [],
+      cinemaTags: [],
+      movies: [],
+      valueMatchType: [],
+      voucherMatchType: [],
     }
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
-    this.props.queryAllDiscount().then(res=>{
-      const {
-        items = [],
-      } = res.value.data;
-      this.setState({ distcounts:items });
+    Promise.all([
+      this.props.voucherConfig(),
+      this.props.queryTags(),
+    ]).then(([config={}, tags = {}]) => {
       if (~~id) {
         this.props.queryInfo({ id }).then(res=>{
           // icon
@@ -42,6 +43,18 @@ class MembercardForm extends React.Component {
           }
         })
       }
+      const {
+        voucherMatchType = [],
+        valueMatchType = [],
+      } = config.value.data;
+      const {
+        data: tagsItems= []
+      } = tags.value;
+      this.setState({
+        voucherMatchType,
+        valueMatchType,
+        cinemaTags: tagsItems,
+      });
     })
   }
 
@@ -133,8 +146,38 @@ class MembercardForm extends React.Component {
       },
     };
     
-    // 匹配类型
-    const sopts = this.state.distcounts.map(item => (<Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>));
+    // 券面抵扣类型
+    const valueTypeOpts = this.state.valueMatchType.map(item => (<Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>));
+
+    // 券面类型值
+    let valueMatchField = null;
+    if(info.data) {
+      if(info.data.type === 2) {
+        valueMatchField = (<Form.Item {...formItemLayout} label="折扣值">
+        {getFieldDecorator('data["value"]', {
+          initialValue: info.data && info.data.value,
+          rules: [
+            {
+              required: true,
+              message: '请输入折扣值',
+            },
+          ],
+        })(<InputNumber min={1} max={1000} placeholder="折扣值,大于1，抵扣xxx元" />)}
+      </Form.Item>);
+      } else if(info.data.type === 3) {
+        valueMatchField = (<Form.Item {...formItemLayout} label="折扣值">
+        {getFieldDecorator('data["value"]', {
+          initialValue: info.data && info.data.value,
+          rules: [
+            {
+              required: true,
+              message: '请输入折扣值',
+            },
+          ],
+        })(<InputNumber min={0} max={1} placeholder="折扣值,小于1,八折=0.8" />)}
+      </Form.Item>);
+      }
+    }
     
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
@@ -197,22 +240,35 @@ class MembercardForm extends React.Component {
             ],
           })(<Input.TextArea rows={4} placeholder="请输入备注" />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="选择折扣">
-          {getFieldDecorator('preferential', {
-            initialValue: info.preferential,
+        <Form.Item {...formItemLayout} label="级别">
+        {getFieldDecorator('level', {
+          initialValue: info.level,
+          rules: [
+            {
+              required: true,
+              message: '请输入折扣值',
+            },
+          ],
+        })(<InputNumber min={1} max={1000} placeholder="级别越大优先级越高" />)}
+      </Form.Item>
+        <Form.Item {...formItemLayout} label="折扣类型">
+          {getFieldDecorator('data["type"]', {
+            initialValue: info.data && info.data.type,
             rules: [{
               required: true,
-              message: '请选择折扣',
+              message: '请选择折扣类型',
               type: 'integer'
             }],
           })(
             <Select placeholder="请选择" optionFilterProp="children" 
             filterOption={this.filterOption}     
+            onChange={this.handleValueTypeChange.bind(this)}
             >
-              {sopts}
+              {valueTypeOpts}
             </Select>
           )}
         </Form.Item>
+        {valueMatchField}
         <Form.Item {...formItemLayout} label="状态">
           {getFieldDecorator('status', {
             valuePropName: 'checked',
@@ -234,7 +290,9 @@ const mapStateToProps = (state) => ({
   searchItems: state.MoviesReducer.searchItems
 });
 const mapDispatchToProps = dispatch => ({
-  queryAllDiscount: payload => dispatch(Action.allDiscount(payload)),
+  queryTags: payload => dispatch(cinameAction.tags(payload)),
+  searchMovies: payload => dispatch(movieAction.moviesSearch(payload)),
+  voucherConfig: payload => dispatch(Action.voucherConfig(payload)),
   queryInfo: payload => dispatch(Action.membercardDetail(payload)),
   onSubmit: payload => dispatch(Action.membercardUpsert(payload)),
 });

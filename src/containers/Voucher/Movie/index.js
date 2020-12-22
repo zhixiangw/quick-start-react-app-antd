@@ -83,7 +83,7 @@ class movieList extends React.Component {
         dataIndex: 'desc'
       },
       {
-        title: '抵扣方式',
+        title: '适用范围',
         key: 'type',
         dataIndex: 'type'
       },
