@@ -50,7 +50,7 @@ export default {
     }]
   }, {
     path: '/voucher',
-    icon: 'ordered-list',
+    icon: 'scan',
     // icon: 'account-book-outlined',
     key: 'voucher',
     name: '优惠券管理',
