@@ -36,6 +36,12 @@ class memberList extends React.Component {
       onClick: () => this.props.history.push('/voucher/memberForm/0'),
       icon: 'plus',
       style: { marginLeft: 8 }
+    }, {
+      label: '导出抵扣券',
+      type: 'danger',
+      onClick: () => this.props.history.push('/voucher/memberExport'),
+      icon: 'export',
+      style: { marginLeft: 8 }
     }]
   }
 

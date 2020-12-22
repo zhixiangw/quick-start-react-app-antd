@@ -22,6 +22,7 @@ import UserDetail from 'containers/User/UserDetail'
 import Setting from 'containers/Setting'
 import VoucherMember from 'containers/Voucher/Member'
 import VoucherMemberForm from 'containers/Voucher/Member/Form'
+import VoucherMemberExport from 'containers/Voucher/Member/Export'
 import VoucherSnacks from 'containers/Voucher/Snacks'
 import VoucherSnacksForm from 'containers/Voucher/Snacks/Form'
 import VoucherMovie from 'containers/Voucher/Movie'
@@ -54,6 +55,7 @@ ReactDOM.render((
               <Route exact path="/voucher/snacksForm/:id" component={VoucherSnacksForm} />
               <Route exact path="/voucher/memberList" component={VoucherMember} />
               <Route exact path="/voucher/memberForm/:id" component={VoucherMemberForm} />
+              <Route exact path="/voucher/memberExport" component={VoucherMemberExport} />
               <Route exact path="/voucher/memberCard" component={MemberCard} />
               <Route exact path="/voucher/memberCardForm/:id" component={MemberCardForm} />
               <Route exact path="/setting" component={Setting} />
