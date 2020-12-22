@@ -10,7 +10,7 @@ class MembercardForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      info:{},
+      info: {},
       fileList: [],
       originValues: [],
       cinemaTags: [],

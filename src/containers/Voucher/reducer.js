@@ -4,8 +4,7 @@ import { VOUCHER } from './action'
 const initState = {
   allMemberType: [],
   list: [],
-  count: 0,
-  detail: {}
+  count: 0
 }
 
 export default handleActions(
@@ -14,25 +13,13 @@ export default handleActions(
       const { data: { count, items = [] } } = payload
       return { ...state, list: items, count }
     },
-    [VOUCHER.MEMBERDETAIL + '_FULFILLED']: (state, { payload }) => {
-      const { data } = payload
-      return { ...state, detail: data }
-    },
     [VOUCHER.MOVIELIST + '_FULFILLED']: (state, { payload }) => {
       const { data: { count, items = [] } } = payload;
       return { ...state, list: items, count }
     },
-    [VOUCHER.MOVIEDETAIL + '_FULFILLED']: (state, { payload }) => {
-      const { data } = payload
-      return { ...state, detail: data }
-    },
     [VOUCHER.SNACKSLIST + '_FULFILLED']: (state, { payload }) => {
       const { data: { count, items = [] } } = payload
       return { ...state, list: items, count }
-    },
-    [VOUCHER.SNACKSDETAIL + '_FULFILLED']: (state, { payload }) => {
-      const { data } = payload
-      return { ...state, detail: data }
     },
     [VOUCHER.ALLMEMBERTYPE + '_FULFILLED']: (state, { payload }) => {
       const { data: { items = [] } } = payload;
@@ -41,10 +28,6 @@ export default handleActions(
     [VOUCHER.MEMBERCARDLIST + '_FULFILLED']: (state, { payload }) => {
       const { data: { count, items = [] } } = payload
       return { ...state, list: items, count }
-    },
-    [VOUCHER.MEMBERCARDDETAIL + '_FULFILLED']: (state, { payload }) => {
-      const { data } = payload
-      return { ...state, detail: data }
     },
   },
   initState

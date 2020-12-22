@@ -38,8 +38,8 @@ class MemberForm extends React.Component {
               url: info.icon,
               thumbUrl: info.icon,
             }];
-            this.setState({ fileList, info });
           }
+          this.setState({ fileList, info });
         })
       }
       const {

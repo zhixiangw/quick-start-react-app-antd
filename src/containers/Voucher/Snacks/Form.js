@@ -11,6 +11,7 @@ class SnacksForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      info: { data:{} },
       fileList: [],
       originValues: [],
       cinemaTags: [],
@@ -40,8 +41,8 @@ class SnacksForm extends React.Component {
               url: info.icon,
               thumbUrl: info.icon,
             }];
-            this.setState({ fileList });
           }
+          this.setState({ fileList, info });
         })
       }
       const {
@@ -60,12 +61,12 @@ class SnacksForm extends React.Component {
   }
 
   handleTypeChange(value){
-    const { info = {}, form } = this.props;
+    const { info = {} } = this.state;
     info.type = value;
   }
 
   handleValueTypeChange(value){
-    const { info = {} } = this.props;
+    const { info = {} } = this.state;
     if(!info.data) {
       info.data = {};
     }
@@ -132,7 +133,8 @@ class SnacksForm extends React.Component {
   filterOption = (input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   render() {
-    let { info = {}, form } = this.props;
+    let { form } = this.props;
+    let { info = {} } = this.state;
     const { getFieldDecorator  } = form;
     
     const formItemLayout = {
