@@ -77,7 +77,7 @@ class MemberForm extends React.Component {
           ...values,
           icon,
           id: ~~id,
-          data: values.voucher,
+          data: values.voucher || [],
           expire_date: values.expire_date.format("YYYY-MM-DD")
         }
         delete postData.voucher;
