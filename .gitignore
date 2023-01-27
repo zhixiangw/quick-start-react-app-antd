@@ -28,4 +28,4 @@ dist
 # Users Environment Variables
 .lock-wscript
 
-yarn.lock
+dist.zip

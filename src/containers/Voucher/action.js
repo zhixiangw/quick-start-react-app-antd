@@ -1,6 +1,6 @@
-import { createActions } from 'redux-actions'
-import fetch from 'lib/fetch'
-import queryString from 'querystring'
+import { createActions } from 'redux-actions';
+import fetch from 'lib/fetch';
+import queryString from 'querystring';
 
 export const VOUCHER = {
   MEMBERLIST: 'MEMBER.LIST',
@@ -19,23 +19,39 @@ export const VOUCHER = {
   MEMBERCARDUPSERT: 'MEMBERCARD.UPSERT',
   ALLVMEMBER: 'ALL.VMEMBER',
   EXPORTVMEMBER: 'EXPORT.VMEMBER',
-}
+  EXPORTMOVIE: 'EXPORT.MOVIE',
+};
 
 export default createActions({
-  [VOUCHER.MEMBERLIST]: (param) => fetch.get('admin/voucher/memberList?' + queryString.stringify(param)),
-  [VOUCHER.MEMBERDETAIL]: (param) => fetch.get('admin/voucher/memberDetail?'+ queryString.stringify(param)),
-  [VOUCHER.MEMBERUPSERT]: (param) => fetch.post('admin/voucher/memberUpsert', param),
-  [VOUCHER.MOVIELIST]: (param) => fetch.get('admin/voucher/movieList?' + queryString.stringify(param)),
-  [VOUCHER.MOVIEDETAIL]: (param) => fetch.get('admin/voucher/movieDetail?'+ queryString.stringify(param)),
-  [VOUCHER.MOVIEUPSERT]: (param) => fetch.post('admin/voucher/movieUpsert', param),
-  [VOUCHER.SNACKSLIST]: (param) => fetch.get('admin/voucher/snacksList?' + queryString.stringify(param)),
-  [VOUCHER.SNACKSDETAIL]: (param) => fetch.get('admin/voucher/snacksDetail?'+ queryString.stringify(param)),
-  [VOUCHER.SNACKSUPSERT]: (param) => fetch.post('admin/voucher/snacksUpsert', param),
+  [VOUCHER.MEMBERLIST]: (param) =>
+    fetch.get('admin/voucher/memberList?' + queryString.stringify(param)),
+  [VOUCHER.MEMBERDETAIL]: (param) =>
+    fetch.get('admin/voucher/memberDetail?' + queryString.stringify(param)),
+  [VOUCHER.MEMBERUPSERT]: (param) =>
+    fetch.post('admin/voucher/memberUpsert', param),
+  [VOUCHER.MOVIELIST]: (param) =>
+    fetch.get('admin/voucher/movieList?' + queryString.stringify(param)),
+  [VOUCHER.MOVIEDETAIL]: (param) =>
+    fetch.get('admin/voucher/movieDetail?' + queryString.stringify(param)),
+  [VOUCHER.MOVIEUPSERT]: (param) =>
+    fetch.post('admin/voucher/movieUpsert', param),
+  [VOUCHER.SNACKSLIST]: (param) =>
+    fetch.get('admin/voucher/snacksList?' + queryString.stringify(param)),
+  [VOUCHER.SNACKSDETAIL]: (param) =>
+    fetch.get('admin/voucher/snacksDetail?' + queryString.stringify(param)),
+  [VOUCHER.SNACKSUPSERT]: (param) =>
+    fetch.post('admin/voucher/snacksUpsert', param),
   [VOUCHER.ALLMEMBERTYPE]: () => fetch.get('admin/main/allMemberCard'),
   [VOUCHER.ALLVMEMBER]: () => fetch.get('admin/voucher/getAllVoucherMember'),
-  [VOUCHER.EXPORTVMEMBER]: (param) => fetch.post('admin/voucher/exportMemberVoucher', param),
+  [VOUCHER.EXPORTVMEMBER]: (param) =>
+    fetch.post('admin/voucher/exportMemberVoucher', param),
+  [VOUCHER.EXPORTMOVIE]: (param) =>
+    fetch.post('admin/voucher/exportMovieVoucher', param),
   [VOUCHER.VOUCHERCONFIG]: () => fetch.get('admin/voucher/config'),
-  [VOUCHER.MEMBERCARDLIST]: (param) => fetch.get('admin/voucher/memberCardList?' + queryString.stringify(param)),
-  [VOUCHER.MEMBERCARDDETAIL]: (param) => fetch.get('admin/voucher/memberCardDetail?'+ queryString.stringify(param)),
-  [VOUCHER.MEMBERCARDUPSERT]: (param) => fetch.post('admin/voucher/memberCardUpsert', param),
-})
+  [VOUCHER.MEMBERCARDLIST]: (param) =>
+    fetch.get('admin/voucher/memberCardList?' + queryString.stringify(param)),
+  [VOUCHER.MEMBERCARDDETAIL]: (param) =>
+    fetch.get('admin/voucher/memberCardDetail?' + queryString.stringify(param)),
+  [VOUCHER.MEMBERCARDUPSERT]: (param) =>
+    fetch.post('admin/voucher/memberCardUpsert', param),
+});

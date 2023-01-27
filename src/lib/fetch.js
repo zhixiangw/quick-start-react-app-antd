@@ -1,11 +1,10 @@
 import axios from 'axios';
-import { message as antdMessage } from 'antd'
+import { message as antdMessage } from 'antd';
 import { APIError } from 'lib/error';
 
-
-export const baseURL = '//openapi.wanguo.press'
+// export const baseURL = '//openapi.huimin.city';
 // export const baseURL = '//test-app.wanguo.press'
-// export const baseURL = 'http://localhost:7001'
+export const baseURL = 'http://localhost:7001';
 const fetch = axios.create({
   baseURL,
   withCredentials: true,
@@ -22,8 +21,7 @@ fetch.isCancel = axios.isCancel;
 fetch.all = axios.all;
 fetch.spread = axios.spread;
 
-
-fetch.interceptors.response.use(async response => {
+fetch.interceptors.response.use(async (response) => {
   const { config, data } = response;
   const { code, message, data: responseBody } = data;
   const { url, autoLogin = true } = config;
@@ -39,17 +37,17 @@ fetch.interceptors.response.use(async response => {
 
     if (code === 408) {
       // 账号不存在
-      antdMessage.error('用户不存在')
+      antdMessage.error('用户不存在');
     } else if (code === 409) {
       // 用户密码错误
-      antdMessage.error('用户密码错误')
+      antdMessage.error('用户密码错误');
     } else {
-      antdMessage.error(message)
+      antdMessage.error(message);
     }
 
     return Promise.reject(error);
   } else {
-    message && antdMessage.success(message)
+    message && antdMessage.success(message);
   }
 
   return data;
